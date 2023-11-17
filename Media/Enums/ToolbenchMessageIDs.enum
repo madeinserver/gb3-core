@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Toolbench messages -->
+<enum type="Normal" storage="efd::UInt32" invalid=""
+      start="0x00005000" end="0x00005FFF">
+
+    <header output="../../Source/Tools/Toolbench/ToolbenchServices/ToolbenchMessageIDs.h"
+            useNamespace="efd" useExistingTypedef="ClassID" prefix="kMSGID_"
+            includes="efd/ClassInfo.h" />
+
+    <item name="OpenWorldMessage"/>
+    <item name="SelectEntitiesMessage"/>
+    <item name="SelectionRequestMessage"/>
+    <item name="ReloadFileMessage"/>
+    <item name="ResetMessage"/>
+    <item name="ReloadModelsMessage"/>
+    <item name="SetActiveSurfaceMessage"/>
+    <item name="ClearBoxSelectionMessage"/>
+    <item name="SizeBoxSelectionMessage"/>
+    <item name="FinishBoxSelectionMessage"/>
+
+</enum>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<enum base="eonSystemServiceIDs" start="0x07013000" end="0x07013FFF">
+
+    <header useNamespace="efd" useExistingTypedef="ClassID" prefix="kCLASSID_" />
+            
+    <item name="PeerGame"/>
+    <item name="ReplicationPolicy"/>
+    <item name="BotGame"/>
+    
+</enum>

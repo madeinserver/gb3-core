@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<enum base="egfLogIDs">
+
+    <header useNamespace="efd" prefix="k" includes="egf/egfLogIDs.h"/>
+
+    <!-- Server -->
+    <item name="ReplicationService"/>  <!-- EGF ReplicationService process -->
+    <item name="ServerLogin"/>         <!-- EGF Server Login Service -->
+    <item name="ClientLogin"/>         <!-- EGF Client Login Service -->
+    <item name="Gateway"/>             <!-- The GatewayService and GWClientProxy classes -->
+    <item name="ReplicationGroups"/>    <!-- Replication Groups -->
+    <item name="ReplicationProducerEntity"/>    <!-- Replication related to Producer Entities -->
+    <item name="ReplicationConsumerEntity"/>    <!-- Replication related to Consumer Entities -->
+
+</enum>

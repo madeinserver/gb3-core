@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<library version="1">
+	<!--========================================================================-->
+	<fragment type="Vertex" name="TransformPosition">
+		<desc>
+			This fragment is responsible for applying a transform to the
+			incoming vertex position. used to transform to/from W, WV and WVP
+		</desc>
+
+		<inputs>
+			<resource type="float3"
+					  semantic="Position"
+					  label="Local"
+					  variable="OriginalPos" />
+			<resource type="float4x4"
+					  semantic=""
+					  label=""
+					  variable="TransformMatrix" />
+		</inputs>
+
+		<outputs>
+			<resource type="float4"
+					  semantic="Position"
+					  label="World"
+					  variable="TransformPos" />
+		</outputs>
+
+		<code lang="hlsl/Cg"
+			  platform="D3D11/D3D10/DX9/Xenon/PS3"
+			  target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/vs_5_0/ps_5_0">
+			TransformPos = mul(float4(OriginalPos,1), TransformMatrix);
+		</code>
+	</fragment>
+	<!--========================================================================-->
+	<fragment type="Vertex" name="TransformDirection">
+		<desc>
+			This fragment is responsible for applying a transform to an incomming
+			direction. this allows the rotation of all directions into and out of
+			different spaces. 
+		</desc>
+
+		<inputs>
+			<resource type="float3"
+					  semantic=""
+					  label="Local"
+					  variable="OriginalDir" />
+			<resource type="float4x4"
+					  semantic=""
+					  label=""
+					  variable="TransformMatrix" />
+		</inputs>
+
+		<outputs>
+			<resource type="float3"
+					  semantic=""
+					  label="World"
+					  variable="TransformDir" />
+		</outputs>
+
+		<code lang="hlsl/Cg"
+			  platform="D3D11/D3D10/DX9/Xenon/PS3"
+			  target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/vs_5_0/ps_5_0">
+			TransformDir = mul(OriginalDir, (float3x3)TransformMatrix);
+		</code>
+	</fragment>
+	<!--========================================================================-->
+	<fragment type="Pixel" name="DestroyDepthInformation">
+		<desc>
+			This fragment is responsible for destroying the depth value of
+			the particular vertex such that it is not clipped by the far plane.
+		</desc>
+
+		<inputs>
+			<resource type="float4"
+					  semantic=""
+					  label=""
+					  variable="posProjectedIn" />
+		</inputs>
+
+		<outputs>
+			<resource type="float4"
+					  semantic=""
+					  label=""
+					  variable="posProjectedOut" />
+		</outputs>
+
+		<code lang="hlsl/Cg"
+			  platform="D3D11/D3D10/DX9/Xenon/PS3"
+			  target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/vs_5_0/ps_5_0">
+			posProjectedOut = posProjectedIn.xyww;
+			posProjectedOut.z = 0.5f;
+		</code>
+	</fragment>
+	<!--========================================================================-->
+	<fragment type="Vertex" name="CalcViewVector">
+		<desc>
+			This fragment is responsible for calculating the view vector (from 
+			camera to world position). 
+		</desc>
+
+		<inputs>
+			<resource type="float3"
+					  semantic="Position"
+					  label=""
+					  variable="CameraPos" />
+			<resource type="float3"
+					  semantic=""
+					  label=""
+					  variable="WorldPos" />
+		</inputs>
+
+		<outputs>
+			<resource type="float3"
+					  semantic="Position"
+					  label="World"
+					  variable="ViewVector" />
+		</outputs>
+
+		<code lang="hlsl/Cg"
+			  platform="D3D11/D3D10/DX9/Xenon/PS3"
+			  target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/vs_5_0/ps_5_0">
+			ViewVector = normalize(WorldPos - CameraPos);
+		</code>
+	</fragment>
+	<!--========================================================================-->
+	<fragment type="Vertex" name="CalcViewVector">
+		<desc>
+			This fragment is responsible for calculating the view vector (from
+			camera to world position).
+		</desc>
+
+		<inputs>
+			<resource type="float3"
+					  semantic="Position"
+					  label=""
+					  variable="CameraPos" />
+			<resource type="float3"
+					  semantic=""
+					  label=""
+					  variable="WorldPos" />
+		</inputs>
+
+		<outputs>
+			<resource type="float3"
+					  semantic="Position"
+					  label="World"
+					  variable="ViewVector" />
+		</outputs>
+
+		<code lang="hlsl/Cg"
+			  platform="D3D11/D3D10/DX9/Xenon/PS3"
+			  target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/vs_5_0/ps_5_0">
+			ViewVector = normalize(WorldPos - CameraPos);
+		</code>
+	</fragment>
+	<!--========================================================================-->
+	<fragment type="Pixel" name="SampleCubeMap">
+		<desc>
+			This fragment is responsible for sampling a specific point in a 
+			cube map for skyboxes.
+		</desc>
+
+		<inputs>
+			<resource type="samplerCUBE"
+				semantic="Texture"
+				label=""
+				variable="Sampler" />
+			<resource type="float3"
+				semantic=""
+				label=""
+				variable="SamplePoint" />
+		</inputs>
+
+		<outputs>
+			<resource type="float4"
+				semantic=""
+				label=""
+				variable="OutColor" />
+		</outputs>
+
+		<code lang="hlsl/Cg"
+			  platform="D3D11/D3D10/DX9/Xenon/PS3"
+			  target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/vs_5_0/ps_5_0">
+			OutColor = texCUBE(Sampler, normalize(-SamplePoint.xyz));
+		</code>
+	</fragment>
+	<!--========================================================================-->
+	<fragment type="Pixel" name="SampleOrientedCubeMap">
+		<desc>
+			This fragment is responsible for sampling a specific point in a 
+			cube map for skyboxes.
+		</desc>
+
+		<inputs>
+			<resource type="samplerCUBE"
+				semantic="Texture"
+				label=""
+				variable="Sampler" />
+			<resource type="float3"
+				semantic=""
+				label=""
+				variable="SamplePoint" />
+		</inputs>
+
+		<outputs>
+			<resource type="float4"
+				semantic=""
+				label=""
+				variable="OutColor" />
+		</outputs>
+
+		<code lang="hlsl/Cg"
+			  platform="D3D11/D3D10/DX9/Xenon/PS3"
+			  target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/vs_5_0/ps_5_0">
+			OutColor = texCUBE(Sampler, normalize(-SamplePoint.xzy));
+		</code>
+	</fragment>
+	<!--========================================================================-->
+	<fragment type="Pixel" name="BlendValueMultiply">
+		<desc>
+			This fragment is responsible for blending two values together using
+			a multiply operation.
+		</desc>
+
+		<inputs>
+			<resource type="float4"
+				semantic=""
+				label=""
+				variable="ValueA" />
+			<resource type="float4"
+				semantic=""
+				label=""
+				variable="ValueB" />
+			<resource type="float"
+				semantic=""
+				label=""
+				variable="Modifier" 
+				default="(1)"/>			
+		</inputs>
+
+		<outputs>
+			<resource type="float4"
+				semantic=""
+				label=""
+				variable="OutValue" />
+		</outputs>
+
+		<code lang="hlsl/Cg"
+			  platform="D3D11/D3D10/DX9/Xenon/PS3"
+			  target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/vs_5_0/ps_5_0">
+			OutValue = ValueA * ValueB * Modifier;
+		</code>
+	</fragment>
+	<!--========================================================================-->
+	<fragment type="Pixel" name="BlendValueAdd">
+		<desc>
+			This fragment is responsible for blending two values together using
+			an addition operation.
+		</desc>
+
+		<inputs>
+			<resource type="float4"
+				semantic=""
+				label=""
+				variable="ValueA" />
+			<resource type="float4"
+				semantic=""
+				label=""
+				variable="ValueB" />
+			<resource type="float"
+				semantic=""
+				label=""
+				variable="Modifier" 
+				default="(1)"/>
+		</inputs>
+
+		<outputs>
+			<resource type="float4"
+				semantic=""
+				label=""
+				variable="OutValue" />
+		</outputs>
+
+		<code lang="hlsl/Cg"
+			  platform="D3D11/D3D10/DX9/Xenon/PS3"
+			  target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/vs_5_0/ps_5_0">
+			OutValue = ValueA + ValueB * Modifier;
+		</code>
+	</fragment>
+	<!--========================================================================-->
+	<fragment type="Pixel" name="BlendValueInterpolate">
+		<desc>
+			This fragment is responsible for blending two values together using
+			a linear interpolation.
+		</desc>
+
+		<inputs>
+			<resource type="float4"
+				semantic=""
+				label=""
+				variable="ValueA" />
+			<resource type="float4"
+				semantic=""
+				label=""
+				variable="ValueB" />
+			<resource type="float"
+				semantic=""
+				label=""
+				variable="Modifier"
+				default="(0.5)"/>
+		</inputs>
+
+		<outputs>
+			<resource type="float4"
+				semantic=""
+				label=""
+				variable="OutValue" />
+		</outputs>
+
+		<code lang="hlsl/Cg"
+			  platform="D3D11/D3D10/DX9/Xenon/PS3"
+			  target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/vs_5_0/ps_5_0">
+			OutValue = lerp(ValueA, ValueB, Modifier);
+		</code>
+	</fragment>
+	<!--========================================================================-->
+	<fragment type="Pixel" name="ExtractAlphaValue">
+		<desc>
+			This fragment is responsible for extracting alpha information from
+			a color.
+		</desc>
+
+		<inputs>
+			<resource type="float4"
+				semantic=""
+				label=""
+				variable="Value" />
+		</inputs>
+
+		<outputs>
+			<resource type="float4"
+				semantic=""
+				label=""
+				variable="OutValue" />
+		</outputs>
+
+		<code lang="hlsl/Cg"
+			  platform="D3D11/D3D10/DX9/Xenon/PS3"
+			  target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/vs_5_0/ps_5_0">
+			OutValue = Value.a;
+		</code>
+	</fragment>
+	<!--========================================================================-->
+	<fragment type="Pixel" name="CalcHorizonBias">
+		<desc>
+			This fragment is responsible for extracting alpha information from
+			a color.
+		</desc>
+
+		<inputs>
+			<resource type="float3"
+				semantic=""
+				label=""
+				variable="Normal" />
+			<resource type="float3"
+				semantic=""
+				label=""
+				variable="UpVector" />
+			<resource type="float"
+				semantic=""
+				label=""
+				variable="Exponent" />
+			<resource type="float"
+				semantic=""
+				label=""
+				variable="HorizonBias" />
+		</inputs>
+
+		<outputs>
+			<resource type="float4"
+				semantic=""
+				label=""
+				variable="OutValue" />
+		</outputs>
+
+		<code lang="hlsl/Cg"
+			  platform="D3D11/D3D10/DX9/Xenon/PS3"
+			  target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/vs_5_0/ps_5_0">
+			float DotValue = dot(normalize(-Normal), UpVector);
+			float InterpValue = asin(DotValue);
+			OutValue = lerp(InterpValue, pow(1-DotValue, Exponent), HorizonBias);
+		</code>
+	</fragment>
+	<!--========================================================================-->
+</library>

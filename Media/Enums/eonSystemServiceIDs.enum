@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<enum base="ecrSystemServiceIDs" start="0x07003000" end="0x07003FFF">
+
+    <header useNamespace="efd" useExistingTypedef="ClassID" prefix="kCLASSID_" 
+            includes="egf/egfSystemServiceIDs.h" />
+
+    <!-- Add new items to the end of the list to preserve the existing values -->
+
+    <item name="ReplicationService"/>
+    <item name="LoginService"/>
+    <item name="ClientLogin"/>
+    <item name="ServerLogin"/>
+    <item name="GatewayService"/>
+    <item name="RapidIterationOnlineService"/>
+    <item name="RemoteLogControl"/>
+    <item name="ETRClientService"/>
+    <item name="ETRClientTestService"/>
+    <item name="ETRServerService"/>
+    <item name="ETRServerTestService"/>
+    <item name="DBClientService"/>
+    <item name="DBServerService"/>
+    <item name="IDBClientService"/>
+    <item name="IDBServerService"/>
+    <item name="GameStatePersistenceService"/>
+    <item name="IGameStatePersistenceService"/>
+    <item name="OnlineEntityManager"/>
+    <item name="BasicReplication"/>
+
+</enum>

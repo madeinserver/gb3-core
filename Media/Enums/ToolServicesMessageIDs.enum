@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Toolbench messages -->
+<enum type="Normal" storage="efd::UInt32" invalid=""
+      start="0x00003200" end="0x000032FF">
+
+    <header useNamespace="efd" useExistingTypedef="ClassID" prefix="kMSGID_"
+            includes="efd/ClassInfo.h" />
+
+    <item name="AddEntityMessage"/>
+    <item name="RemoveEntityMessage"/>
+    <item name="SetEntityPropertyMessage"/>
+    <item name="SetEntitiesPropertiesMessage"/>
+    <item name="SetActiveGizmoMessage"/>
+    <item name="SetGizmoBasisMessage"/>
+    <item name="SetActiveCameraModeMessage"/>
+    <item name="BeginCloneMessage"/>
+    <item name="SettingsUpdateMessage"/>
+    <item name="CameraUpdateMessage"/>
+    <item name="CameraChanged"/>
+    <item name="SelectionChanged"/>
+    <item name="ToolVisibilityChanged"/>
+    <item name="ToolSelectabilityChanged"/>
+    <item name="CreateEntityMessage"/>
+    <item name="InputActionMessage"/>
+
+</enum>

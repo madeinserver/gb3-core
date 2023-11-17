@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<enum type="Normal" storage="efd::UInt32" invalid="" start="0x07F00000" end="0x07F00FFF">
+
+    <header useNamespace="efd" prefix="kBASEID_" />
+            
+    <!-- Add new items to the end of the list to preserve the existing values -->
+    
+    <item name="NetSystem"/>
+    <item name="NetEvent"/>
+    <item name="SendToProducer"/>
+    <item name="LogService"/>
+    <item name="LocalMessage"/>
+    <item name="MyGateway"/>
+    <item name="MyController"/>
+    <item name="MyServer"/>
+    <item name="NameResolutionRequest"/>
+    <item name="NameResolutionResponse"/>
+    <item name="AssetController"/>
+    
+</enum>

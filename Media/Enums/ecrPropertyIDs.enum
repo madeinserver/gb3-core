@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Core Runtime Property Type -->
+<enum type="Normal" storage="efd::UInt32" invalid=""
+      start="0xF0000200" end="0xF00002FF">
+
+    <header useNamespace="efd" useExistingTypedef="ClassID" prefix="kPropID_" includes="efd/ClassInfo.h" />
+
+    <!-- Entity Core Runtime Scalar Property Identifiers -->
+    <item name="AttachEntity"/>
+    <item name="AttachNif"/>
+
+    <!-- Entity Core Runtime Associative Array Property Identifiers -->
+    <item name="AttachEntityAssocArray"/>
+    <item name="AttachNifAssocArray"/>
+
+</enum>

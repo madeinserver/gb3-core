@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<enum type="Normal" storage="efd::UInt32" invalid="" >
+    <header useNamespace="egf"
+            useExistingTypedef="egf::FlatModelID"
+            prefix="kFlatModelID_SamplesModelLibrary_"
+            includes="egf/EntityTypes.h" />
+
+    <!-- Model IDs -->
+    <item name="BaseCamera" value="793847194"/>
+    <item name="MovementHandler" value="1925655767"/>
+    <item name="TargetedCamera" value="2290477055"/>
+    <item name="ThirdPersonRotatingCamera" value="1325792300"/>
+    <item name="ThirdPersonRotatingCameraSubject" value="3784217470"/>
+
+</enum>

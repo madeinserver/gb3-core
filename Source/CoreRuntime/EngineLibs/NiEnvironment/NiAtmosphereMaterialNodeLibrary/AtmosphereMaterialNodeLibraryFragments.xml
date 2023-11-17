@@ -1,0 +1,578 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<library version="1">
+	<!--========================================================================-->
+	<fragment type="Vertex/Pixel" name="SplitAtmosphericScatteringConsts">
+		<desc>
+			This fragment is responsible for splitting the data stored in
+			the atmospheric scattering global constant
+		</desc>
+
+		<inputs>
+			<resource type="float4"
+					  semantic=""
+					  label=""
+					  variable="scAtmosphericScatteringConsts" />
+		</inputs>
+
+		<outputs>
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fKm4PI" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fKr4PI" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fKmESun" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fKrESun" />
+		</outputs>
+
+		<code lang="hlsl/Cg"
+			  platform="D3D11/D3D10/DX9/Xenon/PS3"
+			  target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/vs_5_0/ps_5_0">
+			fKrESun = scAtmosphericScatteringConsts.x;
+			fKmESun = scAtmosphericScatteringConsts.y;
+			fKr4PI = scAtmosphericScatteringConsts.z;
+			fKm4PI = scAtmosphericScatteringConsts.w;
+		</code>
+	</fragment>
+	<!--========================================================================-->
+	<fragment type="Vertex/Pixel" name="SplitPlanetDimensions">
+		<desc>
+			This fragment is responsible for extracting the data out of the 
+			planet dimensions shader constant
+		</desc>
+
+		<inputs>
+			<resource type="float4"
+					  semantic=""
+					  label=""
+					  variable="scPlanetDimensions" />
+		</inputs>
+		<outputs>
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fOuterRadius" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fOuterRadius2" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fInnerRadius" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fInnerRadius2" />
+		</outputs>
+
+		<code lang="hlsl/Cg"
+			  platform="D3D11/D3D10/DX9/Xenon/PS3"
+			  target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/vs_5_0/ps_5_0">
+			fOuterRadius = scPlanetDimensions.x;
+			fOuterRadius2 = scPlanetDimensions.y;
+			fInnerRadius = scPlanetDimensions.z;
+			fInnerRadius2 = scPlanetDimensions.w;
+		</code>
+	</fragment>
+	<!--========================================================================-->
+	<fragment type="Vertex/Pixel" name="SplitAtmosphericScaleDepth">
+		<desc>
+			This fragment is responsible for extracting the information from
+			the atmospheric scale depth shader constant
+		</desc>
+
+		<inputs>
+			<resource type="float4"
+					  semantic=""
+					  label=""
+					  variable="scAtmosphericScaleDepth" />
+		</inputs>
+
+		<outputs>
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fScale" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fScaleDepth" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fScaleOverScaleDepth" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fSunSizeMultiplier" />			
+		</outputs>
+
+		<code lang="hlsl/Cg"
+			  platform="D3D11/D3D10/DX9/Xenon/PS3"
+			  target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/vs_5_0/ps_5_0">
+			fScale = scAtmosphericScaleDepth.x;
+			fScaleDepth = scAtmosphericScaleDepth.y;
+			fScaleOverScaleDepth = scAtmosphericScaleDepth.z;
+			fSunSizeMultiplier = scAtmosphericScaleDepth.w;
+		</code>
+	</fragment>
+	<!--========================================================================-->
+	<fragment type="Vertex/Pixel" name="SplitFrameData">
+		<desc>
+			This fragment is responsible for extracting the frame data from
+			the frame data shader constant
+		</desc>
+
+		<inputs>
+			<resource type="float4"
+					  semantic=""
+					  label=""
+					  variable="scFrameData" />
+		</inputs>
+
+		<outputs>
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fPhaseConstant" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fPhaseConstant2" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fCameraHeight" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fCameraHeight2" />
+		</outputs>
+
+		<code lang="hlsl/Cg"
+			  platform="D3D10/DX9/Xenon/PS3"
+			  target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/vs_5_0/ps_5_0">
+			fPhaseConstant = scFrameData.x;
+			fPhaseConstant2 = scFrameData.y;
+			fCameraHeight = scFrameData.z;
+			fCameraHeight2 = scFrameData.w;
+		</code>
+	</fragment>
+	<!--========================================================================-->
+	<fragment type="Pixel" name="CalcPathThroughAtmosphere">
+		<desc>
+			This fragment is responsible for calculating the path travelled by
+			rays of light through the atmosphere.
+		</desc>
+
+		<inputs>
+			<resource type="float3"
+					  semantic=""
+					  label=""
+					  variable="WorldView" />
+			<resource type="float3"
+					  semantic=""
+					  label=""
+					  variable="upVector" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="RA" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="RA2" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="RE" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="RE2" />
+		</inputs>
+
+		<outputs>
+			<resource type="float3"
+					  semantic=""
+					  label=""
+					  variable="CameraPos" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fCameraHeight" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fFar" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fNear" />
+		</outputs>
+
+		<code lang="hlsl/Cg"
+			  platform="D3D11/D3D10/DX9/Xenon/PS3"
+			  target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/vs_5_0/ps_5_0">
+			// Convert our planar representation into a celestial/spherical
+			// representation (calculate the far point of the ray passing
+			// through the atmosphere)
+			// RE = radius of the planet
+			// RA = radius of the atmosphere
+			// cosTheta = the view direction with respect to directly "up"
+			// Uses the Cosine Rule to calculate the required distance
+			float cosTheta = dot(WorldView, -upVector);
+			fFar = ((2 * RE * cosTheta) + sqrt( pow((-2 * RE * cosTheta),2) - (4 * (RE2 - RA2))))/2;
+
+			// Assume camera is "in" the atmosphere
+			fNear = 0.0f;
+
+			// for atmosphere's sake, position can be a single position on
+			// the planet, and the sun will orbit over it
+			fCameraHeight = RE;
+			CameraPos = upVector * fCameraHeight;
+		</code>
+	</fragment>
+	<!--========================================================================-->
+	<fragment type="Vertex/Pixel" name="CalcAtmosphericScatteringValues">
+		<desc>
+			This fragment is responsible for calculating the scattering amounts for
+			the RGB wavelengths along a particular path through the atmosphere
+			
+			This code is based on the code from GPU Gems 2, Chapter 16, Accurate Atmospheric Scattering by Sean O'Neil. 
+			The licence for this code is below:
+			
+			s_p_oneil@hotmail.com
+			Copyright (c) 2000, Sean O'Neil
+			All rights reserved.
+			
+			Redistribution and use in source and binary forms, with or without
+			modification, are permitted provided that the following conditions are met:
+			
+			* Redistributions of source code must retain the above copyright notice,
+			  this list of conditions and the following disclaimer.
+			* Redistributions in binary form must reproduce the above copyright notice,
+			  this list of conditions and the following disclaimer in the documentation
+			  and/or other materials provided with the distribution.
+			* Neither the name of this project nor the names of its contributors
+			  may be used to endorse or promote products derived from this software
+			  without specific prior written permission.
+			
+			THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+			AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+			IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+			ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+			LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+			CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+			SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+			INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+			CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+			ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+			POSSIBILITY OF SUCH DAMAGE.
+			
+		</desc>
+
+		<inputs>
+			<resource type="float3"
+					  semantic=""
+					  label=""
+					  variable="CameraPos" />
+			<resource type="float3"
+					  semantic=""
+					  label=""
+					  variable="WorldView" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fNear" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fFar" />
+
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fG" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fG2" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fCameraHeight" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fCameraHeight2" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fScale" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fScaleDepth" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fScaleOverScaleDepth" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fSunSizeMultiplier" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fOuterRadius" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fOuterRadius2" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fInnerRadius" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fInnerRadius2" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fKm4PI" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fKr4PI" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fKmESun" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fKrESun" />
+			<resource type="int"
+					  semantic=""
+					  label=""
+					  variable="nSamples" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fSamples" />
+			<resource type="float3"
+					  semantic=""
+					  label=""
+					  variable="RGBInvWavelength4" />
+			<resource type="float3"
+					  semantic=""
+					  label=""
+					  variable="SunDirection" />
+            <resource type="float"
+					  semantic=""
+					  label=""
+					  variable="FakeDepthValue" 
+                      default="(0)"/>
+			
+		</inputs>
+		<outputs>
+			<resource type="float3"
+					  semantic=""
+					  label=""
+					  variable="RayleighRGBScattering" />
+			<resource type="float3"
+					  semantic=""
+					  label=""
+					  variable="MieRGBScattering" />
+		</outputs>
+
+		<code lang="hlsl/Cg"
+			  platform="D3D11/D3D10/DX9/Xenon/PS3"
+			  target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/vs_5_0/ps_5_0">
+			float3 posScatterStart = CameraPos + WorldView * fNear;
+			float fHeight = length(posScatterStart);
+			float fStartAngle = dot(WorldView, posScatterStart) / fHeight;
+			
+            float fStartOffset;
+            CalcOpticalDepth(fStartAngle, fScaleDepth, fScaleOverScaleDepth, (fInnerRadius - fCameraHeight), fStartOffset);
+
+			// Initialize the scattering loop variables
+			float fSampleLength = fFar / fSamples;
+			float fScaledLength = fSampleLength * fScale;
+			float3 dirSample = WorldView * fSampleLength;
+			float3 posSample = posScatterStart + dirSample * 0.5;
+
+			// Now loop through the sample rays
+			float3 colScatter = float3(0.0, 0.0, 0.0);
+			for(int i=0; i &lt; 5; i++)
+			{
+				float fSampleLength = length(posSample);
+                float fHeightAboveSurface = fInnerRadius - fSampleLength;
+				
+                float fLightAngle = dot(-SunDirection, posSample) / fSampleLength;
+				float fLightDepth;
+                CalcOpticalDepth(fLightAngle, fScaleDepth, fScaleOverScaleDepth, fHeightAboveSurface, fLightDepth);
+
+                float fCameraAngle = dot(WorldView, posSample) / fSampleLength;
+				float fCameraDepth;
+                CalcOpticalDepth(fCameraAngle, fScaleDepth, fScaleOverScaleDepth, fHeightAboveSurface, fCameraDepth);
+					 
+				float fScatter = (fStartOffset + (fLightDepth - fCameraDepth));
+				float3 colAttenuate = exp(-fScatter * (RGBInvWavelength4 * fKr4PI + fKm4PI));
+				
+                float fDepth = exp(fScaleOverScaleDepth * fHeightAboveSurface);
+                colScatter += colAttenuate * (fDepth * fScaledLength);
+				posSample += dirSample;
+			}
+
+			// Finally, scale the Mie and Rayleigh colors and set up
+			// the varying variables for the pixel shader
+			MieRGBScattering.xyz = colScatter * fKmESun;
+			RayleighRGBScattering.xyz = colScatter * (RGBInvWavelength4 * fKrESun);
+		</code>
+	</fragment>
+	<!--========================================================================-->
+	<fragment type="Pixel" name="CalcAtmosphericColor">
+		<desc>
+			This fragment is responsible for calculating the atmospheric color
+			in a particular direction based on the scattering values previously
+			calculated
+		</desc>
+
+		<inputs>
+			<resource type="float3"
+					  semantic=""
+					  label=""
+					  variable="WorldView" />
+			<resource type="float3"
+					  semantic=""
+					  label=""
+					  variable="SunDirection" />
+			<resource type="float3"
+					  semantic=""
+					  label=""
+					  variable="RayleighRGBScattering" />
+			<resource type="float3"
+					  semantic=""
+					  label=""
+					  variable="MieRGBScattering" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="g" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="g2" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fSunSizeMultiplier" />
+		</inputs>
+
+		<outputs>
+			<resource type="float3"
+					  semantic=""
+					  label=""
+					  variable="result" />
+		</outputs>
+
+		<code lang="hlsl/Cg"
+			  platform="D3D11/D3D10/DX9/Xenon/PS3"
+			  target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/vs_5_0/ps_5_0">
+			float fCos = dot(SunDirection, WorldView) / length(WorldView);
+
+			float fRayleighPhase = 0.75 * (1.0 + 1* fCos*fCos);
+			float fMiePhase = 1.5 * ((1.0 - g2) / (2.0 + g2)) * (fSunSizeMultiplier * fCos*fCos) / pow(1.0 + g2 - 2.0*g*fCos, 1.5);
+
+			result = fRayleighPhase * RayleighRGBScattering + fMiePhase * MieRGBScattering;
+		</code>
+	</fragment>
+	<!--========================================================================-->
+	<fragment type="Pixel" name="HDRToneMapping">
+		<desc>
+			This fragment is responsible for mapping the dynamic colors of the
+			atmosphere into the normal color range.
+		</desc>
+
+		<inputs>
+			<resource type="float3"
+					  semantic=""
+					  label=""
+					  variable="inColor" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="HDRExposure" />
+		</inputs>
+
+		<outputs>
+			<resource type="float4"
+					  semantic=""
+					  label=""
+					  variable="outColor" />
+		</outputs>
+
+		<code lang="hlsl/Cg"
+			  platform="D3D11/D3D10/DX9/Xenon/PS3"
+			  target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/vs_5_0/ps_5_0">
+			outColor.rgb = 1.0f - exp(inColor * -g_HDRExposure);
+			outColor.a = 1.0f;
+		</code>
+	</fragment>	
+	<!--========================================================================-->
+	<fragment type="Pixel" name="CalcOpticalDepth">
+		<desc>
+			This fragment is responsible for calculating value for 
+            the optical depth in a certain direction from a certain height 
+            above the surface of a planet.
+		</desc>
+
+		<inputs>
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fCos" />
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fScaleDepth" />
+            <resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fScaleOverScaleDepth" />
+            <resource type="float"
+					  semantic=""
+					  label=""
+					  variable="fHeightFromSurface" />
+		</inputs>
+
+		<outputs>
+			<resource type="float"
+					  semantic=""
+					  label=""
+					  variable="depth" />
+		</outputs>
+
+		<code lang="hlsl/Cg"
+			  platform="D3D11/D3D10/DX9/Xenon/PS3"
+			  target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/vs_5_0/ps_5_0">
+			float x = 1.0 - fCos;
+            depth = exp(fScaleOverScaleDepth * fHeightFromSurface);
+			depth *= fScaleDepth * exp(-0.00287 + x*(0.459 + x*(3.83 + x*(-6.80 + x*5.25))));
+		</code>
+	</fragment>
+	<!--========================================================================-->
+</library>
+

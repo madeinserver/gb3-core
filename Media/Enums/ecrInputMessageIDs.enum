@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Core Runtime input messages -->
+<enum type="Normal" storage="efd::UInt32" invalid=""
+      start="0x00003100" end="0x000031FF">
+
+    <header useNamespace="efd" useExistingTypedef="ClassID" prefix="kMSGID_"
+            includes="efd/ClassInfo.h" />
+
+    <item name="KeyDown"/>
+    <item name="KeyUp"/>
+    <item name="MouseMove"/>
+    <item name="MouseDown"/>
+    <item name="MouseUp"/>
+
+    <item name="CoreInputAction"/>
+    <item name="CoreInputActionMapsLoaded"/>
+
+</enum>

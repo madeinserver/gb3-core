@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<enum base="efdClassIDs" start="0xE0010000" end="0xE001FFFF">
+
+    <header useNamespace="efd" useExistingTypedef="ClassID" prefix="kCLASSID_" 
+            includes="efd/efdClassIDs.h" />
+            
+    <!-- Add new items to the end of the list to preserve the existing values -->
+    
+    <item name="EventMessage"/>
+    <item name="ISchedulerScripting"/>
+    <item name="SchedulerPython"/>
+    <item name="SchedulerLua"/>
+    <item name="Entity"/>
+    <item name="LocatatronWorld"/>
+    <item name="DebugEntityListRequest"/>
+    <item name="DebugEntityInfoRequest"/>
+    <item name="DebugChangePropertyRequest"/>
+    <item name="DebugAddEntityRequest"/>
+    <item name="DebugRemoveEntityRequest"/>
+    <item name="DebugEntityListResponse"/>
+    <item name="DebugEntityInfoResponse"/>
+    <item name="ConnectRemoteDebugger"/>
+    <item name="SetEntityBreakpoint"/>
+    <item name="SetModelBreakpoint"/>
+    <item name="NotifyWrapper"/>
+    <item name="NotificationByCallback"/>
+    <item name="NotificationByMessage"/>
+    <item name="NotificationByBehavior"/>
+    <item name="NotificationMessage"/>
+    <item name="ScheduledTask"/>
+    <item name="PendingBehavior"/>
+    <item name="LuaResumeCoroutineTask"/>
+    <item name="PythonBehaviorDebugger"/>
+    <item name="LuaBehaviorDebugger"/>
+    <item name="EntitySetLoadState"/>
+    <item name="GameTimeClock"/>
+    <item name="IBuiltinModel"/>
+    
+    <item name="IBuiltinModelImpl"/>
+
+    <item name="FlatModelFactory"/>
+    <item name="FlatModelFactoryData"/>
+    <item name="EntityFactory"/>
+    <item name="EntityFactoryData"/>
+    <item name="WorldFactory"/>
+    <item name="WorldFactoryData"/>
+    <item name="IScriptFactory"/>
+    <item name="LuaScriptFactory"/>
+    <item name="LuaScriptFactoryData"/>
+
+    <!-- Class IDs used by the efdTest library -->
+    <item name="WaitForBlockLoadState"/>
+    <item name="WaitForFlatModelLoadState"/>
+</enum>

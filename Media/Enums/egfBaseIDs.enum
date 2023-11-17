@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<enum base="efdBaseIDs" start="0x07F01000" end="0x07F01FFF">
+
+    <header useNamespace="efd" prefix="kBASEID_" 
+            includes="efd/efdBaseIDs.h" />
+            
+    <!-- Add new items to the end of the list to preserve the existing values -->
+    
+    <item name="FromToolbench"/>
+    <item name="FromFramework"/>
+    <item name="FromExternalFramework"/>
+    <item name="FromToolbenchScriptDebugger"/>
+    <item name="ToToolbenchScriptDebugger"/>
+    <item name="ToToolbenchLogging"/>
+    <item name="SchedulerAnnouce"/>
+    <item name="ApplicationCategory"/>
+    <item name="FlatModelFactoryCategory"/>
+    <item name="WorldFactoryCategory"/>
+    <item name="LuaScriptFactoryCategory"/>
+    <item name="SchedulerLua"/>
+    <item name="EntitySetLoadState"/>
+    <item name="WaitForFlatModelLoadState"/>
+    <item name="EntityPreload" />
+
+</enum>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<enum base="egfSystemServiceIDs" start="0x07002000" end="0x07002FFF">
+
+    <header useNamespace="efd" useExistingTypedef="ClassID" prefix="kCLASSID_" 
+            includes="egf/egfSystemServiceIDs.h" />
+            
+    <!-- Add new items to the end of the list to preserve the existing values -->
+            
+    <item name="SceneGraphService"/>
+    <item name="RenderService"/>
+    <item name="CameraService"/>
+    <item name="CameraControllerService"/>
+    <item name="PickService"/>
+    <item name="LightService"/>
+    <item name="ShaderService"/>
+    <item name="PropertyVisualizationService"/>
+    <item name="ProxyService"/>
+    <item name="SelectionService"/>
+    <item name="GizmoService"/>
+    <item name="GridService"/>
+    <item name="TerrainService"/>
+    <item name="CollisionService"/>
+    <item name="AnimationService"/>
+    <item name="InteractionService"/>
+    <item name="VisualTrackerService"/>
+    <item name="ToolbenchService"/>
+    <item name="ToolCameraService"/>
+    <item name="ToolSceneService"/>
+    <item name="WorldBuilderGizmoService"/>
+    <item name="WorldBuilderCameraService"/>
+    <item name="WorldBuilderPickService"/>
+    <item name="WorldBuilderGridService"/>
+    <item name="WorldBuilderPropertyVisService"/>
+    <item name="RuntimeService"/>
+    <item name="UpdateSourcesService"/>
+    <item name="UpdateDestinationsService"/>
+    <item name="PhysXTerrainService"/>
+    <item name="PhysXRagdollService"/>
+    <item name="ToolSnapService"/>
+    <item name="WorldBuilderSnapService"/>
+    <item name="PhysXPropService"/>
+    <item name="ToolLightService"/>
+    <item name="TextureRapidIterationService"/>
+    
+</enum>

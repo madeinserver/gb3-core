@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Online -->
+<enum type="Normal" storage="efd::UInt32" invalid=""
+      start="0x00006000" end="0x00006FFF">
+
+    <header useNamespace="efd" useExistingTypedef="ClassID" prefix="kMSGID_" includes="efd/ClassInfo.h" />
+
+    <!-- Enity replication messages -->
+    <item name="EntityMessage"/>
+    <item name="EntityDiscoveryMessage"/>
+    <item name="EntityUpdateMessage"/>
+    <item name="EntityLossMessage"/>
+
+    <!-- Used for sending view behavior invocations to multiple recipients. -->
+    <item name="ViewEvent"/>
+
+    <item name="ClientReLogin"/><!-- Used by RapidIterationOnline service -->
+
+    <item name="LoginService_RequestLogin"/><!-- Client (PC) Sends Username -->
+    <item name="LoginService_SendLoginResponse"/><!-- Gateway (PC) Sends Response/Challenge Message -->
+    <item name="LoginService_RequestLogout"/><!-- Client (PC) Send Logout Message -->
+    <item name="LoginService_JoinChannelResponse"/>
+    <item name="ClientForward"/>
+
+    <item name="GatewayConnectionAccepted"/>
+    <item name="GatewayConnectionClosed"/>
+    <item name="Gateway_OnClientLogin "/>
+    <item name="Gateway_OnClientLogout"/>
+    <!-- Used to inform the client process that it has successfully completed login to a Gateway -->
+    <item name="LoginService_OnGatewayLoginComplete"/>
+    <!-- Used to inform the client process that it has logged out from the Gateway -->
+    <item name="LoginService_OnGatewayLogoutComplete"/>
+
+    <item name="EmbodymentApproval"/><!--Sent from Gateway to ServerLogin to authorize a client for creating entities -->
+
+    <item name="Proxy_SetControllerID"/>
+    <item name="Proxy_JoinChannel"/>
+    <item name="Proxy_LeaveChannel"/>
+
+    <!-- ClientLogin/ServerLogin messages -->
+    <item name="LoginNew"/>
+    <item name="LoginResponse"/>
+    <item name="LogoutExit"/>
+    <item name="LogoutRequest"/>
+    <item name="ControllerLogin"/>
+    <item name="ControllerLogout"/>
+
+    <item name="ReplicatedEntityAdded"/>
+    <item name="ReplicatedEntityUpdated"/>
+    <item /> <!-- placeholder for removed message left to avoid renumbering, can be reused -->
+    <item name="ReplicatedEntityRemoved"/>
+    <item name="PeerJoinResponse"/>
+
+    <!-- Online: Not Used -->
+    <item name="DBRequestEnvelope"/><!-- Used by currently disabled DB service -->
+    <item name="DBResponseEnvelope"/><!-- Used by currently disabled DB service -->
+    <item name="IDBRequestMessage"/><!-- Used by currently disabled DB service -->
+    <item name="IDBResponseMessage"/><!-- Used by currently disabled DB service -->
+</enum>

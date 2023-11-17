@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<enum type="Normal" storage="efd::UInt32" invalid="" >
+    <header useNamespace="egf"
+            useExistingTypedef="egf::PropertyID"
+            prefix="kPropertyID_StandardModelLibrary_"
+            includes="egf/EntityTypes.h" />
+
+    <!-- Property IDs -->
+    <item name="AccumulatesTransforms" value="3273638489"/>
+    <item name="AlwaysAffectedByLight" value="1988520236"/>
+    <item name="AmbientColor" value="2961634472"/>
+    <item name="AttachedObjects" value="4052223838"/>
+    <item name="CameraDistanceScaleFactor" value="3671243165"/>
+    <item name="CastShadows" value="2028291755"/>
+    <item name="ConstantAttenuation" value="1305396295"/>
+    <item name="CustomFarPlane" value="2217890492"/>
+    <item name="DepthBias" value="143107425"/>
+    <item name="DiffuseColor" value="764212102"/>
+    <item name="Dimmer" value="418765070"/>
+    <item name="FarPlane" value="1921669780"/>
+    <item name="FOV" value="2293586166"/>
+    <item name="ImmediateEventMap" value="1235118898"/>
+    <item name="InitialSequence" value="1072862152"/>
+    <item name="InnerSpotAngle" value="1820681000"/>
+    <item name="InputsEnabled" value="1184637157"/>
+    <item name="IsCastingShadow" value="3634273042"/>
+    <item name="IsKfmAssetShared" value="971825834"/>
+    <item name="IsNifAssetShared" value="3588137404"/>
+    <item name="IsOrthographic" value="588305758"/>
+    <item name="IsReceivingShadow" value="2429998135"/>
+    <item name="IsStatic" value="713021940"/>
+    <item name="IsVisible" value="2696327545"/>
+    <item name="KfmAsset" value="305675498"/>
+    <item name="LightNonPCLObjectsAtRuntime" value="2147844064"/>
+    <item name="LightPCLObjectsAtRuntime" value="2928597406"/>
+    <item name="LightPriority" value="2433320795"/>
+    <item name="LinearAttenuation" value="2362551945"/>
+    <item name="LODAdjust" value="249967523"/>
+    <item name="MaterialPackage" value="2461144785"/>
+    <item name="MaxDirectionalLights" value="3276506584"/>
+    <item name="MaximumFarToNearRatio" value="2656458049"/>
+    <item name="MaxPointLights" value="481351731"/>
+    <item name="MaxSpotLights" value="3623858961"/>
+    <item name="MinimumNearPlane" value="2324864004"/>
+    <item name="Name" value="62725275"/>
+    <item name="NearPlane" value="456849770"/>
+    <item name="NeverAffectedByLight" value="3868114911"/>
+    <item name="NifAsset" value="1997430726"/>
+    <item name="NormalEventMap" value="1753976354"/>
+    <item name="OuterSpotAngle" value="3014569209"/>
+    <item name="Position" value="4254452306"/>
+    <item name="PreloadAssets" value="1896513443"/>
+    <item name="ProxyNifAsset" value="1958564334"/>
+    <item name="ProxyTextureAsset" value="1781469821"/>
+    <item name="PSSMEnabled" value="697661803"/>
+    <item name="QuadraticAttenuation" value="2675777447"/>
+    <item name="Range" value="1215385659"/>
+    <item name="RangeVisualizerOrientation" value="3230513011"/>
+    <item name="RenderBackfaces" value="2702261372"/>
+    <item name="Rotation" value="1757921949"/>
+    <item name="Scale" value="763145517"/>
+    <item name="SceneDependentFrustums" value="399441449"/>
+    <item name="ShadowLOD" value="227048934"/>
+    <item name="ShadowTechnique" value="4003517295"/>
+    <item name="SizeHint" value="3629962131"/>
+    <item name="SliceCount" value="3594171977"/>
+    <item name="SliceDistanceExponentFactor" value="3090612939"/>
+    <item name="SliceTransitionLength" value="1107539347"/>
+    <item name="SliceTransitionNoiseGranularity" value="3824403685"/>
+    <item name="SliceTransitions" value="2354585355"/>
+    <item name="SpecularColor" value="3287298718"/>
+    <item name="SpotExponent" value="1605183469"/>
+    <item name="StaticShadows" value="1026821479"/>
+    <item name="StrictlyObserveSizeHint" value="4282050119"/>
+    <item name="SuppressShimmer" value="3796244861"/>
+    <item name="TerrainAsset" value="2650386356"/>
+    <item name="UpdateLightingOnMove" value="4016209235"/>
+    <item name="UseCustomFarPlane" value="4017100074"/>
+    <item name="UseDefaultDepthBias" value="1542307136"/>
+    <item name="UseForPrecomputedLighting" value="1857230642"/>
+
+</enum>

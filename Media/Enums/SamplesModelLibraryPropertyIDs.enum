@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<enum type="Normal" storage="efd::UInt32" invalid="" >
+    <header useNamespace="egf"
+            useExistingTypedef="egf::PropertyID"
+            prefix="kPropertyID_SamplesModelLibrary_"
+            includes="egf/EntityTypes.h" />
+
+    <!-- Property IDs -->
+    <item name="AccumulatesTransforms" value="3273638489"/>
+    <item name="AltitudeLimit" value="2598812714"/>
+    <item name="AttachedObjects" value="4052223838"/>
+    <item name="CameraFocusHeightAdjust" value="2856883496"/>
+    <item name="CameraFocusHorizAdjust" value="1084035343"/>
+    <item name="CameraStopHeightAdjust" value="2868263569"/>
+    <item name="CameraStopOffsetAdjust" value="1948132952"/>
+    <item name="CameraSubject" value="3017578317"/>
+    <item name="DefaultDistanceFromStop" value="4012653223"/>
+    <item name="FarPlane" value="1921669780"/>
+    <item name="FOV" value="2293586166"/>
+    <item name="HorizonRadius" value="1187239021"/>
+    <item name="IdleSequence" value="2026295799"/>
+    <item name="InitialOrientation" value="2686036822"/>
+    <item name="InitialSequence" value="1072862152"/>
+    <item name="IsCameraActive" value="159914903"/>
+    <item name="IsCastingShadow" value="3634273042"/>
+    <item name="IsKfmAssetShared" value="971825834"/>
+    <item name="IsNifAssetShared" value="3588137404"/>
+    <item name="IsOrthographic" value="588305758"/>
+    <item name="IsReceivingShadow" value="2429998135"/>
+    <item name="IsVisible" value="2696327545"/>
+    <item name="KfmAsset" value="305675498"/>
+    <item name="LODAdjust" value="249967523"/>
+    <item name="MaxDirectionalLights" value="3276506584"/>
+    <item name="MaximumFarToNearRatio" value="2656458049"/>
+    <item name="MaxPointLights" value="481351731"/>
+    <item name="MaxSpotLights" value="3623858961"/>
+    <item name="MinimumNearPlane" value="2324864004"/>
+    <item name="NearPlane" value="456849770"/>
+    <item name="Position" value="4254452306"/>
+    <item name="PreloadAssets" value="1896513443"/>
+    <item name="ProxyNifAsset" value="1958564334"/>
+    <item name="Rotation" value="1757921949"/>
+    <item name="RunPlaybackRate" value="1811521764"/>
+    <item name="RunSequence" value="1593376451"/>
+    <item name="RunTopSpeed" value="2757946573"/>
+    <item name="Scale" value="763145517"/>
+    <item name="TurnTopSpeed" value="2686608188"/>
+    <item name="WalkPlaybackRate" value="1638674068"/>
+    <item name="WalkSequence" value="3845507453"/>
+    <item name="WalkTopSpeed" value="2020915766"/>
+
+</enum>

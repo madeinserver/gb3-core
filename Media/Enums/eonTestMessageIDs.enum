@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Framework Tests -->
+<enum type="Normal" storage="efd::UInt32" invalid=""
+      start="0x10006000" end="0x10006FFF">
+
+    <header useNamespace="efd" useExistingTypedef="ClassID" prefix="kMSGID_" includes="efd/ClassInfo.h" />
+
+    <item name="TestRequest"/>
+    <item name="TestResponse"/>
+    <item name="TestFinished"/>
+
+</enum>

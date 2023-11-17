@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<enum base="efdSystemServiceIDs" start="0x07001000" end="0x07001FFF">
+
+    <header useNamespace="efd" useExistingTypedef="ClassID" prefix="kCLASSID_" 
+            includes="efd/efdSystemServiceIDs.h" />
+    
+    <!-- Add new items to the end of the list to preserve the existing values -->
+    
+    <item name="EntityManager"/>
+    <item name="FlatModelManager"/>
+    <item name="Scheduler"/>
+    <item name="RapidIterationSystemService"/>
+    <item name="EntityLoaderService"/>
+    <item name="NotificationService"/>
+    <item name="CategoryNotificationService"/>
+    <item name="DebuggerService"/>
+    <item name="SceneService"/>
+    <item name="StartSimulationService"/>
+    <item name="FinishSimulationService"/>
+    <item name="TriggerService"/>
+    <item name="PhysXTriggerService"/>
+    <item name="BuiltinsTest_MessageHandler"/>
+    <item name="SchedulerServerService"/>
+    
+</enum>

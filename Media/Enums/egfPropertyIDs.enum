@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Framework message IDs -->
+<enum type="Normal" storage="efd::UInt32" invalid=""
+      start="0xF0000100" end="0xF00001FF">
+
+    <header useNamespace="efd" useExistingTypedef="ClassID" prefix="kPropID_" includes="efd/ClassInfo.h" />
+
+    <!-- Entity Primitive Scalar Property Identifiers -->
+    <item name="Boolean"/>
+    <item name="Char"/>
+    <item name="SInt16"/>
+    <item name="UInt16"/>
+    <item name="SInt32"/>
+    <item name="UInt32"/>
+    <item name="SInt64"/>
+    <item name="UInt64"/>
+    <item name="Float32"/>
+    <item name="Float64"/>
+    <item name="String"/>
+    <item name="EntityRef"/>
+
+    <!-- Entity Primitive Associative Array Property Identifiers -->
+    <item name="BooleanAssocArray"/>
+    <item name="CharAssocArray"/>
+    <item name="SInt16AssocArray"/>
+    <item name="UInt16AssocArray"/>
+    <item name="SInt32AssocArray"/>
+    <item name="UInt32AssocArray"/>
+    <item name="SInt64AssocArray"/>
+    <item name="UInt64AssocArray"/>
+    <item name="Float32AssocArray"/>
+    <item name="Float64AssocArray"/>
+    <item name="StringAssocArray"/>
+    <item name="EntityRefAssocArray"/>
+
+    <!-- Entity Utility Property Identifiers -->
+    <item name="Point2"/>
+    <item name="Point2AssocArray"/>
+    <item name="Point3"/>
+    <item name="Point3AssocArray"/>
+    <item name="Matrix3"/>
+    <item name="Matrix3AssocArray"/>
+    <item name="Color"/>
+    <item name="ColorAssocArray"/>
+    <item name="ColorA"/>
+    <item name="ColorAAssocArray"/>
+    
+    <!-- Asset Property Identifiers -->
+    <item name="AssetID"/>
+    <item name="AssetIDAssocArray"/>
+
+</enum>

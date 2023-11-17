@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<enum type="Normal" storage="efd::UInt32" invalid="" >
+    <header useNamespace="egf"
+            useExistingTypedef="egf::FlatModelID"
+            prefix="kFlatModelID_StandardModelLibrary_"
+            includes="egf/EntityTypes.h" />
+
+    <!-- Model IDs -->
+    <item name="2DProxy" value="2664050504"/>
+    <item name="3DProxy" value="2664050537"/>
+    <item name="Actor" value="1221378093"/>
+    <item name="AmbientLight" value="2329509907"/>
+    <item name="Bakeable" value="2219133248"/>
+    <item name="BaseEntity" value="129412341"/>
+    <item name="Camera" value="3170031834"/>
+    <item name="DirectionalLight" value="386943433"/>
+    <item name="InputHandler" value="1915530644"/>
+    <item name="Light" value="742877173"/>
+    <item name="Lightable" value="3306310187"/>
+    <item name="Mesh" value="3176107662"/>
+    <item name="Nameable" value="532089914"/>
+    <item name="ParallelSplitShadowConfig" value="247448509"/>
+    <item name="PCLDirectionalLight" value="1110962218"/>
+    <item name="PCLMesh" value="4017759957"/>
+    <item name="PCLPointLight" value="887368552"/>
+    <item name="PCLSpotLight" value="2854574297"/>
+    <item name="Placeable" value="2827666854"/>
+    <item name="PointLight" value="4051886863"/>
+    <item name="PrecomputedLightConfig" value="4207906322"/>
+    <item name="PrecomputedLighting" value="3209966185"/>
+    <item name="Preloadable" value="1650880398"/>
+    <item name="PSSMDirectionalLight" value="4060805513"/>
+    <item name="Renderable" value="3759402445"/>
+    <item name="Shadowable" value="1432364367"/>
+    <item name="ShadowGenerator" value="3282032347"/>
+    <item name="SpotLight" value="1693681437"/>
+    <item name="Terrain" value="1768119585"/>
+
+</enum>

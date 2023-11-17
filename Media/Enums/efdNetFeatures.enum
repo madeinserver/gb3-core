@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Network Features -->
+<enum type="Bitfield" storage="efd::UInt32" invalid="NET_INVALID"
+    start="0x00000001" end="0x80000000">
+
+    <header useNamespace="efd" prefix="" typedef="NetFeatures" />
+
+    <item name="NET_UDP"/>
+    <item name="NET_TCP"/>
+    <item name="NET_RELIABLE"/>
+    <item name="NET_AES"/>
+    <item name="NET_SSL"/>
+    <item name="NET_COMPRESSED"/>
+    <item name="NET_CONNECTIONLESS"/>
+    <item name="NET_LOCAL"/>
+    <item name="NET_DEFAULT"/>
+    <item name="NET_UNORDERED"/>
+    <item name="NET_ENCRYPTED"/>
+    <item name="NET_VOICE"/>
+    <item name="NET_ENET"/>
+    <item name="NET_TOOL"/>
+    <item name="NET_TOTAL_ORDER"/>
+    <item name="NET_CONSOLE"/>
+    <!-- Any QOS with the NET_VIRTUAL bit set is not a physical QOS -->
+    <item name="NET_VIRTUAL" value="0x80000000"/>
+</enum>

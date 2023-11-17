@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Framework message IDs -->
+<enum type="Normal" storage="efd::UInt32" invalid=""
+      start="0x00002000" end="0x00002FFF">
+
+    <header useNamespace="efd" useExistingTypedef="ClassID" prefix="kMSGID_" includes="efd/ClassInfo.h" />
+
+    <!-- Entity Behavior Event messages -->
+    <item name="Event"/>
+    <item name="EventReturn"/>
+    <item name="EventCancel"/>
+
+    <item name="OwnedEntityAdded"/>
+    <item name="OwnedEntityUpdated"/>
+    <item name="OwnedEntityRemoved"/>
+
+    <item name="EntityChangeMessage"/>
+
+    <item name="SchedulerBeginReload"/>
+    <item name="SchedulerCleared"/>
+    <item name="ELSUnloaded"/>
+    <item name="EntityLoadRequest"/>
+    <item name="EntityLoadResult"/>
+    <item name="EntityPreloadRequest"/>
+    <item name="EntityPreloadResponse"/>
+
+    <!-- Notification Service -->
+    <item name="NoticeEntityDiscovered"/>
+    <item name="NoticeEntityUpdated"/>
+    <item name="NoticeEntityRemoved"/>
+
+    <!-- base message types for python debugging / breakpoints -->
+    <item name="StartDebuggerRequest"/>
+    <item name="BreakpointRequest"/>
+    <item name="BreakpointResponse"/>
+    <item name="ClearBreakpoints"/>
+    <item name="ClearBreakpointsResponse"/>
+    <!-- model-based breakpoint messages -->
+    <item name="InsertModelBreakpoint"/>
+    <item name="RemoveModelBreakpoint"/>
+    <item name="GetModelBreakpoints"/>
+    <item name="GetModelBreakpointsResponse"/>
+    <!-- entity-based breakpoint messages -->
+    <item name="InsertEntityBreakpoint"/>
+    <item name="RemoveEntityBreakpoint"/>
+    <item name="GetEntityBreakpoints"/>
+    <item name="GetEntityBreakpointsResponse"/>
+
+    <!-- Lua debugger messages-->
+    <item name="ScriptDebuggerCommand"/>
+    <item name="ScriptDebuggerResponse"/>
+
+    <!-- Rapid Iteration service -->
+    <item name="WorldResetRequest"/>
+    <item name="GamePauseRequest"/>
+    <item name="GameResumeRequest"/>
+
+    <!-- egfPhysX services -->
+    <item name="PhysXSceneMessage"/>
+    <item name="PhysXSceneAdded"/>
+    <item name="PhysXSceneRemoving"/>
+    <item name="PhysXSceneRemoved"/>
+    <item name="PhysXSceneSimulation"/>
+    <item name="PhysXSceneSimulationStarting"/>
+    <item name="PhysXSceneSimulationFinishing"/>
+    <item name="PhysXSceneSimulationFinished"/>
+    <item name="PhysXSceneSimulationTimeUpdated"/>
+
+  
+    <!-- Background loading messages -->
+    <item name="FlatModelFactoryRequest"/>
+    <item name="FlatModelFactoryResponse"/>
+    <item name="EntityFactoryRequest"/>
+    <item name="EntityFactoryResponse"/>
+    <item name="WorldFactoryRequest"/>
+    <item name="WorldFactoryResponse"/>
+    <item name="ScriptFactoryRequest"/>
+    <item name="ScriptFactoryResponse"/>
+  
+    <!-- To Be Moved -->
+    <item name="RequestDiscovery"/><!-- todo: this belongs in Online, move entire SchedulerMessage class -->
+    <item name="ClientDebuggerRequest"/><!-- todo: move to online -->
+  
+</enum>

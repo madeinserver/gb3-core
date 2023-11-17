@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<enum base="ecrClassIDs" start="0xE0030000" end="0xE003FFFF">
+
+    <header useNamespace="efd" useExistingTypedef="ClassID" prefix="kCLASSID_" 
+            includes="egf/egfClassIDs.h" />
+    
+    <item name="LoginMessage"/>
+    <item name="PendingEntityRemoval"/>
+    <item name="ReplicatingEntity"/>
+    <item name="ReplicationProducerEntity"/>
+    <item name="ReplicationConsumerEntity"/>
+    <item name="IReplicationGroupPolicy"/>
+    <item name="IReplicationGroupPolicyData"/>
+    <item name="GroupUpdatePolicy"/>
+    <item name="GroupUpdatePolicyData"/>
+
+</enum>

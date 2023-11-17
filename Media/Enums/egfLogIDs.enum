@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<enum base="ecrLogIDs">
+
+    <header useNamespace="efd" prefix="k" includes="efd/ecrLogIDs.h"/>
+
+    <!-- Framework -->
+    <item name="Lua"/>                 <!-- Lua script log messages -->
+    <item name="Python"/>              <!-- Python script log messages -->
+    <item name="Entity"/>              <!-- EGF Entity -->
+    <item name="Model"/>               <!-- EGF Model -->
+    <item name="Property"/>            <!-- EGF Entity-Property -->
+    <item name="Behavior"/>            <!-- EGF Entity-Behavior -->
+    <item name="Scheduler"/>           <!-- EGF Scheduler process -->
+    <item name="BehaviorTrace"/>       <!-- Used for tracing all things behavior related -->
+    <item name="BehaviorAPI"/>         <!-- Behavior API method calls -->
+    <item name="NotificationService"/> <!-- EGF Notification Service -->
+    <item name="FlatModelFactory"/>    <!-- FlatModelFactory -->
+    <item name="EntityFactory"/>       <!-- EntityFactory -->
+    <item name="WorldFactory"/>        <!-- WorldFactory -->
+    <item name="LuaScriptFactory"/>    <!-- LuaScriptFactory messages -->
+    <item name="EntityManager"/>       <!-- EntityManager messages -->
+
+</enum>

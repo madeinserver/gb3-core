@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<enum base="efdLogIDs">
+
+    <header useNamespace="efd" prefix="k" includes="efd/efdLogIDs.h"/>
+
+    <!-- Core Runtime -->
+    <item name="GamebryoGeneral0"/>
+    <item name="GamebryoGeneral1"/>
+    <item name="GamebryoGeneral2"/>
+
+    <item name="GamebryoMemory0"/>
+    <item name="GamebryoMemory1"/>
+    <item name="GamebryoMemory2"/>
+
+    <item name="GamebryoMemoryTimeStamp"/>
+    <item name="GamebryoReserved"/>
+
+</enum>

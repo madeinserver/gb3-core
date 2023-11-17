@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<enum type="Normal" storage="efd::UInt16" invalid="UnknownModule=EE_MAX">
+
+    <header useNamespace="efd" prefix="k" />
+
+    <!-- Special values -->
+    <item name="NextId" value="0x8000"/>        <!-- Used to generate new dynamic IDs from scripting -->
+    <item name="ALL" value="0"/>                <!-- Special ID for "All modules", used in logger configuration -->
+
+    <!-- Foundation -->
+    <item name="App"/>                 <!-- generic module for final application use -->
+    <item name="Testing"/>             <!-- Test Service and testing related logging -->
+    <item name="Foundation"/>          <!-- general foundation class usage -->
+    <item name="Message"/>             <!-- handling of local messages -->
+    <item name="Network"/>             <!-- handling of network messages -->
+    <item name="ServiceManager"/>      <!-- System Service ServiceManager -->
+    <item name="MessageService"/>      <!-- MessageService -->
+    <item name="NetMessage"/>          <!-- NetService -->
+    <item name="Log"/>                 <!-- Logger and Log Service -->
+    <item name="MessageTrace"/>        <!-- Used for tracing message delivery (both local and remote) -->
+    <item name="CategoryTrace"/>       <!-- Used for tracing category usage -->
+    <item name="Time"/>                <!-- Used for tracing framework time and game time -->
+    <item name="ChannelManager"/>      <!-- ChannelManager Service -->
+    <item name="MemTracker    "/>      <!-- MemTracker -->
+    <item name="Assets"/>              <!-- Asset Locator Service -->
+    <item name="File"/>                <!-- Used for tracing file handling -->
+    <item name="Enumeration"/>         <!-- Used in the DDE parser and Enum Manager -->
+    <item name="PhysicsSystem"/>       <!-- Used by PhysX integration related code -->
+    <item name="NameResolutionService"/>
+    <item name="RapidIteration"/>      <!-- Everything related to rapid iteration -->
+    <item name="Configuration"/>       <!-- Used for anything configuration related -->
+    <item name="RemoteFile"/>          <!-- Used for remote file related logging -->
+    <item name="USBSocket"/>           <!-- Used for USBSocket class -->
+    <item name="USBComm"/>             <!-- Used for USBComm class -->
+    <item name="Metrics"/>             <!-- Used for various performance and activity metrics -->
+    <item name="Socket"/>              <!-- Used for low-level (e.g. OS or 3rd party lib) networking -->
+    <item name="AssetLoading"/>        <!-- Asset loading logs, e.g. AssetFactoryManager -->
+
+</enum>

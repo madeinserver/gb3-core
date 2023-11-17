@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<enum start="0x80000001" end="0xFFFF0000" invalid="QOS_INVALID">
+<!-- <enum base="efdQualityOfService" start="0x00000001" end="0xFFFF0000"> -->
+
+<header useNamespace="efd" useExistingTypedef="QualityOfService" />
+
+    <item name="QOS_DEFAULT" />
+    <item name="QOS_SUBSCRIPTION" />
+    <item name="QOS_TOOL" />
+    <item name="QOS_TOTAL_ORDER" />
+    <item name="QOS_LOCAL" />
+    <item name="QOS_VOICE" />
+
+    <item name="QOS_RELIABLE" />
+    <item name="QOS_RELIABLE_AES"/>
+    <item name="QOS_RELIABLE_COMPRESSED" />
+    <item name="QOS_RELIABLE_COMPRESSED_AES" />
+
+    <item name="QOS_UNRELIABLE" />
+    <item name="QOS_UNRELIABLE_ORDERED" />
+    <item name="QOS_CONNECTIONLESS" />
+
+    <item name="QOS_TCP" />
+    <item name="QOS_TCP_AES" />
+    <item name="QOS_TCP_COMPRESSED" />
+    <item name="QOS_TCP_COMPRESSED_AES" />
+    <item name="QOS_TCP_SSL" />
+
+</enum>

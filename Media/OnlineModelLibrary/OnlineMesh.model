@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityModel
+  version="5"
+  ID="369a60a2-f723-4045-a6c4-29ec5394b756"
+  Description="An entity that will replicate its render and transform properties to peers or clients.">
+  <Mixins>
+    <Mixin
+      SourceID="94ea9b9e-3aca-467f-841b-bd9503df28ba"
+      SourceName="OnlineProducer" />
+    <Mixin
+      SourceID="769224cc-5c68-4af1-b1c8-85bc9879d9a9"
+      SourceName="Mesh" />
+  </Mixins>
+  <Properties />
+  <PropertyOverrides>
+    <PropertyOverride
+      Name="IsVisible"
+      Description="">
+      <TraitOverrides>
+        <TraitOverride
+          IsActive="true">
+          <Trait
+            Name="ReplicationGroup00" />
+        </TraitOverride>
+      </TraitOverrides>
+      <Value>
+        <Boolean
+          Value="True" />
+      </Value>
+    </PropertyOverride>
+    <PropertyOverride
+      Name="Position"
+      Description="">
+      <TraitOverrides>
+        <TraitOverride
+          IsActive="true">
+          <Trait
+            Name="ReplicationGroup00" />
+        </TraitOverride>
+      </TraitOverrides>
+      <Value>
+        <Point3>
+          <X>
+            <Float32
+              Value="0" />
+          </X>
+          <Y>
+            <Float32
+              Value="0" />
+          </Y>
+          <Z>
+            <Float32
+              Value="0" />
+          </Z>
+        </Point3>
+      </Value>
+    </PropertyOverride>
+    <PropertyOverride
+      Name="Rotation"
+      Description="">
+      <TraitOverrides>
+        <TraitOverride
+          IsActive="true">
+          <Trait
+            Name="ReplicationGroup00" />
+        </TraitOverride>
+      </TraitOverrides>
+      <Value>
+        <Rotator>
+          <Roll>
+            <Degree
+              Value="0" />
+          </Roll>
+          <Pitch>
+            <Degree
+              Value="0" />
+          </Pitch>
+          <Yaw>
+            <Degree
+              Value="0" />
+          </Yaw>
+        </Rotator>
+      </Value>
+    </PropertyOverride>
+    <PropertyOverride
+      Name="Scale"
+      Description="">
+      <TraitOverrides>
+        <TraitOverride
+          IsActive="true">
+          <Trait
+            Name="ReplicationGroup00" />
+        </TraitOverride>
+      </TraitOverrides>
+      <Value>
+        <Float32
+          Value="1" />
+      </Value>
+    </PropertyOverride>
+  </PropertyOverrides>
+  <Behaviors />
+  <BehaviorOverrides />
+  <Traits>
+    <Trait
+      Name="Active" />
+  </Traits>
+  <ExtraDataList />
+</EntityModel>

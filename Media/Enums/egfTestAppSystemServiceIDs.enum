@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<enum base="ecrSystemServiceIDs" start="0x07019000" end="0x07019FFF">
+
+    <header useNamespace="efd" useExistingTypedef="ClassID" prefix="kCLASSID_" />
+    
+    <item name="TestLightsService"/>
+    <item name="TestShadowsService"/>
+    
+</enum>

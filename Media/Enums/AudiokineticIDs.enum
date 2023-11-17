@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    ID Range for Audiokinetic allocated on 2009-04-28.
+    To compile this into a header file, use this command:
+        $(EMERGENT_PATH)\Source\Tools\DDEHeaderGen\bin\DDEHeaderGenRelease.exe output=AudiokineticIDs.h enum=AudiokineticIDs.enum
+-->
+
+<enum type="Normal" storage="efd::UInt32" invalid="" start="0x01000500" end="0x010005FF">
+
+    <header useNamespace="epgmWwise" useExistingTypedef="efd::ClassID" prefix="kCLASSID_" />
+
+    <!-- Add new items to the end of the list to preserve the existing values -->
+
+    <item name="AudioMessage" />
+    <item name="AudioPostEvent" />
+    <item name="AudioPostTrigger" />
+    <item name="AudioSetParam" />
+    <item name="AudioSetState" />
+    <item name="AudioSetSwitch" />
+    <item name="AudioServiceId" />
+    <item name="AudioPrepareEventCallback" />
+    <item name="AudioUnprepareEventCallback" />
+    <item name="AudioLoadBankCallback" />
+    <item name="AudioUnloadBankCallback" />
+	<item name="PostEventExNotifyCallback" />
+
+	<!--
+    <item name="Your Class, Service or Message Name Here"/>
+    -->
+
+</enum>
+

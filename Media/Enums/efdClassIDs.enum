@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<enum type="Normal" storage="efd::UInt32" invalid="" start="0xE0000000" end="0xE000FFFF">
+
+    <header useNamespace="efd" useExistingTypedef="ClassID" prefix="kCLASSID_" 
+            includes="efd/ClassInfo.h"/>
+            
+    <!-- Add new items to the end of the list to preserve the existing values -->
+    <item name="MsgClassIDAndCatLogMask"/>
+    <item name="XMLMemLogHandler"/>
+    <item name="FileDestination"/>
+    <item name="NetDestination"/>
+    <item name="PrintDestination"/>
+    <item name="SystemLogger"/>
+    <item name="ConfigSource"/>
+    <item name="CommandLineSource"/>
+    <item name="IniSource"/>
+    <item name="EnvVarSource"/>
+    <item name="IConfigSource"/>
+    <item name="IMessage"/>
+    <item name="IStreamable"/>
+    <item name="INetListener"/>
+    <item name="EnvelopeMessage"/>
+    <item name="StreamMessage"/>
+    <item name="ServiceManager"/>
+    <item name="AssetLocatorRequest"/>
+    <item name="AssetLocatorResponse"/>
+    <item name="AssetLocationMap"/>
+    <item name="NetMessage"/>
+    <item name="NetListener"/>
+    <item name="NetworkStatus"/>
+    <item name="ISectionEntry"/>
+    <item name="ConfigSection"/>
+    <item name="AssetTagger"/>
+    <item name="AutoTagger_Mime"/>
+    <item name="AutoTagger_PlatSample"/>
+    <item name="AutoTagger_LogicalId"/>
+    <item name="AutoTagger_PrecacheSample"/>
+    <item name="AutoTagger_Directory"/>
+    <item name="NameResolutionMessage"/>
+    <item name="NameResolutionRequest"/>
+    <item name="NameResolutionResponse"/>
+    <item name="NameResolutionLocalDone"/>
+    <item name="NameResolutionRemoteDone"/>
+    <item name="ProxyMessageTarget"/>
+    <item name="HighPrecisionClock"/>
+    <item name="StepHighPrecisionClock"/>
+    <item name="Logger"/>
+    <item name="AssetApplicationInfoMsg"/>
+    <item name="IAssetFactory"/>
+    <item name="BaseAssetFactory"/>
+    <item name="GenericAssetFactory"/>
+    <item name="IAssetResponseData"/>
+    <item name="GenericAssetFactoryData"/>
+    <item name="SyncState"/>
+    <item name="WaitForConnectionEstablishedState"/>
+    <item name="AssetImporter"/>
+    <item name="NameResolutionResponseV2"/>
+    <item name="FailState"/>
+    <item name="DirectedMessage"/>
+    <!-- Add new items to the end of the list to preserve the existing values -->
+
+</enum>

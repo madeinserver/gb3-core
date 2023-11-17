@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<library version="1"
+         id="StandardModelLibrary"
+         name="Standard Model Library"
+         provider="Emergent Game Technologies"
+         default="true"
+         library-version="2">
+  <includes>
+    <include path="StandardModelLibrary\*.*" recursive="true" />
+  </includes>
+  <references>
+    <reference path="StandardModelLibrary\StandardModelLibrary.emtproj" />
+  </references>
+  <asset-web-configs>
+     <asset-web-config path="asset-web-config\MimeTagger.ini" />
+     <asset-web-config path="asset-web-config\LogicalIdTagger.ini" />
+  </asset-web-configs>
+</library>

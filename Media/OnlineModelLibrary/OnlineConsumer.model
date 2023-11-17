@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityModel
+  version="5"
+  ID="bce48e80-6f9e-40cf-a267-51ddb7156100"
+  Description="An entity that will act as a consumer for replication messages. This sets up a channel for other entities to replicate and send events on."
+  Folder="c8c3b77b-bd3e-49ef-8618-b87628811cfd">
+  <Mixins>
+    <Mixin
+      SourceID="627cb1ec-e7b8-446f-aefa-8dc635329a27"
+      SourceName="BaseEntity" />
+  </Mixins>
+  <Properties />
+  <PropertyOverrides />
+  <Behaviors />
+  <BehaviorOverrides>
+    <BehaviorOverride
+      Name="OnCreate"
+      Description="Behavior invoked when the Entity Manager adds the entity instance. Created entities do not render until they enter the world."
+      Target="Lua">
+      <TraitOverrides />
+    </BehaviorOverride>
+  </BehaviorOverrides>
+  <Traits>
+    <Trait
+      Name="Active" />
+  </Traits>
+  <ExtraDataList />
+</EntityModel>

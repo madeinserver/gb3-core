@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<library version="1">
+  <!--========================================================================-->
+  <fragment type="Pixel/Vertex" name="CrossFloat3">
+    <desc>
+    This fragment is responsible for cross producting two float3's. 
+    </desc>
+    <inputs>
+        <resource type="float3" semantic="" label="" 
+            variable="V1" />
+        <resource type="float3" semantic="" label="" 
+            variable="V2" />
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D11/D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_4_0/ps_4_0/vs_5_0/ps_5_0">
+    Output = cross(V1, V2);
+    </code>
+  </fragment>
+    <!--========================================================================-->
+  <fragment type="Pixel/Vertex" name="HandleTransformPosition">
+		<desc>
+			This fragment is responsible for applying a transform to the
+			incoming vertex position. used to transform to/from W, WV and WVP
+		</desc>
+
+		<inputs>
+			<resource type="float3"
+					  semantic="Position"
+					  label="Local"
+					  variable="OriginalPos" />
+			<resource type="float4x4"
+					  semantic=""
+					  label=""
+					  variable="TransformMatrix" />
+		</inputs>
+
+		<outputs>
+			<resource type="float4"
+					  semantic="Position"
+					  label="World"
+					  variable="TransformPos" />
+		</outputs>
+
+		<code lang="hlsl/Cg"
+			  platform="D3D10/DX9/Xenon/PS3"
+			  target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/ps_5_0">
+			TransformPos = mul(float4(OriginalPos,1), TransformMatrix);
+		</code>
+	</fragment>
+	<!--========================================================================-->
+	<fragment type="Pixel/Vertex" name="HandleTransformDirection">
+		<desc>
+			This fragment is responsible for applying a transform to an incomming
+			direction. this allows the rotation of all directions into and out of
+			different spaces. 
+		</desc>
+
+		<inputs>
+			<resource type="float3"
+					  semantic=""
+					  label="Local"
+					  variable="OriginalDir" />
+			<resource type="float3x3"
+					  semantic=""
+					  label=""
+					  variable="TransformMatrix" />
+		</inputs>
+
+		<outputs>
+			<resource type="float3"
+					  semantic=""
+					  label="World"
+					  variable="TransformDir" />
+		</outputs>
+
+		<code lang="hlsl/Cg"
+			  platform="D3D10/DX9/Xenon/PS3"
+			  target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/ps_5_0">
+			TransformDir = mul(OriginalDir, TransformMatrix);
+		</code>
+	</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="Float4ToFloat3">
+    <desc>
+	    This fragment implements the operation:
+	    Output = Input.xyz;
+    </desc>
+    <inputs>
+        <resource type="float4" semantic="" label="" 
+            variable="Input" default="(1.0, 1.0, 1.0, 1.0)"/>
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D11/D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/ps_5_0">
+    Output = Input.xyz;
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="Float2ToFloat3">
+    <desc>
+	    This fragment implements the operation:
+	    Output = float3(Input.xy, 0);
+    </desc>
+    <inputs>
+        <resource type="float2" semantic="" label="" 
+            variable="Input" default="(1.0, 1.0)"/>
+    </inputs>
+    <outputs>
+        <resource type="float3" semantic="" label="" 
+            variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D11/D3D10/DX9/Xenon/PS3" 
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/ps_5_0">
+    Output = float3(Input.xy, 0);
+    </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="Float2ToFloat4">
+  <desc>
+    This fragment implements the operation:
+    Output = float3(Input.xy, 0);
+  </desc>
+  <inputs>
+    <resource type="float2" semantic="" label=""
+        variable="Input" default="(1.0, 1.0)"/>
+  </inputs>
+  <outputs>
+    <resource type="float4" semantic="" label=""
+        variable="Output" />
+  </outputs>
+  <code lang="hlsl/Cg" platform="D3D11/D3D10/DX9/Xenon/PS3"
+        target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/ps_5_0">
+    Output = float4(Input.xy, 0, 0);
+  </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="Float4x4ToFloat3x3">
+  <desc>
+    This fragment implements the operation:
+    Output = float3(Input.xy, 0);
+  </desc>
+  <inputs>
+    <resource type="float4x4" semantic="" label="" variable="Input" />
+  </inputs>
+  <outputs>
+    <resource type="float3x3" semantic="" label="" variable="Output" />
+  </outputs>
+  <code lang="hlsl/Cg" platform="D3D11/D3D10/DX9/Xenon/PS3"
+        target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/ps_5_0">
+    Output = float3x3(Input[0].xyz, Input[1].xyz, Input[2].xyz);
+  </code>
+</fragment>
+<!--========================================================================-->
+<fragment type="Vertex/Pixel" name="ColorToLuminance">
+  <desc>
+    This fragments converts a color to its luminance value. useful for converting
+    to a greyscale image. 
+  </desc>
+  <inputs>
+    <resource type="float3" semantic="" label="" variable="Color"/>
+  </inputs>
+  <outputs>
+    <resource type="float" semantic="" label="" variable="Luma" />
+  </outputs>
+  <code lang="hlsl/Cg" platform="D3D11/D3D10/DX9/Xenon/PS3"
+        target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/ps_5_0">
+    Luma = 0.2904*Color.r + 0.6051*Color.g + 0.1045*Color.b;
+  </code>
+</fragment>
+<!--========================================================================-->
+  <fragment type="Vertex/Pixel" name="ExtractChannel">
+    <desc>
+      This fragments extracts a specific channel from the input variable
+    </desc>
+    <inputs>
+      <resource type="float4" semantic="" label="" variable="Input"/>
+      <resource type="int" semantic="" label="" variable="Channel"/>
+    </inputs>
+    <outputs>
+      <resource type="float" semantic="" label="" variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D11/D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/ps_5_0">
+      Output = Input[Channel];
+    </code>
+  </fragment>
+<!--========================================================================-->
+  <fragment type="Vertex/Pixel" name="CombineFloat3Float1">
+    <desc>
+        Combines a float3 into XYZ and float1 into W of a float4
+    </desc>
+    <inputs>
+      <resource type="float3" semantic="" label="" variable="InputA"/>
+      <resource type="float" semantic="" label="" variable="InputB"/>
+    </inputs>
+    <outputs>
+      <resource type="float4" semantic="" label="" variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D11/D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/ps_5_0">
+      Output.xyz = InputA;
+      Output.w = InputB;
+    </code>
+  </fragment>
+<!--========================================================================-->
+  <fragment type="Vertex/Pixel" name="CombineFloat2Float2">
+    <desc>
+        Combines a float2 into XY and float2 into ZW of a float4
+    </desc>
+    <inputs>
+      <resource type="float2" semantic="" label="" variable="InputA"/>
+      <resource type="float2" semantic="" label="" variable="InputB"/>
+    </inputs>
+    <outputs>
+      <resource type="float4" semantic="" label="" variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D11/D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/ps_5_0">
+      Output.xy = InputA;
+      Output.zw = InputB;
+    </code>
+  </fragment>
+<!--========================================================================-->
+  <fragment type="Vertex/Pixel" name="CombineFloat1Float3">
+    <desc>
+        Combines a float into X and float3 into YZW of a float4
+    </desc>
+    <inputs>
+      <resource type="float" semantic="" label="" variable="InputA"/>
+      <resource type="float3" semantic="" label="" variable="InputB"/>
+    </inputs>
+    <outputs>
+      <resource type="float4" semantic="" label="" variable="Output" />
+    </outputs>
+    <code lang="hlsl/Cg" platform="D3D11/D3D10/DX9/Xenon/PS3"
+          target="vs_1_1/ps_2_0/vs_3_0/ps_3_0/vs_4_0/ps_4_0/ps_5_0">
+      Output.x = InputA;
+      Output.yzw = InputB;
+    </code>
+  </fragment>
+</library>

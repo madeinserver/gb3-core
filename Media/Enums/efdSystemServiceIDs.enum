@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<enum type="Normal" storage="efd::UInt32" invalid="" start="0x07000000" end="0x07000FFF">
+
+    <header useNamespace="efd" useExistingTypedef="ClassID" prefix="kCLASSID_"
+            includes="efd/ClassInfo.h"/>
+            
+    <!-- Add new items to the end of the list to preserve the existing values -->
+
+    <item name="NullSystemService"/>
+    <item name="ISystemService"/>
+    <item name="NetService"/>
+    <item name="MessageService"/>
+    <item name="ConfigManager"/>
+    <item name="IConfigManager"/>
+    <item name="BridgeService"/>
+    <item name="ChannelManager"/>
+    <item name="LogService"/>
+    <item name="EnumManager"/>
+    <item name="ConsoleInput"/>
+    <item name="IconAppService"/>
+    <item name="InputService"/>
+    <item name="IAssetLocatorService"/>
+    <item name="AssetLocatorService"/>
+    <item name="AssetMonitorService"/>
+    <item name="IAssetServer"/>
+    <item name="AssetServer"/>
+    <item name="AssetConfigService"/>
+    <item name="ReloadManager"/>
+    <item name="IMultiProcessTestService"/>
+    <item name="MultiProcessTestService"/>
+    <item name="ITest"/>
+    <item name="Test"/>
+    <item name="ITestService"/>
+    <item name="TestService"/>
+    <item name="Win32PlatformService"/>
+    <item name="WiiPlatformService"/>
+    <item name="PS3PlatformService"/>
+    <item name="USBRemoteFileHostService"/>
+    <item name="NameResolutionService"/>
+
+    <item name="ToolsNetService"/>
+    <item name="ToolsMessageService"/>
+
+    <item name="IMessageHelperSystemService"/>
+
+    <item name="AssetFactoryManager"/>
+    <item name="RemoteAssetServerRescan"/>
+
+    <item name="NetService"/>
+    <item name="ToolServiceManager"/>
+    <item name="SDL2PlatformService"/> <!-- mis -->
+
+</enum>

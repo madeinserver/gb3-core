@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<enum type="Normal" storage="efd::UInt32" invalid="" start="0xF0000001" end="0xF00000FF">
+
+    <header useNamespace="efd" prefix="kTypeID_" />
+
+    <item name="Bool"/>
+    <item name="Char"/>
+    <item name="SInt8"/>
+    <item name="UInt8"/>
+    <item name="SInt16"/>
+    <item name="UInt16"/>
+    <item name="SInt32"/>
+    <item name="UInt32"/>
+    <item name="SInt64"/>
+    <item name="UInt64"/>
+    <item name="Float32"/>
+    <item name="Float64"/>
+    <item name="utf8string"/>
+    <item name="Point2"/>
+    <item name="Point3"/>
+    <item name="Point4"/>
+    <item name="Matrix3"/>
+    <item name="Color"/>
+    <item name="ColorA"/>
+    <item name="Quaternion"/>
+    <item name="AssetID"/>
+
+</enum>

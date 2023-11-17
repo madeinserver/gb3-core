@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<enum base="egfClassIDs" start="0xE0020000" end="0xE002FFFF">
+
+    <header useNamespace="efd" useExistingTypedef="ClassID" prefix="kCLASSID_" 
+            includes="egf/egfClassIDs.h" />
+
+    <item name="InputStickMessage"/>
+    <item name="AttachNifData"/>
+    <item name="IRenderServiceDelegate"/>
+    <item name="InputHandler"/>
+    <item name="NIFFactory"/>
+    <item name="KFMFactory"/>
+    <item name="KFMFactoryData"/>
+    <item name="SceneGraphCache"/>
+
+</enum>

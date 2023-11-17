@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<enum base="efdQualityOfService" start="0x00000001" end="0x80000000">
+
+<header useNamespace="efd" useExistingTypedef="QualityOfService" includes="efd/NetEnums.h" />
+
+    <alias name="kQOS_EnetReliable" value="NET_UDP|NET_RELIABLE|NET_ENET"/>
+    <alias name="kQOS_EnetReliableTotalOrder" value="NET_UDP|NET_RELIABLE|NET_ENET|NET_TOTAL_ORDER"/>
+    <alias name="kQOS_EnetUnreliable" value="NET_UDP|NET_UNORDERED|NET_ENET"/>
+    <alias name="kQOS_EnetUnreliableOrdered" value="NET_UDP|NET_ENET"/>
+
+</enum>

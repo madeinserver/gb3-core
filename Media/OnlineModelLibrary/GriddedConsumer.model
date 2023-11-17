@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityModel
+  version="5"
+  ID="4763519f-a48f-4748-a4b2-69e1b778339f"
+  Description="When mixed into a Placeable Entity, will automatically subscribe to nearby grids populating the local cache with Entities publishing into that grid. On a client, those will be the only producers kept up to date and visible. Matches with GriddedProducer."
+  Folder="3db42a48-7970-490d-b7b1-50e598c7c5af">
+  <Mixins>
+    <Mixin
+      SourceID="627cb1ec-e7b8-446f-aefa-8dc635329a27"
+      SourceName="BaseEntity" />
+    <Mixin
+      SourceID="2696199a-98a7-410b-a3e3-28abeeae752a"
+      SourceName="Placeable" />
+  </Mixins>
+  <Properties>
+    <Property
+      Name="GridSize"
+      Description="">
+      <Traits />
+      <Value>
+        <Float32
+          Value="400" />
+      </Value>
+      <Restriction />
+    </Property>
+    <Property
+      Name="Range"
+      Description="">
+      <Traits />
+      <Value>
+        <Float32
+          Value="400" />
+      </Value>
+      <Restriction />
+    </Property>
+    <Property
+      Name="ConsumerUpdateDelta"
+      Description="Recompute every 1 second">
+      <Traits />
+      <Value>
+        <Float32
+          Value="1" />
+      </Value>
+      <Restriction />
+    </Property>
+    <Property
+      Name="ConsumingCategories"
+      Description="List of Categories (stored in the key) we are consuming">
+      <Traits />
+      <Value>
+        <Map
+          ItemsDataType="String">
+          <Items>
+            <Item
+              Key="0">
+              <String
+                Value="yes" />
+            </Item>
+          </Items>
+        </Map>
+      </Value>
+      <Restriction />
+    </Property>
+  </Properties>
+  <PropertyOverrides>
+    <PropertyOverride
+      Name="Position"
+      Description="">
+      <TraitOverrides />
+      <Value>
+        <Point3>
+          <X>
+            <Float32
+              Value="0" />
+          </X>
+          <Y>
+            <Float32
+              Value="0" />
+          </Y>
+          <Z>
+            <Float32
+              Value="0" />
+          </Z>
+        </Point3>
+      </Value>
+    </PropertyOverride>
+  </PropertyOverrides>
+  <Behaviors>
+    <Behavior
+      Name="OnUpdateConsumerSubscription"
+      Description=""
+      Target="Lua">
+      <Traits />
+    </Behavior>
+  </Behaviors>
+  <BehaviorOverrides>
+    <BehaviorOverride
+      Name="OnCreate"
+      Description="Behavior invoked when the Entity Manager adds the entity instance. Created entities do not render until they enter the world."
+      Target="Lua">
+      <TraitOverrides />
+    </BehaviorOverride>
+  </BehaviorOverrides>
+  <Traits>
+    <Trait
+      Name="Active" />
+  </Traits>
+  <ExtraDataList />
+</EntityModel>

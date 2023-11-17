@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<enum base="efdNetFeatures" >
+
+    <header useNamespace="efd" prefix="" useExistingTypedef="QualityOfService"/>
+    
+    <alias name="kQOS_Invalid" value="NET_INVALID"/>
+    <alias name="kQOS_Reliable" value="NET_TCP|NET_RELIABLE|NET_DEFAULT"/>
+    <alias name="kQOS_Unreliable" value="NET_UDP|NET_UNORDERED"/>
+    <alias name="kQOS_UnreliableOrdered" value="NET_UDP"/>
+    <alias name="kQOS_UnreliableConnectionless" value="NET_UDP|NET_UNORDERED|NET_CONNECTIONLESS"/>
+    <alias name="kQOS_TCP" value="NET_TCP|NET_RELIABLE"/>
+    <alias name="kQOS_Local" value="NET_LOCAL|NET_RELIABLE"/>
+    <alias name="kQOS_ReliableAES" value="NET_UDP|NET_RELIABLE|NET_AES"/>
+    <alias name="kQOS_ReliableCompressed" value="NET_UDP|NET_RELIABLE|NET_COMPRESSED"/>
+    <alias name="kQOS_ReliableAESCompressed" value="NET_UDP|NET_RELIABLE|NET_AES|NET_COMPRESSED"/>
+    <alias name="kQOS_ReliableEncrypted" value="NET_UDP|NET_RELIABLE|NET_ENCRYPTED"/>
+    <alias name="kQOS_TCPAES" value="NET_TCP|NET_RELIABLE|NET_AES"/>
+    <alias name="kQOS_TCPCompressed" value="NET_TCP|NET_RELIABLE|NET_COMPRESSED"/>
+    <alias name="kQOS_TCPAESCompressed" value="NET_TCP|NET_RELIABLE|NET_AES|NET_COMPRESSED"/>
+    <alias name="kQOS_TCPEncrypted" value="NET_TCP|NET_RELIABLE|NET_ENCRYPTED"/>
+    <alias name="kQOS_TCPSSL" value="NET_TCP|NET_RELIABLE|NET_SSL"/>
+    <alias name="kQOS_Voice" value="NET_UDP|NET_UNORDERED|NET_VOICE"/>
+    <alias name="kQOS_TCPTool" value="NET_TCP|NET_RELIABLE|NET_TOOL"/>
+    <alias name="kQOS_ReliableTotalOrder" value="NET_UDP|NET_RELIABLE|NET_TOTAL_ORDER"/>
+    <alias name="kQOS_TCPTotalOrder" value="NET_TCP|NET_RELIABLE|NET_TOTAL_ORDER"/>
+</enum>

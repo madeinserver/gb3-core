@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityModel
+  version="5"
+  ID="16607d2f-184a-4563-8767-df5d17df107e"
+  Description="An entity that will replicate its render and transform properties to peers or clients.">
+  <Mixins>
+    <Mixin
+      SourceID="94ea9b9e-3aca-467f-841b-bd9503df28ba"
+      SourceName="OnlineProducer" />
+    <Mixin
+      SourceID="bc8153af-f680-46ac-9de7-f99106dee084"
+      SourceName="Actor" />
+  </Mixins>
+  <Properties />
+  <PropertyOverrides>
+    <PropertyOverride
+      Name="IsVisible"
+      Description="">
+      <TraitOverrides>
+        <TraitOverride
+          IsActive="true">
+          <Trait
+            Name="ReplicationGroup00" />
+        </TraitOverride>
+      </TraitOverrides>
+      <Value>
+        <Boolean
+          Value="True" />
+      </Value>
+    </PropertyOverride>
+    <PropertyOverride
+      Name="KfmAsset"
+      Description="">
+      <TraitOverrides>
+        <TraitOverride
+          IsActive="true">
+          <Trait
+            Name="ReplicationGroup00" />
+        </TraitOverride>
+      </TraitOverrides>
+      <Value>
+        <Asset
+          Value="">
+          <LastKnownName></LastKnownName>
+          <LastKnownPath></LastKnownPath>
+          <LastKnownTags></LastKnownTags>
+        </Asset>
+      </Value>
+    </PropertyOverride>
+    <PropertyOverride
+      Name="Position"
+      Description="">
+      <TraitOverrides>
+        <TraitOverride
+          IsActive="true">
+          <Trait
+            Name="ReplicationGroup00" />
+        </TraitOverride>
+      </TraitOverrides>
+      <Value>
+        <Point3>
+          <X>
+            <Float32
+              Value="0" />
+          </X>
+          <Y>
+            <Float32
+              Value="0" />
+          </Y>
+          <Z>
+            <Float32
+              Value="0" />
+          </Z>
+        </Point3>
+      </Value>
+    </PropertyOverride>
+    <PropertyOverride
+      Name="Rotation"
+      Description="">
+      <TraitOverrides>
+        <TraitOverride
+          IsActive="true">
+          <Trait
+            Name="ReplicationGroup00" />
+        </TraitOverride>
+      </TraitOverrides>
+      <Value>
+        <Rotator>
+          <Roll>
+            <Degree
+              Value="0" />
+          </Roll>
+          <Pitch>
+            <Degree
+              Value="0" />
+          </Pitch>
+          <Yaw>
+            <Degree
+              Value="0" />
+          </Yaw>
+        </Rotator>
+      </Value>
+    </PropertyOverride>
+    <PropertyOverride
+      Name="Scale"
+      Description="">
+      <TraitOverrides>
+        <TraitOverride
+          IsActive="true">
+          <Trait
+            Name="ReplicationGroup00" />
+        </TraitOverride>
+      </TraitOverrides>
+      <Value>
+        <Float32
+          Value="1" />
+      </Value>
+    </PropertyOverride>
+  </PropertyOverrides>
+  <Behaviors />
+  <BehaviorOverrides />
+  <Traits>
+    <Trait
+      Name="Active" />
+  </Traits>
+  <ExtraDataList />
+</EntityModel>

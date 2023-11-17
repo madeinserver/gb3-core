@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<enum base="ecrSystemServiceIDs" start="0x07011000" end="0x07011FFF">
+
+    <header useNamespace="efd" useExistingTypedef="ClassID" prefix="kCLASSID_" includes="efd/ClassInfo.h"/>
+
+    <item name="HelloWorldService"/>
+    <item name="BaseGame"/>
+    <item name="CameraControlService"/>
+    <item name="MCameraService"/>
+    <item name="WalkableService"/>
+    <item name="CustomTypeExampleService"/>
+    <item name="MovementService"/>
+    <item name="MovementHandler"/>
+    <item name="GameStateService"/>
+    <item name="GameState"/>
+    <item name="LoadingState"/>
+    <item name="LoadingState_Error"/>
+    <item name="ControlService"/>
+    <item name="EntityCameraService"/>
+    <item name="ICamera"/>
+    <item name="ICameraImpl"/>
+    <item name="TargetedCamera"/>
+    <item name="ThirdPersonRotatingCamera"/>
+    <item name="IFatalError"/>
+    <item name="WalkableMaterialChanged"/>
+
+</enum>

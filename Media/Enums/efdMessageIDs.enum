@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Foundation -->
+<enum type="Normal" storage="efd::UInt32" invalid=""
+      start="0x00001000" end="0x00001FFF">
+
+    <header useNamespace="efd" useExistingTypedef="ClassID" prefix="kMSGID_"
+            includes="efd/ClassInfo.h"/>
+
+    <item name="SubscribeExternal"/>
+    <item name="UnsubscribeExternal"/>
+    <item name="Resubscribe"/>
+    <item name="BeginCategoryProduction"/>
+    <item name="EndCategoryProduction"/>
+    <item name="RequestNetID"/>
+    <item name="SetNetID"/>
+    <item name="RemoteWrapper"/>
+    <item name="SendToProducer"/>
+    <item name="ResubscribeComplete"/>
+    <item name="AnnounceNetID"/>
+    <item name="UnreliableVersion"/>
+
+    <item name="ConnectionConnectedMsg"/>
+    <item name="ConnectionFailedToConnectMsg"/>
+    <item name="ConnectionDisconnectedMsg"/>
+    <item name="ConnectionDataReceivedMsg"/>
+    <item name="ConnectionAcceptedMsg"/>
+    <item name="ConnectionFailedToAcceptMsg"/>
+    <item name="NetServiceConnectionEstablished"/>
+    <item name="NetServiceConnectionClosed"/>
+    <item name="NetServiceConnectionFailed"/>
+
+    <item name="ChannelManagerConnectionAccepted"/>
+    <item name="ChannelManagerConnectionClosed"/>
+
+    <item name="NetworkBufferOK"/>
+    <item name="NetworkBuffer1X"/>
+    <item name="NetworkBuffer2X"/>
+    <item name="NetworkBuffer3X"/>
+    <item name="NetworkFailure"/>
+
+    <!-- Used by the ConsoleInput service to notify about key presses -->
+    <item name="ConsoleInput"/>
+
+    <!-- LogService control messages -->
+    <item name="LogServiceRequest"/>
+    <item name="LogServiceResponse"/>
+    <item name="GetLogDestinationsRequest"/>
+    <item name="GetLogDestinationsResponse"/>
+    <item name="GetModulesRequest"/>
+    <item name="GetModulesResponse"/>
+    <item name="GetLogLevelRequest"/>
+    <item name="GetLogLevelResponse"/>
+    <item name="GetMsgLogLevelRequest"/>
+    <item name="GetMsgLogLevelResponse"/>
+    <item name="SetLogLevelRequest"/>
+    <item name="SetLogLevelResponse"/>
+    <item name="SetMsgLogLevelRequest"/>
+    <item name="SetMsgLogLevelResponse"/>
+    <item name="StartLogStreamRequest"/>
+    <item name="StartLogStreamResponse"/>
+    <item name="StopLogStreamRequest"/>
+    <item name="StopLogStreamResponse"/>
+    <item name="LogEntriesMessage"/>
+
+    <!-- Asset Locator Service messages -->
+    <item name="AssetLocatorRequest"/>
+    <item name="AssetServerConnectNotify"/>
+    <item name="AssetLocatorResponse"/>
+    <item name="AssetServerChangeNotify"/>
+    <item name="AssetFetchDataRequest"/>
+    <item name="AssetFetchDataResponse"/>
+    <item name="AssetApplicationInfoMsg"/>
+    <item name="AssetConfigRequest"/>
+    <item name="AssetConfigResponse"/>
+    <item name="AssetConfigNotify"/>
+    <item name="AssetBrowseInfoRequest"/>
+    <item name="AssetBrowseInfoResponse"/>
+    <item name="AssetTagsInfoRequest"/>
+    <item name="AssetTagsInfoResponse"/>
+    <item name="AssetLocateEnumResponse"/>
+
+    <item name="TestShutdown"/><!-- For MultiProcessTestService -->
+
+    <item name="StartTick"/>
+
+  
+    <!-- efdTest messages -->
+    <item name="SyncState"/>
+  
+    <!-- Asset Factory messages -->
+    <item name="AssetLoadRequest"/>
+    <item name="AssetLoadResponse"/>
+    <item name="GenericAssetLoadResponse"/>
+    <item name="AssetCacheResponse"/>
+
+    <!-- To Be Moved -->
+    <item name="ClientLogServiceRequest"/><!-- todo: move to Online -->
+    <item name="ClientLogServiceResponse"/><!-- todo: move to Online -->
+    <item name="ServiceDiscoveryRequest"/><!-- todo: this belongs in Online, move entire ServiceDiscoveryRequest class -->
+    <item name="ServiceDiscoveryResponse"/><!-- todo: this belongs in Online, move entire ServiceDiscoveryResponse class -->
+    <item name="ServerToClientMessage"/><!-- todo: move ServerToClientMessage to Online -->
+    <item name="NetErrorMessage"/>
+
+    <!-- End To Be Moved -->
+
+    <item name="AckNetID"/>
+    <item name="ChannelManagerClientJoin"/>
+    <item name="ChannelManagerClientLeave"/>
+    <item name="AssetServerShutdown"/>
+    <item name="ChannelManagerPortInUse"/>
+    <item name="AssetFlushRequest"/>
+    <item name="AssetFlushSuccess"/>
+    <item name="AssetFlushFailed"/>
+
+</enum>

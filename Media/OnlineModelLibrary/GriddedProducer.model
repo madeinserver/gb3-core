@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityModel
+  version="5"
+  ID="3319ceae-bcbf-4846-9186-96ea5afde29d"
+  Description="When mixed into a Placeable Entity, will automatically publish itself into a grid of categories. Matches with GriddedConsumer."
+  Folder="3db42a48-7970-490d-b7b1-50e598c7c5af">
+  <Mixins>
+    <Mixin
+      SourceID="627cb1ec-e7b8-446f-aefa-8dc635329a27"
+      SourceName="BaseEntity" />
+    <Mixin
+      SourceID="2696199a-98a7-410b-a3e3-28abeeae752a"
+      SourceName="Placeable" />
+  </Mixins>
+  <Properties>
+    <Property
+      Name="GridSize"
+      Description="">
+      <Traits />
+      <Value>
+        <Float32
+          Value="400" />
+      </Value>
+      <Restriction />
+    </Property>
+    <Property
+      Name="ProducerUpdateDelta"
+      Description="">
+      <Traits />
+      <Value>
+        <Float32
+          Value="1" />
+      </Value>
+      <Restriction />
+    </Property>
+  </Properties>
+  <PropertyOverrides />
+  <Behaviors>
+    <Behavior
+      Name="OnUpdateProducerCategory"
+      Description=""
+      Target="Lua">
+      <Traits />
+    </Behavior>
+  </Behaviors>
+  <BehaviorOverrides>
+    <BehaviorOverride
+      Name="OnCreate"
+      Description="Behavior invoked when the Entity Manager adds the entity instance. Created entities do not render until they enter the world."
+      Target="Lua">
+      <TraitOverrides />
+    </BehaviorOverride>
+  </BehaviorOverrides>
+  <Traits>
+    <Trait
+      Name="Active" />
+  </Traits>
+  <ExtraDataList />
+</EntityModel>

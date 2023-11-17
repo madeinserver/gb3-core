@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<enum type="Normal" storage="efd::UInt32" invalid="" >
+    <header useNamespace="egf"
+            useExistingTypedef="egf::BehaviorID"
+            prefix="kBehaviorID_StandardModelLibrary_"
+            includes="egf/EntityTypes.h" />
+
+    <!-- Behavior IDs -->
+    <item name="OnAssetsLoaded" value="3815550487"/>
+    <item name="OnCreate" value="2991225057"/>
+    <item name="OnDestroy" value="3415513274"/>
+    <item name="OnEntitySetFinished" value="677833593"/>
+
+</enum>

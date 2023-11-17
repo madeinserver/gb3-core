@@ -1,0 +1,12 @@
+add_subdirectory(NiSystem)
+add_subdirectory(NiMain)
+add_subdirectory(NiAnimation)
+add_subdirectory(NiMesh)
+add_subdirectory(NiFloodGate)
+add_subdirectory(NiCollision)
+add_subdirectory(NiPortal)
+add_subdirectory(NiParticle)
+add_subdirectory(NiTerrain)
+add_subdirectory(NiEnvironment)
+
+add_integrations("EngineLibs")

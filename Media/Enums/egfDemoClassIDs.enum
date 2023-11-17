@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<enum base="egfDemoClassIDs" start="0xE0020000" end="0xE002FFFF">
+
+    <header useNamespace="egf" useExistingTypedef="ClassID" prefix="kCLASSID_" 
+            includes="egf/egfClassIDs.h" />
+            
+    <!-- Add new items to the end of the list to preserve the existing values -->
+    
+    <item name="CustomType"/>
+    
+</enum>

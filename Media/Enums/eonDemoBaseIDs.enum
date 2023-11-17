@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<enum base="egfBaseIDs" start="0x07F13000" end="0x07F13FFF">
+
+    <header useNamespace="eon" prefix="kBASEID_" />
+            
+    <!-- Add new items to the end of the list to preserve the existing values -->
+    
+    <item name="PlayingState"/>
+
+</enum>

@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<enum base="egfClassIDs" start="0xE0030000" end="0xE003FFFF">
+
+    <header useNamespace="egmToolServices" useExistingTypedef="efd::ClassID" prefix="kCLASSID_"
+            includes="egf/egfClassIDs.h"/>
+
+    <item name="IGizmo"/>
+    <item name="GizmoPolicy"/>
+    <item name="CreationGizmoPolicy"/>
+    <item name="EntityGizmoPolicy"/>
+    <item name="SplineGizmoPolicy"/>
+  
+    <item name="GizmoAdapter"/>
+    <item name="TransformGizmoAdapter"/>
+    <item name="CreationGizmoAdapter"/>
+    <item name="SplineGizmoAdapter"/>
+    
+    <item name="EntityTransformGizmoAdapter"/>
+    <item name="EntityCreationGizmoAdapter"/>
+
+    <item name="SelectionAdapter"/>
+    <item name="EntitySelectionAdapter"/>
+
+    <item name="IInteractionDelegate"/>
+
+</enum>
