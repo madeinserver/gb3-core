@@ -1103,7 +1103,6 @@ bool TiXmlDocument::LoadFile( efd::File* file, TiXmlEncoding encoding )
     LoadFile.
     BY:  Emergent Game Technologies, Inc.
 */
-#if !defined(EE_PLATFORM_LINUX)
 bool TiXmlDocument::LoadBuffer( const char* p, TiXmlEncoding encoding )
 {
     // Delete the existing data:
@@ -1120,7 +1119,6 @@ bool TiXmlDocument::LoadBuffer( const char* p, TiXmlEncoding encoding )
     else
         return true;
 }
-#endif
 
 bool TiXmlDocument::SaveFile( const char * filename ) const
 {
@@ -1168,7 +1166,6 @@ bool TiXmlDocument::SAXParseFile(TiXmlDefaultHandler* handler, TiXmlEncoding enc
     SAXParseFile.
     BY:  Emergent Game Technologies, Inc.
 */
-#if !defined(EE_PLATFORM_LINUX)
 bool TiXmlDocument::SAXParseBuffer(
     const char* buffer,
     TiXmlDefaultHandler* handler,
@@ -1177,7 +1174,6 @@ bool TiXmlDocument::SAXParseBuffer(
     saxHandler = handler;
     return LoadBuffer (buffer, encoding);
 }
-#endif
 
 /*
     MODIFIED:  4 Sept 2009

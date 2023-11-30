@@ -284,14 +284,13 @@ protected:
     // structs are platform specific and so are defined in platform specific header files instead
     // of here.  As the structs are members of this class, the platform specific header file is
     // included here instead of at the top of the file.
-    #if defined (EE_PLATFORM_WIN32)
-    #include <efd/Win32/UniversalID_Win32.h>
+
+    #if defined (EE_PLATFORM_SDL2)
+    #include <efd/SDL2/UniversalID_SDL2.h>
     #elif defined (EE_PLATFORM_XBOX360)
     #include <efd/XBox360/UniversalID_XBox360.h>
     #elif defined (EE_PLATFORM_PS3)
     #include <efd/PS3/UniversalID_PS3.h>
-    #elif defined (EE_PLATFORM_LINUX)
-    #include <efd/Linux/UniversalID_Linux.h>
     #endif
 
 // Swig does not compile with EE_COMPILETIME_ASSERT.

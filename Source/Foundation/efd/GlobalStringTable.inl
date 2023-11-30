@@ -21,7 +21,7 @@ inline char* GlobalStringTable::GetRealBufferStart(
     const GlobalStringHandle& handle)
 {
     EE_ASSERT(handle != NULL);
-    return ((char*)handle - 2*sizeof(size_t));
+    return ((char*)handle - 2*sizeof(efd::UAtomic));
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -31,7 +31,7 @@ inline void GlobalStringTable::IncRefCount(GlobalStringHandle& handle)
         return;
 
     EE_ASSERT(ValidateString(handle));
-    size_t* mem = (size_t*)GetRealBufferStart(handle);
+    efd::UAtomic* mem = (efd::UAtomic*)GetRealBufferStart(handle);
     AtomicIncrement(mem[0]);
 }
 
@@ -42,7 +42,7 @@ inline void GlobalStringTable::DecRefCount(GlobalStringHandle& handle)
         return;
 
     EE_ASSERT(ValidateString(handle));
-    size_t* mem = (size_t*)GetRealBufferStart(handle);
+    efd::UAtomic* mem = (efd::UAtomic*)GetRealBufferStart(handle);
 
     // We must get the hash value before we decrement. After decrementing,
     // the fixed string could be deleted in another thread which would
@@ -76,14 +76,14 @@ inline size_t GlobalStringTable::GetLength(
     else
     {
         EE_ASSERT(ValidateString(handle));
-        size_t* mem = (size_t*)GetRealBufferStart(handle);
-        return ((unsigned int)mem[1] & GSTABLE_LEN_MASK) >>
+        efd::UAtomic* mem = (efd::UAtomic*)GetRealBufferStart(handle);
+        return ((efd::UAtomic)mem[1] & GSTABLE_LEN_MASK) >>
             GSTABLE_LEN_SHIFT;
     }
 }
 
 //-------------------------------------------------------------------------------------------------
-inline size_t GlobalStringTable::GetRefCount(
+inline efd::UAtomic GlobalStringTable::GetRefCount(
     const GlobalStringHandle& handle)
 {
     if (handle == NULL_STRING)
@@ -93,8 +93,8 @@ inline size_t GlobalStringTable::GetRefCount(
     else
     {
         EE_ASSERT(ValidateString(handle));
-        size_t* mem = (size_t*)GetRealBufferStart(handle);
-        return (unsigned int)mem[0];
+        efd::UAtomic* mem = (efd::UAtomic*)GetRealBufferStart(handle);
+        return (efd::UAtomic)mem[0];
     }
 }
 
@@ -107,7 +107,7 @@ inline unsigned int GlobalStringTable::GetHashValue(
     // the calling context of GlobalStringTable has verified the handle to
     // be non-null.
     EE_ASSERT(ValidateString(handle));
-    size_t* mem = (size_t*)GetRealBufferStart(handle);
+    efd::UAtomic* mem = (efd::UAtomic*)GetRealBufferStart(handle);
     return ((unsigned int)mem[1] & GSTABLE_HASH_MASK) >> GSTABLE_HASH_SHIFT;
 }
 
@@ -118,8 +118,8 @@ inline bool GlobalStringTable::ValidateString(
     if (handle == NULL_STRING)
         return true;
 
-    size_t* mem = (size_t*)GetRealBufferStart(handle);
-    size_t length = (mem[1] & GSTABLE_LEN_MASK) >> GSTABLE_LEN_SHIFT;
+    efd::UAtomic* mem = (efd::UAtomic*)GetRealBufferStart(handle);
+    efd::UAtomic length = (mem[1] & GSTABLE_LEN_MASK) >> GSTABLE_LEN_SHIFT;
 
     if (length != strlen((const char*)handle))
         return false;

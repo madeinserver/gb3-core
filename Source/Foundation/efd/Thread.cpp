@@ -27,7 +27,7 @@ Thread::Thread(ThreadFunctor* pProcedure, UInt32 stackSize, const char* pcThread
     m_returnValue(0xFFFFFFFF),
 #if defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_XBOX360)
     m_hThread(0),
-#elif defined(EE_PLATFORM_PS3) || defined(EE_PLATFORM_LINUX)
+#elif defined(EE_PLATFORM_PS3)
     m_resumed(false),
 #endif
     m_pName(0)
@@ -53,7 +53,7 @@ Thread::~Thread()
     m_pProcedure = 0;
     pthread_detach(m_threadID);
     pthread_mutex_destroy(&m_mutexID);
-#elif defined(EE_PLATFORM_LINUX)
+#elif defined(EE_PLATFORM_LINUX) || defined(EE_PLATFORM_MACOSX)
     m_returnValue = pthread_mutex_lock(&m_mutexID);
     EE_ASSERT(0 == m_returnValue);
     EE_ASSERT(m_pProcedure);
@@ -158,7 +158,7 @@ void* Thread::ThreadProc(void* pArg)
     return NULL;
 }
 //-------------------------------------------------------------------------------------------------
-#elif defined (EE_PLATFORM_LINUX)
+#elif defined (EE_PLATFORM_LINUX) || defined(EE_PLATFORM_MACOSX)
 void* Thread::ThreadProc(void* pArg)
 {
     Thread* pThread = (Thread*)pArg;

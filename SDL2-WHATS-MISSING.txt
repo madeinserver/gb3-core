@@ -1,0 +1,2 @@
+efd:
+    SDL2PlatformService::SetWindowIcon (EE_PLATFORM_WIN32)

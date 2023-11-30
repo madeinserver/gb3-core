@@ -33,6 +33,7 @@
 #include <vector>
 #include <set>
 #include <deque>
+#include <algorithm>
 #else
 #include <stlport/map>
 #include <stlport/hash_map>
@@ -69,9 +70,12 @@ namespace efd
         typedef value_type* pointer;
         typedef const value_type* const_pointer;
 
-#ifndef EE_USE_NATIVE_STL
+#if !defined(EE_USE_NATIVE_STL)
         typedef value_type* iterator;
         typedef const value_type* const_iterator;
+#elif !defined(EE_COMPILER_MSVC)
+        typedef typename BaseClass::iterator iterator;
+        typedef typename BaseClass::const_iterator const_iterator;
 #endif
 
         typedef value_type& reference;

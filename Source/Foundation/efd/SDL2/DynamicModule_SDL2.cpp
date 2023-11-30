@@ -74,27 +74,6 @@ utf8string CreateSuffix(const char* suffix)
 static void* GetGamebryoLibraryHandle(
     const utf8string& i_strName)
 {
-#if defined(EE_COMPILE_VC80)
-
-#if defined(EE_EFD_CONFIG_DEBUG)
-    utf8string suffix = CreateSuffix("VC80D");
-#elif defined(EE_EFD_CONFIG_SHIPPING)
-    utf8string suffix = CreateSuffix("VC80S");
-#else
-    utf8string suffix = CreateSuffix("VC80R");
-#endif
-
-#elif defined(EE_COMPILE_VC90)
-
-#if defined(EE_EFD_CONFIG_DEBUG)
-    utf8string suffix = CreateSuffix("VC90D");
-#elif defined(EE_EFD_CONFIG_SHIPPING)
-    utf8string suffix = CreateSuffix("VC90S");
-#else
-    utf8string suffix = CreateSuffix("VC90R");
-#endif
-
-#else
 
 #if defined(EE_EFD_CONFIG_DEBUG)
     utf8string suffix = CreateSuffix("D");
@@ -103,8 +82,6 @@ static void* GetGamebryoLibraryHandle(
 #else
     utf8string suffix = CreateSuffix("R");
 #endif
-
-#endif // EE_COMPILE_VC80
 
     utf8string qualifiedName = i_strName;
     qualifiedName.append(suffix);

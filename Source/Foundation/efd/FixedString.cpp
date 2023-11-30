@@ -164,7 +164,7 @@ bool FixedString::Contains(const efd::Char* pCStr) const
     // The previous check would return true if BOTH were NULL. Now check if the const efd::Char*
     // is NULL
     if (pCStr == NULL  || m_handle == NULL || pCStr[0] == '\0' ||
-        (const efd::Char*) m_handle == '\0')
+        ((const efd::Char*) m_handle)[0] == '\0')
     {
         return false;
     }
@@ -181,7 +181,7 @@ bool FixedString::ContainsNoCase(const efd::Char* pCStr) const
     // The previous check would return true if BOTH were NULL. Now check if the const efd::Char*
     // is NULL
     if (pCStr == NULL  || m_handle == NULL || pCStr[0] == '\0' ||
-        (const efd::Char*) m_handle == '\0')
+        ((const efd::Char*) m_handle)[0] == '\0')
     {
         return false;
     }

@@ -16,10 +16,10 @@
 #define NIVERSION_H
 
 // GAMEBRYO VERSION NUMBERS (to be changed by Emergent Developers only).
-#define GAMEBRYO_MAJOR_VERSION 3
-#define GAMEBRYO_MINOR_VERSION 2
-#define GAMEBRYO_PATCH_VERSION 0
-#define GAMEBRYO_BUILD_VERSION 661
+#define GAMEBRYO_MAJOR_VERSION @GB3_VERSION_MAJOR@
+#define GAMEBRYO_MINOR_VERSION @GB3_VERSION_MINOR@
+#define GAMEBRYO_PATCH_VERSION @GB3_PATCH_VERSION@
+#define GAMEBRYO_BUILD_VERSION @GB3_BUILD_VERSION@
 
 // Note that GAMEBRYO_BUILD_VERSION may be > 8 bits, so GAMEBRYO_BUILD_VERSION is now excluded
 // from the 32-bit consolidated GAMEBRYO_SDK_VERSION below.
@@ -28,9 +28,9 @@
     (GAMEBRYO_PATCH_VERSION << 8)
 
 // This value represents the date of the current Emergent-provided build.
-#define GAMEBRYO_BUILD_DATE_DAY 24
-#define GAMEBRYO_BUILD_DATE_MONTH 10
-#define GAMEBRYO_BUILD_DATE_YEAR 2010
+#define GAMEBRYO_BUILD_DATE_DAY @GB3_BUILD_DAY@
+#define GAMEBRYO_BUILD_DATE_MONTH @GB3_BUILD_MONTH@
+#define GAMEBRYO_BUILD_DATE_YEAR @GB3_BUILD_YEAR@
 
 #define GAMEBRYO_BUILD_DATE \
     (GAMEBRYO_BUILD_DATE_YEAR << 16) + (GAMEBRYO_BUILD_DATE_MONTH << 8) + \
@@ -76,7 +76,7 @@
     #define NI_DLL_CONFIG_SUFFIX "S"
 #endif
 
-#if defined(WIN32) || defined(_XENON)
+/*#if defined(WIN32) || defined(_XENON)
     #if (_MSC_VER >= 1500) //VC9.0+
         #define NI_SHORT_DLL_SUFFIX NI_STR(GAMEBRYO_MAJOR_VERSION) \
             NI_STR(GAMEBRYO_MINOR_VERSION) "VC90"
@@ -91,7 +91,8 @@
     #endif
 #else // #if defined(WIN32) || defined(_XENON)
     #define NI_SHORT_DLL_SUFFIX ""
-#endif // #if defined(WIN32) || defined(_XENON)
+#endif // #if defined(WIN32) || defined(_XENON)*/
+#define NI_SHORT_DLL_SUFFIX ""
 
 // Gamebryo DLLs are in the form of $(ProjectName)$(NI_DLL_SUFFIX).dll.
 #define NI_DLL_SUFFIX NI_SHORT_DLL_SUFFIX NI_DLL_CONFIG_SUFFIX

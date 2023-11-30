@@ -41,7 +41,16 @@ efd::SInt32 efd::Vsprintf(efd::Char* dest, size_t destSize, const efd::Char* for
 //--------------------------------------------------------------------------------------------------
 efd::SInt32 efd::Vscprintf(const efd::Char* format, va_list args)
 {
+#ifdef EE_PLATFORM_WIN32
     return _vscprintf(format, args);
+#else
+    SInt32 retval;
+    va_list argcopy;
+    va_copy(argcopy, args);
+    retval = vsnprintf(NULL, 0, format, argcopy);
+    va_end(argcopy);
+    return retval;
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -76,22 +85,28 @@ efd::SInt32 efd::Vsnprintf(efd::Char* dest, size_t destSize, size_t count,
 
     bool bTruncate = (count == EE_TRUNCATE);
 
-#if _MSC_VER >= 1400
+#ifdef EE_HAVE_SECURE_FUNCTIONS
     efd::SInt32 ret = vsnprintf_s(dest, destSize, count, format, args);
-#else   // _MSC_VER >= 1400
+#else   // #ifdef EE_HAVE_SECURE_FUNCTIONS
     if (bTruncate)
     {
         count = destSize - 1;
     }
+
+#if defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_XBOX360)
     efd::SInt32 ret = _vsnprintf(dest, count, format, args);
-#endif  // _MSC_VER >= 1400
+#else
+    efd::SInt32 ret = vsnprintf(dest, count, format, args);
+#endif
+
+#endif  // #ifdef EE_HAVE_SECURE_FUNCTIONS
 
     if (ret == -1 && !bTruncate)
     {
         ret = (efd::SInt32)count;
     }
 
-#if _MSC_VER < 1400
+#ifndef EE_HAVE_SECURE_FUNCTIONS
     // Ensure that the string ends in a null character.
     if (ret == -1)
     {
@@ -101,7 +116,7 @@ efd::SInt32 efd::Vsnprintf(efd::Char* dest, size_t destSize, size_t count,
     {
         dest[ret] = '\0';
     }
-#endif  // #if _MSC_VER < 1400
+#endif  // #ifndef EE_HAVE_SECURE_FUNCTIONS
 
     return ret;
 }
@@ -109,21 +124,25 @@ efd::SInt32 efd::Vsnprintf(efd::Char* dest, size_t destSize, size_t count,
 //--------------------------------------------------------------------------------------------------
 efd::SInt32 efd::Stricmp(const efd::Char* s1, const efd::Char* s2)
 {
-#if _MSC_VER >= 1400
+#ifdef EE_HAVE_SECURE_FUNCTIONS
     return _stricmp(s1, s2);
-#else // #if _MSC_VER >= 1400
+#elif defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_XBOX360) // #ifdef EE_HAVE_SECURE_FUNCTIONS
     return stricmp(s1, s2);
-#endif // #if _MSC_VER >= 1400
+#else
+    return strcasecmp(s1, s2);
+#endif // #ifdef EE_HAVE_SECURE_FUNCTIONS
 }
 
 //--------------------------------------------------------------------------------------------------
 efd::SInt32 efd::Strnicmp(const efd::Char* s1, const efd::Char* s2, size_t n)
 {
-#if _MSC_VER >= 1400
+#ifdef EE_HAVE_SECURE_FUNCTIONS
     return _strnicmp(s1, s2, n);
-#else // #if _MSC_VER >= 1400
+#elif defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_XBOX360) // #ifdef EE_HAVE_SECURE_FUNCTIONS
     return strnicmp(s1, s2, n);
-#endif // #if _MSC_VER >= 1400
+#else
+    return strncasecmp(s1, s2, n);
+#endif // #ifdef EE_HAVE_SECURE_FUNCTIONS
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -150,11 +169,11 @@ efd::SInt32 efd::WSprintf(WChar* dest, size_t destSize, const WChar* format, ...
     va_list args;
     va_start(args, format);
 
-#if _MSC_VER >= 1400
+#ifdef EE_HAVE_SECURE_FUNCTIONS
     efd::SInt32 ret = vswprintf_s((wchar_t *)dest, destSize,
         (const wchar_t *)format, args);
-#else // #if _MSC_VER >= 1400
-    efd::SInt32 ret = vswprintf(dest, destSize, format, args);
+#else // #ifdef EE_HAVE_SECURE_FUNCTIONS
+    efd::SInt32 ret = vswprintf((wchar_t*)dest, destSize, (const wchar_t*)format, args);
 
     if (ret >= 0 && ((efd::UInt32)ret == destSize - 1) &&
         dest[destSize - 1] != '\0')
@@ -163,7 +182,7 @@ efd::SInt32 efd::WSprintf(WChar* dest, size_t destSize, const WChar* format, ...
         // is not null terminated. We will report this as an error.
         ret = -1;
     }
-#endif // #if _MSC_VER >= 1400
+#endif // #ifdef EE_HAVE_SECURE_FUNCTIONS
 
     va_end(args);
 

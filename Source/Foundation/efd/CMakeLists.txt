@@ -45,7 +45,6 @@ set(EFD_SRC
     AssetWeb.cpp
     AssetWeb.h
     AtomicOperations.h
-    AtomicOperations.inl
     BaseAssetFactory.cpp
     BaseAssetFactory.h
     BaseAssetFactory.inl
@@ -378,6 +377,19 @@ set(SDL2_SRC
     SDL2/UniversalTypes_SDL2.h
     SDL2/PathUtils_SDL2.inl
     SDL2/RTLib_SDL2.h
+    SDL2/StringUtilities_SDL2.cpp
+    SDL2/StringUtilities_SDL2.inl
+    SDL2/UniversalID_SDL2.h
+    SDL2/EEMath_SDL2.inl
+    SDL2/Point3_SDL2.cpp
+    SDL2/Point3_SDL2.inl
+    SDL2/Point4_SDL2.cpp
+    SDL2/Point4_SDL2.inl
+    SDL2/Matrix3_SDL2.cpp
+    SDL2/Matrix3_SDL2.inl
+    SDL2/ThreadLocal_SDL2.inl
+    SDL2/SystemUniqueIndex_SDL2.inl
+    SDL2/Endian_SDL2.inl
 )
 
 source_group("SDL2" FILES ${SDL2_SRC})
@@ -404,8 +416,18 @@ target_compile_definitions(efdBase INTERFACE
     EE_GAMEBRYO_VERSION=7563629; # 7563629 -> MIS
 )
 
-target_link_libraries(efdBase INTERFACE $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>)
+target_link_libraries(efdBase INTERFACE
+    $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
+    #tinyxml2::tinyxml2
+    efdXML
+)
 target_compile_definitions(efdBase INTERFACE -DEE_PLATFORM_SDL2=1)
+
+if("${GB3_ARCH}" STREQUAL "64")
+    target_compile_definitions(efdBase INTERFACE -DEE_PLATFORM_64BIT=1)
+else()
+    target_compile_definitions(efdBase INTERFACE -DEE_PLATFORM_32BIT=1)
+endif()
 
 if(WIN32)
     target_compile_definitions(efdBase INTERFACE -DEE_PLATFORM_WIN32=1 -DSTRICT=1)
@@ -427,14 +449,14 @@ endif()
 add_library(efd STATIC ${EFD_SRC} ${SDL2_SRC})
 set_target_properties(efd PROPERTIES FOLDER "${GB3_PREFIX}Foundation")
 target_precompile_headers(efd PRIVATE efdPCH.h)
-target_link_libraries(efd PUBLIC efdBase efdXML)
+target_link_libraries(efd PUBLIC efdBase)
 target_compile_definitions(efd PUBLIC -DEE_EFD_NO_IMPORT)
 
 if (GB3_ENABLE_DLL)
     add_library(efdDLL SHARED ${EFD_SRC} ${SDL2_SRC})
     set_target_properties(efdDLL PROPERTIES FOLDER "${GB3_PREFIX}Foundation")
     target_precompile_headers(efdDLL PRIVATE efdPCH.h)
-    target_link_libraries(efdDLL PUBLIC efdBase efdXML)
+    target_link_libraries(efdDLL PUBLIC efdBase)
     target_compile_definitions(efdDLL PRIVATE -DEE_EFD_EXPORT INTERFACE -DEE_EFD_IMPORT PRIVATE -D_USRDLL)
 
     if (WIN32)

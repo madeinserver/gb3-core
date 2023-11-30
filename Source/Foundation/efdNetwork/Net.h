@@ -17,17 +17,7 @@
 
 /// @cond EMERGENT_INTERNAL
 
-#if defined(EE_PLATFORM_WIN32)
-#   include <efdNetwork/Win32/Net_Win32.h>
-#elif defined(EE_PLATFORM_PS3)
-#   include <efdNetwork/PS3/Net_PS3.h>
-#elif defined(EE_PLATFORM_XBOX360)
-#   include <efdNetwork/Xbox360/Net_Xbox360.h>
-#elif defined(EE_PLATFORM_LINUX)
-#   include <efdNetwork/Linux/Net_Linux.h>
-#else
-#   error Unknown platform
-#endif // EE_PLATFORM_*
+#include EE_PLATFORM_SPECIFIC_INCLUDE(efdNetwork, Net, h)
 
 /// @endcond
 

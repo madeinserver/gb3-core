@@ -117,17 +117,6 @@ EE_EFD_ENTRY efd::Char* Strdup(const efd::Char* str);
 
 //------------------------------------------------------------------------------------------------
 
-#if defined(EE_PLATFORM_LINUX)
-//DT32425 Implement 16 bit versions of these functions for Linux
-#define WStrcpy EE_COMPILETIME_ASSERT(false)
-#define WStrncpy EE_COMPILETIME_ASSERT(false)
-#define WStrcat EE_COMPILETIME_ASSERT(false)
-#define WStrtok EE_COMPILETIME_ASSERT(false)
-#define WSprintf EE_COMPILETIME_ASSERT(false)
-#define WStrupr EE_COMPILETIME_ASSERT(false)
-#define WStrlwr EE_COMPILETIME_ASSERT(false)
-#else
-
 /// Wrapper for strcpy using 16-bit wide chars
 inline efd::WChar* WStrcpy(WChar* dest, size_t destSize, const WChar* src);
 
@@ -148,7 +137,6 @@ inline efd::SInt32 WStrupr(efd::WChar* dest, size_t destSize);
 
 /// Wrapper for strlwr using 16-bit wide chars
 inline efd::SInt32 WStrlwr(efd::WChar* dest, size_t destSize);
-#endif
 
 //@}
 

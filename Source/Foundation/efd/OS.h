@@ -123,15 +123,13 @@
     @note There must be no spaces in the macro invocation, or GCC will substitute them in along
         with the other tokens, constructing an invalid filename for the include.
 */
-#if defined(EE_PLATFORM_LINUX)
+
+#if defined(EE_PLATFORM_SDL2)
     #define EE_PLATFORM_SPECIFIC_INCLUDE(Directory, File, Extension) \
-        <Directory/Linux/File##_Linux.Extension>
+        <Directory/SDL2/File##_SDL2.Extension>
 #elif defined(EE_PLATFORM_PS3)
     #define EE_PLATFORM_SPECIFIC_INCLUDE(Directory, File, Extension) \
         <Directory/PS3/File##_PS3.Extension>
-#elif defined(EE_PLATFORM_WIN32)
-    #define EE_PLATFORM_SPECIFIC_INCLUDE(Directory, File, Extension) \
-        <Directory/Win32/File##_Win32.Extension>
 #elif defined(EE_PLATFORM_XBOX360)
     #define EE_PLATFORM_SPECIFIC_INCLUDE(Directory, File, Extension) \
         <Directory/Xbox360/File##_XBox360.Extension>
@@ -139,17 +137,10 @@
     #error "Unsupported platform"
 #endif
 
-#if defined(EE_PLATFORM_SDL2)
-#define EE_PLATFORM_WRAPPER_INCLUDE(Directory, File, Extension) \
-        <Directory/SDL2/File##_SDL2.Extension>
-#else
-#define EE_PLATFORM_WRAPPER_INCLUDE EE_PLATFORM_SPECIFIC_INCLUDE
-#endif
-
 //--------------------------------------------------------------------------------------------------
 
 // Include the platform specific header.
-#include EE_PLATFORM_WRAPPER_INCLUDE(efd,OS,h)
+#include EE_PLATFORM_SPECIFIC_INCLUDE(efd,OS,h)
 
 //--------------------------------------------------------------------------------------------------
 

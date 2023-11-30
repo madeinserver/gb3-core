@@ -4,6 +4,7 @@
     "dependencies": [
         "libpng",
         "openexr",
-		"sdl2"
+		"sdl2",
+        "tinyxml2"
     ]
 }

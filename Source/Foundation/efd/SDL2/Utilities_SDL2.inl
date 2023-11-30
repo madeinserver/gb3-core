@@ -11,8 +11,11 @@
 // Emergent Game Technologies, Calabasas, CA 91302
 // http://www.emergent.net
 
+#ifdef EE_PLATFORM_WIN32
 #include <direct.h>
 #include <process.h>
+#endif
+
 #include <efd/Asserts.h>
 #include <efd/StringUtilities.h>
 
@@ -20,12 +23,12 @@ namespace efd
 {
 
 //-------------------------------------------------------------------------------------------------
-inline void efd::Sleep(efd::UInt32 milliseconds)
+inline void Sleep(efd::UInt32 milliseconds)
 {
     SDL_Delay(milliseconds);
 }
 //-------------------------------------------------------------------------------------------------
-inline void efd::YieldThread()
+inline void YieldThread()
 {
     // Preferably, we could call SwitchToThread here, but that requires
     // knowing that your target platform is at least WinNT.
@@ -107,7 +110,11 @@ inline unsigned long GetCurrentThreadId()
 //-------------------------------------------------------------------------------------------------
 inline efd::Char* Getcwd(efd::Char* buffer, size_t maxlen)
 {
+#ifdef EE_PLATFORM_WIN32
     return _getcwd(buffer, (int)maxlen);
+#else
+    return getcwd(buffer, maxlen);
+#endif
 }
 //-------------------------------------------------------------------------------------------------
 #if defined(EE_EFD_CONFIG_DEBUG)
@@ -119,7 +126,13 @@ inline void WriteToStdErr(const efd::Char* pText)
 //-------------------------------------------------------------------------------------------------
 inline efd::UInt64 GetPid()
 {
+#ifdef EE_PLATFORM_WIN32
     return _getpid();
+#else
+    return getpid();
+#endif
 }
+
 //-------------------------------------------------------------------------------------------------
+
 } // end namespace efd

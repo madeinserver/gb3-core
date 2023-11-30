@@ -16,6 +16,7 @@
 #define EE_ENDIAN_H
 
 #include <efd/Asserts.h>
+#include <efd/OS.h>
 
 namespace efd
 {
@@ -39,16 +40,6 @@ public:
 
 } // end namespace efd
 
-#if defined(EE_PLATFORM_WIN32)
-#include <efd/Win32/Endian_Win32.inl>
-#elif defined(EE_PLATFORM_LINUX)
-#include <efd/Linux/Endian_Linux.inl>
-#elif defined(EE_PLATFORM_XBOX360)
-#include <efd/Xbox360/Endian_Xbox360.inl>
-#elif defined(EE_PLATFORM_PS3)
-#include <efd/PS3/Endian_PS3.inl>
-#else
-#error Unknown platform
-#endif
+#include EE_PLATFORM_SPECIFIC_INCLUDE(efd,Endian,inl)
 
 #endif

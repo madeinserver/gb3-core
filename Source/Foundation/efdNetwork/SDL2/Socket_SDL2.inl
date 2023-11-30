@@ -5,6 +5,7 @@
 // be copied or disclosed except in accordance with the terms of that 
 // agreement.
 //
+//      Copyright (c) 2022-2023 Arves100/Made In Server Developers.
 //      Copyright (c) 1996-2009 Emergent Game Technologies.
 //      All Rights Reserved.
 //
@@ -17,14 +18,22 @@ namespace efd
 //-------------------------------------------------------------------------------------------------
 efd::UInt32 Socket::getError()
 {
+#ifdef EE_PLATFORM_WIN32
     return WSAGetLastError();
+#else
+    return errno;
+#endif
 }
 
 
 //-------------------------------------------------------------------------------------------------
 efd::utf8string Socket::getErrorMessage()
 {
+#ifdef EE_PLATFORM_WIN32
     DWORD dw = WSAGetLastError();
+#else
+    efd::UInt32 dw = (efd::UInt32)errno;
+#endif
     return getErrorMessage(dw);
 }
 
@@ -32,6 +41,7 @@ efd::utf8string Socket::getErrorMessage()
 //-------------------------------------------------------------------------------------------------
 efd::utf8string Socket::getErrorMessage(efd::UInt32 errorNum)
 {
+#ifdef EE_PLATFORM_WIN32
     LPVOID lpMsgBuf;
     DWORD dw = errorNum;
 
@@ -47,6 +57,10 @@ efd::utf8string Socket::getErrorMessage(efd::UInt32 errorNum)
 
     efd::utf8string returnString = (char*)lpMsgBuf;
     LocalFree(lpMsgBuf);
+#else
+    efd::utf8string returnString = strerror((int)errorNum);
+#endif
+
     return returnString;
 }
 

@@ -33,6 +33,10 @@
 #pragma warning(pop)
 #endif
 
+#if defined(EE_PLATFORM_LINUX) || defined(EE_PLATFORM_MACOSX)
+#include <unistd.h>
+#endif
+
 #define EE_UNUSED
 
 /// A helper macro that declares the argument as unused. Useful when building at warning level-4
@@ -48,18 +52,24 @@
 
 #if (_MSC_VER >= 1400) //VC8.0
     #define EE_RESTRICT __restrict
+    #define EE_HAVE_SECURE_FUNCTIONS 1
 #else
     #define EE_RESTRICT
 #endif
 
 #elif EE_COMPILER_GCC || EE_COMPILER_CLANG
 /// Attempt to force the compiler to inline the function.
-#define EE_FORCEINLINE __attribute__((always_inline))
+#define EE_FORCEINLINE inline __attribute__((always_inline))
 
 /// Attempt to force the compiler to never inline the function.
 #define EE_NOINLINE __attribute__ ((noinline))
 
 #define EE_RESTRICT __restrict__
+
+#ifdef _WIN32
+#define EE_HAVE_SECURE_FUNCTIONS 1
+#endif
+
 #endif
 
 #define EE_EMPTY_THROW throw()

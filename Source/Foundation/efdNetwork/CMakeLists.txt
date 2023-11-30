@@ -1,4 +1,4 @@
-add_library(efdNetwork STATIC
+set(SRC
     BridgeService.cpp
     BridgeService.h
     ChannelManagerConfig.h
@@ -49,17 +49,22 @@ add_library(efdNetwork STATIC
     TCPSocket.h
     TransportFactory.cpp
     TransportFactory.h
-
-    Win32/HostInfo_Win32.cpp
-    Win32/NetLib_Win32.cpp
-    Win32/Net_Win32.h
-    Win32/Socket_Win32.cpp
-    Win32/Socket_Win32.h
-    Win32/Socket_Win32.inl
-    Win32/TCPSocket_Win32.cpp
 )
 
-target_link_libraries(efdNetwork PUBLIC efd)
+
+set(SDL2_SRC
+    SDL2/Net_SDL2.h
+    SDL2/HostInfo_SDL2.cpp
+    SDL2/Socket_SDL2.h
+    SDL2/Socket_SDL2.inl
+    SDL2/TCPSocket_SDL2.cpp
+    SDL2/NetLib_SDL2.cpp
+)
+
+
+source_group("SDL2" FILES ${SDL2_SRC})
+add_library(efdNetwork STATIC ${SDL2_SRC} ${SRC})
 set_target_properties(efdNetwork PROPERTIES FOLDER "${GB3_PREFIX}Foundation")
 target_precompile_headers(efdNetwork PRIVATE efdNetworkPCH.h)
 target_include_directories(efdNetwork PRIVATE ${CMAKE_CURRENT_LIST_DIR})
+target_link_libraries(efdNetwork PUBLIC efd)

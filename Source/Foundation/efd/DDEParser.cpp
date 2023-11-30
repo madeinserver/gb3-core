@@ -38,184 +38,184 @@
 namespace efd
 {
 
-//------------------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------
 
-namespace details
-{
-    enum EnumAddResult
+    namespace details
     {
-        ear_Success,
-
-        // Attempt to add a name that already exists
-        ear_DuplicateName,
-
-        // Attempt to add a value that already exists
-        ear_DuplicateValue,
-
-        // Attempt to add a value that is beyond the maximum allowed value for this enum
-        ear_RangeError,
-
-        // Attempt to add an alias for a value when that value is not in use
-        ear_AliasValueError,
-    };
-
-
-    template< typename T >
-    class DataDrivenEnumCreator : public efd::DataDrivenEnum<T>
-    {
-        typedef efd::DataDrivenEnum<T> Base;
-        T m_nextValue;
-        T m_maxValue;
-
-    public:
-        DataDrivenEnumCreator(const efd::utf8string& i_name, efd::EnumType i_et)
-            : DataDrivenEnum<T>(i_name, i_et)
+        enum EnumAddResult
         {
-            Base::m_invalidValue = 0;
-            m_nextValue = 1;
-            m_maxValue = EE_STL_NAMESPACE::numeric_limits<T>::max();
-        }
+            ear_Success,
 
-        DataDrivenEnumCreator(const efd::utf8string& i_name, DataDrivenEnum<T>* i_pParent)
-            : DataDrivenEnum<T>(i_name, i_pParent)
+            // Attempt to add a name that already exists
+            ear_DuplicateName,
+
+            // Attempt to add a value that already exists
+            ear_DuplicateValue,
+
+            // Attempt to add a value that is beyond the maximum allowed value for this enum
+            ear_RangeError,
+
+            // Attempt to add an alias for a value when that value is not in use
+            ear_AliasValueError,
+        };
+
+
+        template< typename T >
+        class DataDrivenEnumCreator : public efd::DataDrivenEnum<T>
         {
-            DataDrivenEnumCreator<T>* pParent = (DataDrivenEnumCreator<T>*)i_pParent;
+            typedef efd::DataDrivenEnum<T> Base;
+            T m_nextValue;
+            T m_maxValue;
 
-            Base::m_invalidValue = pParent->m_invalidValue;
-            m_nextValue = pParent->m_nextValue;
-            m_maxValue = pParent->m_maxValue;
-        }
-
-        bool SetMax(T maxValue)
-        {
-            if (m_maxValue > m_nextValue)
+        public:
+            DataDrivenEnumCreator(const efd::utf8string& i_name, efd::EnumType i_et)
+                : DataDrivenEnum<T>(i_name, i_et)
             {
-                m_maxValue = maxValue;
-                return true;
-            }
-            return false;
-        }
-
-        /// Set the initial value to be used in this enum
-        /// @note If using SetInvalid or NoInvalidEntry, you must call those methods before
-        /// calling SetStart.
-        void SetStart(const T& value)
-        {
-            m_nextValue = value;
-        }
-
-        // Add an item with the next available value
-        EnumAddResult AddItem(const efd::utf8string& name)
-        {
-            return AddItem(name, m_nextValue);
-        }
-
-        // Add an item with a specific value
-        EnumAddResult AddItem(const efd::utf8string& name, const T& value)
-        {
-            // verify value is in range
-            if (value > m_maxValue)
-            {
-                return ear_RangeError;
-            }
-            if (Base::HasName(name))
-            {
-                return ear_DuplicateName;
-            }
-            if (HasValue(value))
-            {
-                return ear_DuplicateValue;
+                Base::m_invalidValue = 0;
+                m_nextValue = 1;
+                m_maxValue = EE_STL_NAMESPACE::numeric_limits<T>::max();
             }
 
-            Base::m_nameToValue[ name ] = value;
-            Base::m_valueToName[ value ] = name;
-
-            m_nextValue = value;
-
-            if (Base::GetEnumType() == et_Bitwise)
+            DataDrivenEnumCreator(const efd::utf8string& i_name, DataDrivenEnum<T>* i_pParent)
+                : DataDrivenEnum<T>(i_name, i_pParent)
             {
-                m_nextValue <<= 1;
-            }
-            else
-            {
-                ++m_nextValue;
+                DataDrivenEnumCreator<T>* pParent = (DataDrivenEnumCreator<T>*)i_pParent;
+
+                Base::m_invalidValue = pParent->m_invalidValue;
+                m_nextValue = pParent->m_nextValue;
+                m_maxValue = pParent->m_maxValue;
             }
 
-            return ear_Success;
-        }
-
-        // Add an alias with a specific value.
-        EnumAddResult AddAlias(const efd::utf8string& name, const T& value)
-        {
-            if (Base::HasName(name))
+            bool SetMax(T maxValue)
             {
-                return ear_DuplicateName;
-            }
-            if (!HasValue(value))
-            {
-                return ear_AliasValueError;
-            }
-
-            // Aliases ONLY map from Name to Value, there is already another value to name
-            // mapping for the non-aliased version
-            Base::m_nameToValue[ name ] = value;
-
-            return ear_Success;
-        }
-
-        // skip an enum value
-        EnumAddResult AddPlaceholder()
-        {
-            if (m_nextValue > m_maxValue)
-            {
-                return ear_RangeError;
-            }
-
-            ++m_nextValue;
-            return ear_Success;
-        }
-
-        // This enum has no reserved "invalid" value
-        void NoInvalidEntry()
-        {
-            Base::m_fUseInvalid = false;
-            m_nextValue = 0;
-        }
-
-        bool SetInvalid(const efd::utf8string& name, const T& value)
-        {
-            if (!Base::m_spParent)
-            {
-                Base::m_fUseInvalid = true;
-                if (ear_Success == AddItem(name, value))
+                if (m_maxValue > m_nextValue)
                 {
-                    // Here I'm checking for "value < 0", but I cannot simply say "value < 0"
-                    // because then GCC generates a warning about "condition always true" which
-                    // we then treat as an error.
-                    if (value != 0 && value < 1)
-                    {
-                        m_nextValue = 0;
-                    }
-                    else
-                    {
-                        m_nextValue = value;
-                        ++m_nextValue;
-                    }
-
-                    Base::m_invalidName = name;
-                    Base::m_invalidValue = value;
+                    m_maxValue = maxValue;
                     return true;
                 }
+                return false;
             }
-            return false;
-        }
 
-        //@}
+            /// Set the initial value to be used in this enum
+            /// @note If using SetInvalid or NoInvalidEntry, you must call those methods before
+            /// calling SetStart.
+            void SetStart(const T& value)
+            {
+                m_nextValue = value;
+            }
 
-    protected:
-    };
+            // Add an item with the next available value
+            EnumAddResult AddItem(const efd::utf8string& name)
+            {
+                return AddItem(name, m_nextValue);
+            }
 
-} // end namespace details
+            // Add an item with a specific value
+            EnumAddResult AddItem(const efd::utf8string& name, const T& value)
+            {
+                // verify value is in range
+                if (value > m_maxValue)
+                {
+                    return ear_RangeError;
+                }
+                if (Base::HasName(name))
+                {
+                    return ear_DuplicateName;
+                }
+                if (this->HasValue(value))
+                {
+                    return ear_DuplicateValue;
+                }
+
+                Base::m_nameToValue[name] = value;
+                Base::m_valueToName[value] = name;
+
+                m_nextValue = value;
+
+                if (Base::GetEnumType() == et_Bitwise)
+                {
+                    m_nextValue <<= 1;
+                }
+                else
+                {
+                    ++m_nextValue;
+                }
+
+                return ear_Success;
+            }
+
+            // Add an alias with a specific value.
+            EnumAddResult AddAlias(const efd::utf8string& name, const T& value)
+            {
+                if (Base::HasName(name))
+                {
+                    return ear_DuplicateName;
+                }
+                if (!this->HasValue(value))
+                {
+                    return ear_AliasValueError;
+                }
+
+                // Aliases ONLY map from Name to Value, there is already another value to name
+                // mapping for the non-aliased version
+                Base::m_nameToValue[name] = value;
+
+                return ear_Success;
+            }
+
+            // skip an enum value
+            EnumAddResult AddPlaceholder()
+            {
+                if (m_nextValue > m_maxValue)
+                {
+                    return ear_RangeError;
+                }
+
+                ++m_nextValue;
+                return ear_Success;
+            }
+
+            // This enum has no reserved "invalid" value
+            void NoInvalidEntry()
+            {
+                Base::m_fUseInvalid = false;
+                m_nextValue = 0;
+            }
+
+            bool SetInvalid(const efd::utf8string& name, const T& value)
+            {
+                if (!Base::m_spParent)
+                {
+                    Base::m_fUseInvalid = true;
+                    if (ear_Success == AddItem(name, value))
+                    {
+                        // Here I'm checking for "value < 0", but I cannot simply say "value < 0"
+                        // because then GCC generates a warning about "condition always true" which
+                        // we then treat as an error.
+                        if (value != 0 && value < 1)
+                        {
+                            m_nextValue = 0;
+                        }
+                        else
+                        {
+                            m_nextValue = value;
+                            ++m_nextValue;
+                        }
+
+                        Base::m_invalidName = name;
+                        Base::m_invalidValue = value;
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            //@}
+
+        protected:
+        };
+
+    } // end namespace details
 } // end namespace efd
 
 
@@ -266,7 +266,7 @@ void DDEParser::Parse(const efd::utf8string& enumName, const efd::utf8string& so
         m_enumName.c_str(), m_sourceFile.c_str()));
 
     // create a SAX parser
-    TiXmlDocument parser (sourceFile.c_str());
+    TiXmlDocument parser(sourceFile.c_str());
 
     File* pkFile = efd::File::GetFile(parser.Value(), File::READ_ONLY);
     if (pkFile)
@@ -526,7 +526,7 @@ void DDEParser::ParseEnum(const TiXmlAttributeSet& attrs)
 //------------------------------------------------------------------------------------------------
 template< typename T >
 void DDEParser::ParseEnumHelper(const TiXmlAttributeSet& attrs,
-                                 efd::DataDrivenEnumBase* pBaseEnum)
+    efd::DataDrivenEnumBase* pBaseEnum)
 {
     efd::DataDrivenEnum<T>* pTypedParent = NULL;
     if (pBaseEnum)
@@ -934,7 +934,7 @@ bool DDEParser::SplitNameAndValue(efd::utf8string& io_invalid, T& o_value)
         return true;
     }
 
-    utf8string strValue = io_invalid.substr(pos+1);
+    utf8string strValue = io_invalid.substr(pos + 1);
     io_invalid = io_invalid.substr(0, pos);
 
     // In the case of "=12345" use the default name:

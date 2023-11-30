@@ -6,6 +6,6 @@ add_library(efdXML STATIC
     tinyxmlerror.cpp
     tinyxmlparser.cpp
 )
-set_target_properties(efdXML PROPERTIES FOLDER "${GB3_PREFIX}3rdParty")
+set_target_properties(efdXML PROPERTIES FOLDER "${GB3_PREFIX}Foundation")
 target_include_directories(efdXML PUBLIC ${CMAKE_CURRENT_LIST_DIR}/../)
 target_link_libraries(efdXML efdBase)

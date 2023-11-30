@@ -80,18 +80,9 @@ SInt8 efd::DisplayAssertDialog(
         buffer.append("\nYes to debug, No to ignore once, Cancel to ignore always.");
     }
 
-    // SDL3: bool cursorShowing = SDL_CursorVisible();
-#if _WIN32
-    CURSORINFO ci;
-    ci.cbSize = sizeof(ci);
-    GetCursorInfo(&ci);
+    bool cursorShowing = efd::IsCursorVisible();
 
-    bool cursorShowing = ci.flags & CURSOR_SHOWING;
-#else
-#error "TODO: Other platforms"
-#endif
-
-    SDL_ShowCursor(SDL_ENABLE);
+    efd:ShowCursor();
 
     // Display the message box
     SDL_MessageBoxData data;
@@ -120,7 +111,7 @@ SInt8 efd::DisplayAssertDialog(
     int msgboxID;
     SDL_ShowMessageBox(&data, &msgboxID);
 
-    SDL_ShowCursor(cursorShowing);
+    efd::SetCursorVisibility(cursorShowing);
 
     // Check the return value and let the helpers know how to handle the assert
     switch (msgboxID)

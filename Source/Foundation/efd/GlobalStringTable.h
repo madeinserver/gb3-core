@@ -41,7 +41,7 @@ public:
     static void DecRefCount(GlobalStringHandle& handle);
     static const efd::Char* GetString(const GlobalStringHandle& handle);
     static size_t GetLength(const GlobalStringHandle& handle);
-    static size_t GetRefCount(const GlobalStringHandle& handle);
+    static efd::UAtomic GetRefCount(const GlobalStringHandle& handle);
     static bool ValidateString(const GlobalStringHandle& handle);
 
     // Begin Emergent internal use only

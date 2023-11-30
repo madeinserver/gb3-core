@@ -37,8 +37,10 @@ public:
         Default constructor. Does not acquire an index.
     */
     SystemUniqueIndex()
-        : m_handle(NULL)
-        , m_index(0)
+        : m_index(0)
+#ifdef EE_PLATFORM_WIN32
+        , m_handle(NULL)
+#endif
     {
     }
 
@@ -47,8 +49,10 @@ public:
         @param strBaseName name of the index to acquire.
     */
     SystemUniqueIndex(const efd::utf8string& strBaseName)
-        : m_handle(NULL)
-        , m_index(0)
+        : m_index(0)
+#ifdef EE_PLATFORM_WIN32
+        , m_handle(NULL)       
+#endif
     {
         AquireIndex(strBaseName);
     }
@@ -68,6 +72,8 @@ public:
     bool AquireIndex(const efd::utf8string& strBaseName)
     {
         ReleaseIndex();
+
+#ifdef EE_PLATFORM_WIN32
         for (efd::UInt32 i = 1; i; ++i)
         {
             m_name.sprintf("%s_%d", strBaseName.c_str(), i);
@@ -85,6 +91,12 @@ public:
             }
         }
         return false;
+#else
+        // we can assume that the PID of a process will always be unique
+        m_index = getpid();
+        m_name.sprintf("%s_%u", strBaseName.c_str(), m_index);
+        return true;
+#endif
     }
 
     /**
@@ -92,12 +104,15 @@ public:
     */
     void ReleaseIndex()
     {
+#ifdef EE_PLATFORM_WIN32
         if (m_handle)
         {
             CloseHandle(m_handle);
         }
         m_handle = NULL;
+#endif
         m_index = 0;
+
     }
 
     /**
@@ -117,8 +132,10 @@ public:
     }
 
 protected:
-    HANDLE m_handle;
     efd::UInt32 m_index;
+#ifdef EE_PLATFORM_WIN32
+    HANDLE m_handle;
+#endif
     efd::utf8string m_name;
 };
 

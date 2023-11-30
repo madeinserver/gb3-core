@@ -5,6 +5,7 @@
 // be copied or disclosed except in accordance with the terms of that
 // agreement.
 //
+//      Copyright (c) 2022-2023 Arves100/Made In Server Developers.
 //      Copyright (c) 1996-2009 Emergent Game Technologies.
 //      All Rights Reserved.
 //
@@ -41,6 +42,14 @@ inline void YieldThread();
 
 /// method to get the current thread identifier
 inline unsigned long GetCurrentThreadId();
+
+#if !defined(EE_PLATFORM_WIN32) && !defined(EE_PLATFORM_XBOX360)
+/// convert unix time to windows time
+inline efd::UInt64 UnixTimeToWindowsTime(efd::UInt64 unixTime)
+{
+    return (unixTime * 10000000) + 116444736000000000;
+}
+#endif
 
 //--------------------------------------------------------------------------------------------------
 // Cache Control Functions
@@ -106,11 +115,29 @@ EE_EFD_ENTRY void InitTestEnvironment();
 
 //--------------------------------------------------------------------------------------------------
 
+//--------------------------------------------------------------------------------------------------
+// Cursor routines for SDL
+//--------------------------------------------------------------------------------------------------
+
+/// Shows the cursor
+EE_EFD_ENTRY void ShowCursor();
+
+/// Hides the cursor
+EE_EFD_ENTRY void HideCursor();
+
+/// Set the visiblity of the cursor
+EE_EFD_ENTRY void SetCursorVisibility(bool visibility);
+
+/// Checks if the cursor is currently visible
+EE_EFD_ENTRY bool IsCursorVisible();
+
+//--------------------------------------------------------------------------------------------------
+
 //@}
 
 } // end namespace efd
 
 // Include the platform specific inline functions
-#include EE_PLATFORM_WRAPPER_INCLUDE(efd,Utilities,inl)
+#include EE_PLATFORM_SPECIFIC_INCLUDE(efd,Utilities,inl)
 
 #endif // EE_UTILITIES_H

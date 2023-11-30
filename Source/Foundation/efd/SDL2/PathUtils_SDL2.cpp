@@ -15,6 +15,7 @@
 //#include "efdPCH.h"
 
 #include <efd/PathUtils.h>
+#include <fcntl.h>
 
 using namespace efd;
 
@@ -136,7 +137,7 @@ bool PathUtils::GetDefaultLogDirectory(efd::Char* pcPath, size_t stDestSize)
 //--------------------------------------------------------------------------------------------------
 bool PathUtils::PathContainsDrive(const utf8string& i_strPath)
 {
-#ifdef _WIN32
+#ifdef EE_PLATFORM_WIN32
     if (i_strPath.length() >= 2)
     {
         if (i_strPath[1] == ':')
@@ -158,7 +159,7 @@ bool PathUtils::PathContainsDrive(const utf8string& i_strPath)
 //--------------------------------------------------------------------------------------------------
 bool PathUtils::IsUNCPath(const utf8string& i_strPath)
 {
-#ifdef _WIN32
+#ifdef EE_PLATFORM_WIN32
     // A UNC style path has the form \\server\share.  For our purposes any path that starts
     // with two slashes will be considered UNC-style.
     if (i_strPath.length() >= 2)
@@ -179,7 +180,7 @@ efd::Bool PathUtils::GetLastModifed(const efd::utf8string& path,
 {
     efd::Bool retval = false;
 
-#ifdef _WIN32
+#ifdef EE_PLATFORM_WIN32
     modified->HiBits = (UInt32)0;
     modified->LoBits = (UInt32)0;
 
@@ -216,16 +217,30 @@ efd::Bool PathUtils::GetLastModifed(const efd::utf8string& path,
         }
         CloseHandle (h);
     }
-#else
+#elif defined(EE_PLATFORM_MACOSX)
     struct stat res;
     if (stat(path.c_str(), &res) == 0)
     {
-        efd::UInt64 ts;
-
-#error "..."
+        efd::UInt64 ts = UnixTimeToWindowsTime(res.st_birthtimespec.tv_sec);
 
         modified->HiBits = (ts >> 0x20) & 0xFFFFFFFF;
         modified->LoBits = ts & 0xFFFFFFFF;
+
+        retval = true;
+    }
+#elif defined(EE_PLATFORM_LINUX)
+    struct statx res;
+    if (statx(AT_FDCWD, path.c_str(), 0, STATX_BTIME, &res) == 0)
+    {
+        if (res.stx_mask & STATX_BTIME)
+        {
+            efd::UInt64 ts = UnixTimeToWindowsTime(res.stx_btime.tv_sec);
+
+            modified->HiBits = (ts >> 0x20) & 0xFFFFFFFF;
+            modified->LoBits = ts & 0xFFFFFFFF;
+
+            retval = true;
+        }
     }
 #endif
 

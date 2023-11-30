@@ -32,9 +32,13 @@ String::String()
 {
     // To be safe lets ensure that the StringHeader, StringBody, and StringData classes are sized
     // the same on all platforms:
-    EE_COMPILETIME_ASSERT(sizeof(StringHeader) == (sizeof(size_t)*3));
+    EE_COMPILETIME_ASSERT(sizeof(StringHeader) == (sizeof(size_t) + sizeof(size_t) + sizeof(efd::UAtomic)));
     EE_COMPILETIME_ASSERT(sizeof(StringBody) == 1);
+#ifdef EE_COMPILER_MSVC
+    EE_COMPILETIME_ASSERT(sizeof(StringData) == sizeof(StringHeader) + sizeof(void*) + sizeof(void*));
+#else
     EE_COMPILETIME_ASSERT(sizeof(StringData) == sizeof(StringHeader) + sizeof(void*));
+#endif
     // Also ensure that the char data buffer immediately follows the header:
     EE_COMPILETIME_ASSERT(EE_OFFSETOF(StringData, m_data) == sizeof(StringHeader));
 }
@@ -1203,13 +1207,13 @@ String::StringBody* String::vformat(const char* pcFormat, va_list argPtr)
     if (stBufferSize != 0)
     {
         //DT32423 Switch to using efd Vsnprintf wrapper
-#if defined(_MSC_VER) && _MSC_VER >= 1400
+#ifdef EE_HAVE_SECURE_FUNCTIONS
         numChars = _vsnprintf_s(pBody->m_data, stBufferSize, stBufferSize - 1,  pcFormat, argPtr);
-#elif defined(_PS3) || defined(linux)
+#elif defined(EE_PLATFORM_PS3) || defined(EE_PLATFORM_LINUX) || defined(EE_PLATFORM_MACOSX)
         numChars = vsnprintf(pBody->m_data, stBufferSize - 1, pcFormat, argPtr);
-#else //#if defined(_MSC_VER) && _MSC_VER >= 1400
+#else //#ifdef EE_HAVE_SECURE_FUNCTIONS
         numChars = _vsnprintf(pBody->m_data, stBufferSize - 1, pcFormat, argPtr);
-#endif //#if defined(_MSC_VER) && _MSC_VER >= 1400
+#endif //#ifdef EE_HAVE_SECURE_FUNCTIONS
     }
 
     while (numChars == String::npos || pBody == NULL || (size_t)numChars >= stBufferSize - 1)
@@ -1221,18 +1225,18 @@ String::StringBody* String::vformat(const char* pcFormat, va_list argPtr)
         pBody = Allocate(stBufferSize * 2);
         stBufferSize = GetBufferSize(pBody, false);
         //DT32423 Switch to using efd Vsnprintf wrapper
-#if defined(_MSC_VER) && _MSC_VER >= 1400
+#ifdef EE_HAVE_SECURE_FUNCTIONS
         numChars = _vsnprintf_s(pBody->m_data, stBufferSize, stBufferSize - 1, pcFormat, argPtr);
-#elif defined(_PS3) || defined(linux)
+#elif defined(EE_PLATFORM_PS3) || defined(EE_PLATFORM_LINUX) || defined(EE_PLATFORM_MACOSX)
         // _vsnprintf returns the number of characters actually written
         // but... vsnprintf returns the number of characters it wanted
         // to write, not the number actually written!!! (bug 4737)
         numChars = vsnprintf(pBody->m_data, stBufferSize - 1, pcFormat, argPtr);
         if (numChars >= stBufferSize - 1)
             numChars = String::npos;
-#else //#if defined(_MSC_VER) && _MSC_VER >= 1400
+#else //#ifdef EE_HAVE_SECURE_FUNCTIONS
         numChars = _vsnprintf(pBody->m_data, stBufferSize - 1, pcFormat, argPtr);
-#endif //#if defined(_MSC_VER) && _MSC_VER >= 1400
+#endif //#ifdef EE_HAVE_SECURE_FUNCTIONS
     }
 
     pBody->m_data[numChars] = '\0';

@@ -5,6 +5,7 @@
 // be copied or disclosed except in accordance with the terms of that 
 // agreement.
 //
+//      Copyright (c) 2022-2023 Arves100/Made In Server Developers.
 //      Copyright (c) 1996-2009 Emergent Game Technologies.
 //      All Rights Reserved.
 //
@@ -12,8 +13,8 @@
 // http://www.emergent.net
 
 #pragma once
-#ifndef EE_SOCKET_WIN32_H
-#define EE_SOCKET_WIN32_H
+#ifndef EE_SOCKET_SDL2_H
+#define EE_SOCKET_SDL2_H
 
 #define EE_SOCKET_ERROR(expression) (expression == SOCKET_ERROR)
 
@@ -41,6 +42,6 @@ typedef int socklen_t;
 #endif
 
 #include <efd/Metrics.h>
-#include <efdNetwork/Win32/Socket_Win32.inl>
+#include EE_PLATFORM_SPECIFIC_INCLUDE(efdNetwork, Socket, inl)
 
 #endif // EE_SOCKET_WIN32_H

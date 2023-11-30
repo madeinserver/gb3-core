@@ -21,74 +21,49 @@
 
 namespace efd
 {
-/// atomically increment a variable
-inline efd::SInt32 AtomicIncrement(efd::SInt32 &value);
 
-/// atomically decrement a variable
-inline efd::SInt32 AtomicDecrement(efd::SInt32 &value);
-
-/// atomically increment a variable
-inline efd::UInt32 AtomicIncrement(efd::UInt32 &value);
-
-/// atomically decrement a variable
-inline efd::UInt32 AtomicDecrement(efd::UInt32 &value);
-
-/// atomically increment a variable
-inline efd::SInt32 AtomicIncrement(volatile efd::SInt32 &value);
-
-/// atomically decrement a variable
-inline efd::SInt32 AtomicDecrement(volatile efd::SInt32 &value);
-
-/// atomically increment a variable
-inline efd::UInt32 AtomicIncrement(volatile efd::UInt32 &value);
-
-/// atomically decrement a variable
-inline efd::UInt32 AtomicDecrement(volatile efd::UInt32 &value);
-
-
-#if defined(__SPU__)
-    /// atomically increment a variable
-    inline size_t AtomicIncrement(size_t &value);
-
-    /// atomically decrement a variable
-    inline size_t AtomicDecrement(size_t &value);
-
-    /// atomically increment a variable
-    inline size_t AtomicIncrement(volatile size_t &value);
-
-    /// atomically decrement a variable
-    inline size_t AtomicDecrement(volatile size_t &value);
+#if (defined(EE_PLATFORM_WIN32) && _WIN32_WINNT >= 0x600) \
+    || defined(EE_PLATFORM_PS3) \
+    || defined(EE_PLATFORM_XBOX360) \
+    || defined(EE_PLATFORM_LINUX)
+    typedef efd::UInt64 UAtomic;
+    typedef efd::SInt64 SAtomic;
+#elif (defined(EE_PLATFORM_WIN32) && _WIN32_WINNT < 0x600)
+    typedef efd::UInt32 UAtomic;
+    typedef efd::SInt32 SAtomic;
+#else
+#error "Missing atomics for specified platform"
 #endif
 
-#if /*defined(EE_ARCH_64) ||*/ defined(EE_PLATFORM_PS3)
-    /// atomically increment a variable
-    inline efd::SInt64 AtomicIncrement(efd::SInt64 &value);
 
-    /// atomically decrement a variable
-    inline efd::SInt64 AtomicDecrement(efd::SInt64 &value);
+/// atomically increment a variable
+inline efd::SAtomic AtomicIncrement(efd::SAtomic &value);
 
-    /// atomically increment a variable
-    inline efd::UInt64 AtomicIncrement(efd::UInt64 &value);
+/// atomically decrement a variable
+inline efd::SAtomic AtomicDecrement(efd::SAtomic &value);
 
-    /// atomically decrement a variable
-    inline efd::UInt64 AtomicDecrement(efd::UInt64 &value);
+/// atomically increment a variable
+inline efd::UAtomic AtomicIncrement(efd::UAtomic &value);
 
-    /// atomically increment a variable
-    inline efd::SInt64 AtomicIncrement(volatile efd::SInt64 &value);
+/// atomically decrement a variable
+inline efd::UAtomic AtomicDecrement(efd::UAtomic &value);
 
-    /// atomically decrement a variable
-    inline efd::SInt64 AtomicDecrement(volatile efd::SInt64 &value);
+/// atomically increment a variable
+inline efd::SAtomic AtomicIncrement(volatile efd::SAtomic &value);
 
-    /// atomically increment a variable
-    inline efd::UInt64 AtomicIncrement(volatile efd::UInt64 &value);
+/// atomically decrement a variable
+inline efd::SAtomic AtomicDecrement(volatile efd::SAtomic &value);
 
-    /// atomically decrement a variable
-    inline efd::UInt64 AtomicDecrement(volatile efd::UInt64 &value);
-#endif
+/// atomically increment a variable
+inline efd::UAtomic AtomicIncrement(volatile efd::UAtomic &value);
+
+/// atomically decrement a variable
+inline efd::UAtomic AtomicDecrement(volatile efd::UAtomic &value);
 
     /// @name Atomic compare-and-swap operations
     //@{
 
+#if defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_XBOX360) || defined(EE_PLATFORM_PS3)
     /**
         Performs an atomic compare-and-swap (CAS) operation on the specified pointer values.
 
@@ -114,63 +89,33 @@ inline efd::UInt32 AtomicDecrement(volatile efd::UInt32 &value);
         void* volatile* ppDestination,
         void* pComparand,
         void* pExchange);
-
-    /**
-        Performs an atomic compare-and-swap (CAS) operation on the specified 32-bit values.
-
-        In pseudocode, this function performs the following operation:
-        @code
-           atomic
-           {
-               UInt32 oldValue = *pDestination;
-               if (oldValue == comparand)
-                   *pDestination = exchange;
-               return oldValue;
-           }
-        @endcode
-
-        This operation includes a memory barrier.
-
-        @param pDestination The memory location tested and potentially modified
-        @param comparand The value to test against *pDestination
-        @param exchange The new value written to *pDestination if the comparison passed
-        @return UInt32 The initial value of *pDestination
-    */
-    inline efd::UInt32 AtomicCompareAndSwap(
-        efd::UInt32 volatile* pDestination,
-        efd::UInt32 comparand,
-        efd::UInt32 exchange);
-
-#if defined(EE_PLATFORM_PS3) || defined(EE_PLATFORM_XBOX360)
-    //defined(EE_ARCH_64)
-
-    /**
-        Performs an atomic compare-and-swap (CAS) operation on the specified 64-bit values.
-
-        In pseudocode, this function performs the following operation:
-        @code
-           atomic
-           {
-               UInt64 oldValue = *pDestination;
-               if (oldValue == comparand)
-                   *pDestination = exchange;
-               return oldValue;
-           }
-        @endcode
-
-        This operation includes a memory barrier.
-
-        @param pDestination The memory location tested and potentially modified
-        @param comparand The value to test against *pDestination
-        @param exchange The new value written to *pDestination if the comparison passed
-        @return UInt64 The initial value of *pDestination
-    */
-    inline efd::UInt64 AtomicCompareAndSwap(
-        efd::UInt64 volatile* pDestination,
-        efd::UInt64 comparand,
-        efd::UInt64 exchange);
 #endif
 
+    /**
+        Performs an atomic compare-and-swap (CAS) operation on the specified atomic values.
+
+        In pseudocode, this function performs the following operation:
+        @code
+           atomic
+           {
+               UAtomic oldValue = *pDestination;
+               if (oldValue == comparand)
+                   *pDestination = exchange;
+               return oldValue;
+           }
+        @endcode
+
+        This operation includes a memory barrier.
+
+        @param pDestination The memory location tested and potentially modified
+        @param comparand The value to test against *pDestination
+        @param exchange The new value written to *pDestination if the comparison passed
+        @return UAtomic The initial value of *pDestination
+    */
+    inline efd::UAtomic AtomicCompareAndSwap(
+        efd::UAtomic volatile* pDestination,
+        efd::UAtomic comparand,
+        efd::UAtomic exchange);
 
     //@}
 
@@ -242,8 +187,7 @@ private:
     template <int Size, typename T>
     struct SelectMatchingUIntBySize;
 
-#if defined(EE_PLATFORM_PS3) || defined(EE_PLATFORM_XBOX360) /*|| defined(EE_ARCH_64)*/
-
+#if defined(EE_PLATFORM_PS3) || defined(EE_PLATFORM_XBOX360) || defined(EE_ARCH_64)
     template <typename T>
     struct SelectMatchingUIntBySize<8, T>
     {
@@ -261,10 +205,7 @@ private:
 } // end namespace efd
 
 // Include the platform specific inline functions
-#include EE_PLATFORM_WRAPPER_INCLUDE(efd,AtomicOperations,inl)
-
-// Include the cross-platform inline functions
-#include <efd/AtomicOperations.inl>
+#include EE_PLATFORM_SPECIFIC_INCLUDE(efd,AtomicOperations,inl)
 
 #endif // EE_ATOMICOPERATIONS_H
 

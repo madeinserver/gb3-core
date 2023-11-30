@@ -20,7 +20,9 @@
 #include <efd/PathUtils.h>
 #include <efd/SDL2/SDL2File.h>
 
+#ifdef EE_PLATFORM_WIN32
 #include <share.h>
+#endif
 
 namespace efd
 {
@@ -65,6 +67,7 @@ SDL2File::SDL2File(const char* pcName, OpenMode eMode,
         break;
     }
 
+#ifdef EE_PLATFORM_WIN32
     // Check for environment variables.
     char acFileName[EE_MAX_PATH];
     DWORD uiWrite = ::ExpandEnvironmentStringsA(pcName, acFileName, EE_MAX_PATH);
@@ -82,6 +85,15 @@ SDL2File::SDL2File(const char* pcName, OpenMode eMode,
     // open the file as a share and allow other processes to open it read-only.
 
     m_pFile = _fsopen(acFileName, pcMode, _SH_DENYWR);
+#else
+    const char* env = (const char*)getenv(pcName);
+    if (!env)
+        env = pcName;
+
+    // posix does not support shared mode...
+    m_pFile = fopen(env, pcMode);
+#endif
+
     m_bGood = (m_pFile != NULL);
 
     m_uiBufferAllocSize = uiBufferSize;

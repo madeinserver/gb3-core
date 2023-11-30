@@ -26,16 +26,20 @@ namespace efd
 {
 /// @name UniversalTypes
 /// Define our Universal types in terms of platform specific types. 
-/// The following types have been defined for Win32 in UniversalTypes_Win32.h.
 //@{
 
 typedef bool                Bool;
 
 typedef char                Char;
+
+#ifdef EE_PLATFORM_WIN32
 typedef unsigned short      WChar;
+#else
+typedef unsigned int        WChar;
+#endif
 
 typedef int8_t              SInt8;
-typedef uint8_t     UInt8;
+typedef uint8_t             UInt8;
 
 #define EE_SINT8_MAX        (127)
 #define EE_UINT8_MAX        (255)
@@ -63,7 +67,7 @@ typedef double              Float64;
 
 #if !defined(SWIG)
 
-#ifdef _WIN32 // Specifically required for resources...
+#ifdef EE_PLATFORM_WIN32 // Specifically required for resources...
 typedef HINSTANCE InstanceRef;
 #endif
 

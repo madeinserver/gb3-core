@@ -5,6 +5,7 @@
 // be copied or disclosed except in accordance with the terms of that
 // agreement.
 //
+//      Copyright (c) 2022-2023 Arves100/Made In Server Developers.
 //      Copyright (c) 1996-2009 Emergent Game Technologies.
 //      All Rights Reserved.
 //
@@ -35,23 +36,23 @@ class EE_EFD_ENTRY NonAtomicRefCount
 public:
     /// @name Construction and Destruction
     //@{
-    inline NonAtomicRefCount(efd::UInt32 startAt = 0) : m_ref(startAt) {}
+    inline NonAtomicRefCount(efd::UAtomic startAt = 0) : m_ref(startAt) {}
     //@}
 
     /// Increment the reference count.
     /// @return The incremented reference count.
-    inline efd::UInt32 operator++() { return ++m_ref; }
+    inline efd::UAtomic operator++() { return ++m_ref; }
 
     /// Decrement the reference count.
     /// @return The decremented reference count.
-    inline efd::UInt32 operator--() { return --m_ref; }
+    inline efd::UAtomic operator--() { return --m_ref; }
 
     /// Get the current reference count.
     /// @return The current reference count.
-    inline operator efd::UInt32() { return m_ref; }
+    inline operator efd::UAtomic() { return m_ref; }
 
 protected:
-    efd::UInt32 m_ref;
+    efd::UAtomic m_ref;
 };
 
 
@@ -69,18 +70,18 @@ public:
 
     /// Increment the reference count.
     /// @return The incremented reference count.
-    inline efd::UInt32 operator++() { return efd::AtomicIncrement(m_ref); }
+    inline efd::UAtomic operator++() { return efd::AtomicIncrement(m_ref); }
 
     /// Decrement the reference count.
     /// @return The decremented reference count.
-    inline efd::UInt32 operator--() { return efd::AtomicDecrement(m_ref); }
+    inline efd::UAtomic operator--() { return efd::AtomicDecrement(m_ref); }
 
     /// Get the current reference count.
     /// @return The current reference count.
-    inline operator efd::UInt32() { return m_ref; }
+    inline operator efd::UAtomic() { return m_ref; }
 
 protected:
-    efd::UInt32 m_ref;
+    efd::UAtomic m_ref;
 };
 
 
@@ -120,7 +121,7 @@ public:
 
     /// Get the current reference count.
     /// @return The current reference count.
-    inline efd::UInt32 GetRefCount() const;
+    inline efd::UAtomic GetRefCount() const;
 
 protected:
     /// keeps track of the ref count for this object

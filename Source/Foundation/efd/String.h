@@ -19,6 +19,7 @@
 #include <efd/IBase.h>
 #include <efd/utf8char.h>
 #include <efd/StdContainers.h>
+#include <efd/AtomicOperations.h>
 
 /// @cond EMERGENT_INTERNAL
 
@@ -519,8 +520,8 @@ protected:
     struct StringHeader
     {
         size_t m_cbBufferSize;
-        size_t m_RefCount;
         size_t m_cchStringLength;
+        efd::UAtomic m_RefCount;
     };
     /// Internal structure defining the body, used for providing type information.  The actually
     /// buffer allocated is larger than StringBody making it safe to read beyond the one character

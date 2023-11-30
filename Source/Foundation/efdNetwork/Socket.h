@@ -247,17 +247,6 @@ typedef efd::SmartPointer<Socket> SocketPtr;
 
 } // end namespace efd
 
-
-#if defined(EE_PLATFORM_WIN32)
-#include <efdNetwork/Win32/Socket_Win32.h>
-#elif defined(EE_PLATFORM_LINUX)
-
-#elif defined(EE_PLATFORM_XBOX360)
-#include <efdNetwork/Xbox360/Socket_Xbox360.h>
-#elif defined(EE_PLATFORM_PS3)
-#include <efdNetwork/PS3/Socket_PS3.h>
-#else
-#error Unknown platform
-#endif
+#include EE_PLATFORM_SPECIFIC_INCLUDE(efdNetwork, Socket, h)
 
 #endif // EE_SOCKET_H

@@ -26,10 +26,12 @@ efd::SDL2PlatformService::SDL2PlatformService(
 #ifdef _WIN32
     HINSTANCE hInstance,
 #endif
-    LPTSTR lpCmdLine,
-    efd::SInt32 m_nCmdShow) :
-      m_lpCmdLine(lpCmdLine)
-    , m_nCmdShow(m_nCmdShow)
+    int argc,
+    char** argv,
+    efd::SInt32 flags)
+    : m_nCmds(argc)
+    , m_lpCmdLine(argv)
+    , m_nFlags(flags)
     , m_hWnd(0)
     , m_windowWidth(1024)
     , m_windowHeight(768)
@@ -82,40 +84,38 @@ void efd::SDL2PlatformService::SetWindowTitle(const efd::utf8string& strTitle)
     m_strWindowTitle = strTitle;
 }
 
+#ifdef EE_PLATFORM_WIN32
 //------------------------------------------------------------------------------------------------
 void efd::SDL2PlatformService::SetWindowTitle(efd::UInt32 titleResourceID)
 {
-#error a
-
-#ifdef _WIN32
     TCHAR buffer[MAX_LOADSTRING];
     LoadString(m_hInstance, titleResourceID, buffer, MAX_LOADSTRING);
     m_strWindowTitle = buffer;
-#else
-#error "TODO"
-#endif
 }
 
 //------------------------------------------------------------------------------------------------
 void efd::SDL2PlatformService::SetWindowIcon(efd::UInt32 iconID)
 {
-#error a
-
-#ifdef _WIN32
-    // TODO...
-#else
-    return false;
-#endif
-
-/*   
     if (m_hIcon)
     {
         SDL_FreeSurface(m_hIcon);
         m_hIcon = nullptr;
     }
-*/
 
+    HICON icon = LoadIconW(GetModuleHandleW(NULL), MAKEINTRESOURCEW(iconID));
+
+    if (icon)
+    {
+        ICONINFO info;
+        if (GetIconInfo(icon, &info))
+        {
+            // TODO
+        }
+
+        DestroyIcon(icon);
+    }
 }
+#endif
 
 //------------------------------------------------------------------------------------------------
 void efd::SDL2PlatformService::SetWindowWidth(efd::UInt32 width)
@@ -151,7 +151,7 @@ efd::SyncResult efd::SDL2PlatformService::OnPreInit(efd::IDependencyRegistrar* p
     EE_UNUSED_ARG(pDependencyRegistrar);
 
     // Initialize window instance.
-    if (InitInstance(m_nCmdShow))
+    if (InitInstance(m_nFlags))
     {
         return efd::SyncResult_Success;
     }

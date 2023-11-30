@@ -16,77 +16,134 @@ namespace efd
 {
 
     //-------------------------------------------------------------------------------------------------
-    inline efd::SInt32 AtomicIncrement(efd::SInt32& value)
+    inline efd::SAtomic AtomicIncrement(efd::SAtomic& value)
     {
-        SDL_AtomicIncRef((SDL_atomic_t*)&value);
+#if (defined(EE_PLATFORM_WIN32) && _WIN32_WINNT >= 0x600) || defined(EE_PLATFORM_XBOX360)
+        return InterlockedIncrement64((LONGLONG*)&value);
+#elif (defined(EE_PLATFORM_WIN32) && _WIN32_WINNT < 0x600)
+        return InterlockedIncrement((LONG*)&value);
+#elif defined(EE_PLATFORM_LINUX)
+        __sync_add_and_fetch(&value, 1);
         return value;
+#endif
     }
     //-------------------------------------------------------------------------------------------------
-    inline efd::SInt32 AtomicDecrement(efd::SInt32& value)
+    inline efd::SAtomic AtomicDecrement(efd::SAtomic& value)
     {
-        SDL_AtomicDecRef((SDL_atomic_t*)&value);
+#if (defined(EE_PLATFORM_WIN32) && _WIN32_WINNT >= 0x600) || defined(EE_PLATFORM_XBOX360)
+        return InterlockedDecrement64((LONGLONG*)&value);
+#elif (defined(EE_PLATFORM_WIN32) && _WIN32_WINNT < 0x600)
+        return InterlockedDecrement((LONG*)&value);
+#elif defined(EE_PLATFORM_LINUX)
+        __sync_sub_and_fetch(&value, 1);
         return value;
+#endif
     }
     //-------------------------------------------------------------------------------------------------
-    inline efd::SInt32 AtomicIncrement(volatile efd::SInt32& value)
+    inline efd::SAtomic AtomicIncrement(volatile efd::SAtomic& value)
     {
-        SDL_AtomicIncRef((SDL_atomic_t*)&value);
+#if (defined(EE_PLATFORM_WIN32) && _WIN32_WINNT >= 0x600) || defined(EE_PLATFORM_XBOX360)
+        return InterlockedIncrement64((LONGLONG*)&value);
+#elif (defined(EE_PLATFORM_WIN32) && _WIN32_WINNT < 0x600)
+        return InterlockedIncrement((LONG*)&value);
+#elif defined(EE_PLATFORM_LINUX)
+        __sync_add_and_fetch(&value, 1);
         return value;
+#endif
     }
     //-------------------------------------------------------------------------------------------------
-    inline efd::SInt32 AtomicDecrement(volatile efd::SInt32& value)
+    inline efd::SAtomic AtomicDecrement(volatile efd::SAtomic& value)
     {
-        SDL_AtomicDecRef((SDL_atomic_t*)&value);
+#if (defined(EE_PLATFORM_WIN32) && _WIN32_WINNT >= 0x600) || defined(EE_PLATFORM_XBOX360)
+        return InterlockedDecrement64((LONGLONG*)&value);
+#elif (defined(EE_PLATFORM_WIN32) && _WIN32_WINNT < 0x600)
+        return InterlockedDecrement((LONG*)&value);
+#elif defined(EE_PLATFORM_LINUX)
+        __sync_sub_and_fetch(&value, 1);
         return value;
+#endif
     }
     //-------------------------------------------------------------------------------------------------
-    inline efd::UInt32 AtomicIncrement(efd::UInt32& value)
+    inline efd::UAtomic AtomicIncrement(efd::UAtomic& value)
     {
-        SDL_AtomicIncRef((SDL_atomic_t*)&value);
+#if (defined(EE_PLATFORM_WIN32) && _WIN32_WINNT >= 0x600) || defined(EE_PLATFORM_XBOX360)
+        return InterlockedIncrement64((LONGLONG*)&value);
+#elif (defined(EE_PLATFORM_WIN32) && _WIN32_WINNT < 0x600)
+        return InterlockedIncrement((LONG*)&value);
+#elif defined(EE_PLATFORM_LINUX)
+        __sync_add_and_fetch(&value, 1);
         return value;
+#endif
     }
     //-------------------------------------------------------------------------------------------------
-    inline efd::UInt32 AtomicDecrement(efd::UInt32& value)
+    inline efd::UAtomic AtomicDecrement(efd::UAtomic& value)
     {
-        EE_ASSERT(value > 0);
-        SDL_AtomicDecRef((SDL_atomic_t*)&value);
+#if (defined(EE_PLATFORM_WIN32) && _WIN32_WINNT >= 0x600) || defined(EE_PLATFORM_XBOX360)
+        return InterlockedDecrement64((LONGLONG*)&value);
+#elif (defined(EE_PLATFORM_WIN32) && _WIN32_WINNT < 0x600)
+        return InterlockedDecrement((LONG*)&value);
+#elif defined(EE_PLATFORM_LINUX)
+        __sync_sub_and_fetch(&value, 1);
         return value;
+#endif
     }
     //-------------------------------------------------------------------------------------------------
-    inline efd::UInt32 AtomicIncrement(volatile efd::UInt32& value)
+    inline efd::UAtomic AtomicIncrement(volatile efd::UAtomic& value)
     {
-        SDL_AtomicIncRef((SDL_atomic_t*)&value);
+#if (defined(EE_PLATFORM_WIN32) && _WIN32_WINNT >= 0x600) || defined(EE_PLATFORM_XBOX360)
+        return InterlockedIncrement64((LONGLONG*)&value);
+#elif (defined(EE_PLATFORM_WIN32) && _WIN32_WINNT < 0x600)
+        return InterlockedIncrement((LONG*)&value);
+#elif defined(EE_PLATFORM_LINUX)
+        __sync_add_and_fetch(&value, 1);
         return value;
+#endif
     }
     //-------------------------------------------------------------------------------------------------
-    inline efd::UInt32 AtomicDecrement(volatile efd::UInt32& value)
+    inline efd::UAtomic AtomicDecrement(volatile efd::UAtomic& value)
     {
-        EE_ASSERT(value > 0);
-        SDL_AtomicDecRef((SDL_atomic_t*)&value);
+#if (defined(EE_PLATFORM_WIN32) && _WIN32_WINNT >= 0x600) || defined(EE_PLATFORM_XBOX360)
+        return InterlockedDecrement64((volatile LONGLONG*)&value);
+#elif (defined(EE_PLATFORM_WIN32) && _WIN32_WINNT < 0x600)
+        return InterlockedDecrement((volatile LONG*)&value);
+#elif defined(EE_PLATFORM_LINUX)
+        __sync_sub_and_fetch(&value, 1);
         return value;
+#endif
     }
+
+#if defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_XBOX360)
     //-------------------------------------------------------------------------------------------------
     inline void* AtomicCompareAndSwap(
         void* volatile* ppDestination,
         void* pComparand,
         void* pExchange)
     {
-#error a
         return InterlockedCompareExchangePointer(ppDestination, pExchange, pComparand);
     }
+#endif
+
     //-------------------------------------------------------------------------------------------------
-    inline efd::UInt32 AtomicCompareAndSwap(
-        efd::UInt32 volatile* pDestination,
-        efd::UInt32 comparand,
-        efd::UInt32 exchange)
+    inline efd::UAtomic AtomicCompareAndSwap(
+        efd::UAtomic volatile* pDestination,
+        efd::UAtomic comparand,
+        efd::UAtomic exchange)
     {
-#error a
+#if (defined(EE_PLATFORM_WIN32) && _WIN32_WINNT >= 0x600)
+        return InterlockedCompareExchange64(
+            reinterpret_cast<LONGLONG volatile*>(pDestination),
+            static_cast<LONGLONG>(exchange),
+            static_cast<LONGLONG>(comparand));
+#elif (defined(EE_PLATFORM_WIN32) && _WIN32_WINNT < 0x600)
         return InterlockedCompareExchange(
             reinterpret_cast<LONG volatile*>(pDestination),
             static_cast<LONG>(exchange),
             static_cast<LONG>(comparand));
+#elif defined(EE_PLATFORM_LINUX)
+        __sync_val_compare_and_swap(pDestination, comparand, exchange);
+        return *pDestination;
+#endif
     }
-
 
 } // end namespace efd
 

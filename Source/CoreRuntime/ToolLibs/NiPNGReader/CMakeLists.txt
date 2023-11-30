@@ -1,5 +1,3 @@
-find_package(libpng CONFIG REQUIRED)
-
 add_library(NiPNGReader STATIC
     NiPNGReader.cpp
     NiPNGReader.h

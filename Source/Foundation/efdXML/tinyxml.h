@@ -1723,9 +1723,8 @@ public:
         LoadFile.
         BY:  Emergent Game Technologies, Inc.
     */
-#if !defined(EE_PLATFORM_LINUX)
     bool LoadBuffer( const char*, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING );
-#endif
+
     /// Save a file using the given FILE*. Returns true if successful.
     bool SaveFile( FILE* ) const;
 
@@ -1762,12 +1761,10 @@ public:
         SAXParseFile.
         BY:  Emergent Game Technologies, Inc.
     */
-#if !defined(EE_PLATFORM_LINUX)
     virtual bool SAXParseBuffer(
         const char* buffer,
         TiXmlDefaultHandler* handler,
         TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING );
-#endif
 
     /** Parse the given null terminated block of xml data. Passing in an encoding to this
         method (either TIXML_ENCODING_LEGACY or TIXML_ENCODING_UTF8 will force TinyXml

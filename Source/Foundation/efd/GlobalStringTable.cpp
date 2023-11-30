@@ -54,7 +54,7 @@ GlobalStringTable::GlobalStringTable() :
     // Make sure we have enough room for storing the hash value and the
     // length. Later on, we'll pack them into a size_t object which must
     // be at least 4B.
-    EE_ASSERT(sizeof(size_t) >= 4);
+    EE_ASSERT(sizeof(efd::UAtomic) >= 4);
 
     for (efd::UInt32 ui = 0; ui < GSTABLE_NUM_GLOBAL_STRING_HASH_BUCKETS; ui++)
     {
@@ -91,19 +91,19 @@ GlobalStringTable::GlobalStringHandle GlobalStringTable::AddString(
     }
 
     // Add in space for ref count, length, and null terminator.
-    size_t stAllocLen = stStrLen + 2*sizeof(size_t) + sizeof(efd::Char);
+    size_t stAllocLen = stStrLen + 2*sizeof(efd::UAtomic) + sizeof(efd::Char);
 
     // since we need the size_t header to be properly aligned
-    if (stAllocLen % sizeof(size_t) != 0)
+    if (stAllocLen % sizeof(efd::UAtomic) != 0)
     {
-        stAllocLen += sizeof(size_t) - (stAllocLen % sizeof(size_t));
+        stAllocLen += sizeof(efd::UAtomic) - (stAllocLen % sizeof(efd::UAtomic));
     }
 
     void * pvMem = EE_MALLOC(stAllocLen);
 
-    efd::Char* pcMem = (efd::Char*) pvMem + 2*sizeof(size_t);
+    efd::Char* pcMem = (efd::Char*) pvMem + 2*sizeof(efd::UAtomic);
     handle = pcMem;
-    size_t* kMem = (size_t*) pvMem;
+    efd::UAtomic* kMem = (efd::UAtomic*) pvMem;
 
     efd::UInt32 hash = HashFunction(pString, stStrLen);
 
@@ -235,7 +235,7 @@ void GlobalStringTable::RemoveString(const GlobalStringHandle& handle,
     {
         if (*i == pString)
         {
-            size_t* mem = (size_t*)GetRealBufferStart(handle);
+            efd::UAtomic* mem = (efd::UAtomic*)GetRealBufferStart(handle);
             if (GetRefCount(handle) == 1 &&
                 AtomicDecrement(mem[0]) == 0)
             {

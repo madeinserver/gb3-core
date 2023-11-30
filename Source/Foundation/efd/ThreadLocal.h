@@ -20,12 +20,15 @@
 #include <efd/Asserts.h>
 #include <efd/MemObject.h>
 
-#if defined(EE_PLATFORM_PS3) || defined(EE_PLATFORM_LINUX) || defined(EE_PLATFORM_MACOSX)
+#if defined(EE_PLATFORM_PS3)
 #include <pthread.h>
 #endif
 
 namespace efd
 {
+#if !defined(EE_PLATFORM_WIN32) && !defined(EE_PLATFORM_XBOX360)
+    #define TLS_OUT_OF_INDEXES 0xffffffffu
+#endif
 
 /**
     A cross platform template class to support thread local storage.
@@ -81,14 +84,10 @@ private:
     SDL_TLSID m_tlsHandle;
     static const int INVALID_KEY = 0;
     typedef void* ThreadLocalReturnType;
-#elif defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_XBOX360)
+#elif defined(EE_PLATFORM_XBOX360)
     DWORD m_tlsHandle;
     typedef void* ThreadLocalReturnType;
 #elif defined (EE_PLATFORM_PS3)
-    pthread_key_t m_tlsHandle;
-    static const pthread_key_t INVALID_KEY = 0xFFFFFFFF;
-    typedef void* ThreadLocalReturnType;
-#elif defined (EE_PLATFORM_LINUX)
     pthread_key_t m_tlsHandle;
     static const pthread_key_t INVALID_KEY = 0xFFFFFFFF;
     typedef void* ThreadLocalReturnType;
@@ -169,14 +168,12 @@ private:
 
 //--------------------------------------------------------------------------------------------------
 
-#if defined (EE_PLATFORM_WIN32)
-#include <efd/Win32/ThreadLocal_Win32.inl>
+#if defined (EE_PLATFORM_SDL2)
+#include <efd/SDL2/ThreadLocal_SDL2.inl>
 #elif defined (EE_PLATFORM_LINUX)
 #include <efd/Linux/ThreadLocal_Linux.inl>
 #elif defined (EE_PLATFORM_PS3)
 #include <efd/PS3/ThreadLocal_PS3.inl>
-#elif defined (EE_PLATFORM_XBOX360)
-#include <efd/XBox360/ThreadLocal_XBox360.inl>
 #endif
 
 }

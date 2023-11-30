@@ -20,11 +20,11 @@ using namespace efd;
 
 //--------------------------------------------------------------------------------------------------
 bool XMLUtils::GetAttribute(const TiXmlAttributeSet& attrs, const EE_TIXML_STRING& name,
-                             efd::utf8string& o_result)
+    efd::utf8string& o_result)
 {
     bool retval = false;
 
-    const TiXmlAttribute* attrib = attrs.Find (name.c_str());
+    const TiXmlAttribute* attrib = attrs.Find(name.c_str());
     if (attrib)
     {
         o_result = attrib->Value();

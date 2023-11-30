@@ -5,7 +5,7 @@
 // be copied or disclosed except in accordance with the terms of that
 // agreement.
 //
-//      Copyright (c) 2022 Arves100/Made In Server Developers.
+//      Copyright (c) 2022-2023 Arves100/Made In Server Developers.
 //      Copyright (c) 1996-2009 Emergent Game Technologies.
 //      All Rights Reserved.
 //
@@ -17,6 +17,9 @@
 #include <efd/TimeType.h>
 
 using namespace efd;
+
+/// global state of the cursor
+static bool g_cursorShown = true;
 
 //--------------------------------------------------------------------------------------------------
 efd::UInt64 efd::GetPerformanceCounter()
@@ -66,7 +69,7 @@ efd::UInt32 efd::MakeDir(const efd::Char* path)
 #if defined (EE_PLATFORM_WIN32)
     return efd::UInt32(_mkdir(path));
 #else
-    return efd::UInt32(mkdir(path));
+    return efd::UInt32(mkdir(path, S_IRWXU | S_IRWXG));
 #endif
 }
 
@@ -78,5 +81,31 @@ void efd::InitTestEnvironment()
     SetErrorMode(dwMode | SEM_NOGPFAULTERRORBOX);
 #endif
 }
+//--------------------------------------------------------------------------------------------------
 
+void efd::ShowCursor()
+{
+    SDL_ShowCursor(SDL_ENABLE);
+    g_cursorShown = true;
+}
+//--------------------------------------------------------------------------------------------------
+
+void efd::HideCursor()
+{
+    SDL_ShowCursor(SDL_DISABLE);
+    g_cursorShown = false;
+}
+//--------------------------------------------------------------------------------------------------
+
+void efd::SetCursorVisibility(bool x)
+{
+    SDL_ShowCursor(x ? SDL_ENABLE : SDL_DISABLE);
+    g_cursorShown = x;
+}
+//--------------------------------------------------------------------------------------------------
+
+bool efd::IsCursorVisible()
+{
+    return g_cursorShown;
+}
 //--------------------------------------------------------------------------------------------------

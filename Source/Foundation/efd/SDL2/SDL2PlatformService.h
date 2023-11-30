@@ -41,8 +41,9 @@ public:
 #ifdef _WIN32
         HINSTANCE hInstance,
 #endif
-        LPTSTR lpCmdLine,
-        efd::SInt32 nCmdShow = SDL_WINDOW_MINIMIZED);
+        int argc,
+        char** argv,
+        efd::SInt32 flags = SDL_WINDOW_MINIMIZED);
 
     /// @name Configuration options
     /// These functions are only useful to call prior to PreInit.  These values are used
@@ -52,6 +53,8 @@ public:
     /// Sets the initial window title from a string. The window title should be set shortly
     /// after creating the platform service and before ticking services.
     void SetWindowTitle(const efd::utf8string& strTitle);
+
+#ifdef EE_PLATFORM_WIN32
     /// Sets the initial window title from a resource string. The window title should be set
     /// shortly after creating the platform service and before ticking services.
     void SetWindowTitle(efd::UInt32 titleResourceID);
@@ -60,6 +63,7 @@ public:
     /// the icon is not set the system will use a default icon. The window icon, if set, should be
     /// set shortly after creating the platform service and before ticking services.
     void SetWindowIcon(efd::UInt32 iconResourceID);
+#endif
 
     /// Sets the initial window width. This can be called as soon as the service is created. If
     /// called before the service is initialized this will set the initial width of the window. If
@@ -103,9 +107,9 @@ protected:
     // Overridden virtual functions inherit base documentation and thus are not documented here.
     virtual const char* GetDisplayName() const;
 
-
-    LPTSTR m_lpCmdLine;
-    efd::UInt32 m_nCmdShow;
+    int m_nCmds;
+    char** m_lpCmdLine;
+    efd::UInt32 m_nFlags;
     efd::WindowRef m_hWnd;
 
     efd::utf8string m_strWindowTitle;

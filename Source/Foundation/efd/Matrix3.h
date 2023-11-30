@@ -511,15 +511,12 @@ protected:
     static const efd::Float32 EE_RIGHT_ANGLE_EPSILON;
 };
 
-#if defined (EE_PLATFORM_WIN32)
-#include <efd/Win32/Matrix3_Win32.inl>
+#if defined (EE_PLATFORM_SDL2)
+#include <efd/SDL2/Matrix3_SDL2.inl>
 #elif defined (EE_PLATFORM_XBOX360)
 #include <efd/XBox360/Matrix3_XBox360.inl>
 #elif defined (EE_PLATFORM_PS3)
 #include <efd/PS3/Matrix3_PS3.inl>
-#elif defined (EE_PLATFORM_LINUX)
-#include <efd/Linux/Matrix3_Linux.inl>
-#else
 #error Unknown platform
 #endif
 

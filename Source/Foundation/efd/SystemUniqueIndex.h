@@ -15,7 +15,7 @@
 #ifndef __SystemUniqueIndex_h__
 #define __SystemUniqueIndex_h__
 
-
+#include <efd/OS.h>
 
 /**
     @class SystemUniqueIndex
@@ -32,16 +32,6 @@
 
  */
 
-
-#if defined(EE_PLATFORM_WIN32)
-#include <efd/Win32/SystemUniqueIndex_Win32.inl>
-#elif defined(EE_PLATFORM_LINUX)
-#include <efd/Linux/SystemUniqueIndex_Linux.inl>
-#elif defined(EE_PLATFORM_PS3)
-#include <efd/PS3/SystemUniqueIndex_PS3.inl>
-#elif defined(EE_PLATFORM_XBOX360)
-#include <efd/XBox360/SystemUniqueIndex_Xbox360.inl>
-#endif
-
+#include EE_PLATFORM_SPECIFIC_INCLUDE(efd,SystemUniqueIndex,inl)
 
 #endif // EE_IDATASTREAM_H

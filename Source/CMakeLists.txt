@@ -1,4 +1,3 @@
-add_subdirectory(3rdParty)
 add_subdirectory(Foundation)
 add_subdirectory(CoreRuntime)
 add_subdirectory(GameFramework)
