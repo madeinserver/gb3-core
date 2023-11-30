@@ -31,7 +31,6 @@ Platform neutral wrapper for a socket. Internal use only.
 #include <efdNetwork/INetLib.h>
 #include <efd/Metrics.h>
 
-
 namespace efd
 {
 
@@ -44,7 +43,7 @@ const int MAX_MSG_LEN = 1024;
 #define MAX_DATAGRAM_SIZE 9216
 #elif defined(EE_PLATFORM_XBOX360)
 #define MAX_DATAGRAM_SIZE 1264
-#elif defined(EE_PLATFORM_WIN32)
+#elif defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_MACOSX) || defined(EE_PLATFORM_LINUX)
 #define MAX_DATAGRAM_SIZE 1500
 #endif
 
@@ -247,6 +246,6 @@ typedef efd::SmartPointer<Socket> SocketPtr;
 
 } // end namespace efd
 
-#include EE_PLATFORM_SPECIFIC_INCLUDE(efdNetwork, Socket, h)
+#include EE_PLATFORM_SPECIFIC_INCLUDE(efdNetwork,Socket,h)
 
 #endif // EE_SOCKET_H

@@ -20,11 +20,14 @@
 
 #define EE_SOCKET_INVALID(expression) (expression == INVALID_SOCKET)
 
+#ifdef EE_PLATFORM_WIN32
 #define EE_SOCKET_CLOSE(expression) closesocket(expression)
+#else
+#define EE_SOCKET_CLOSE(expression) close(expression)
+#endif
 
 #define EE_SOCKET_LINGER(expression) static_cast<u_short>(expression)
 
-typedef int socklen_t;
 #ifndef EAGAIN
 #define EAGAIN WSAEWOULDBLOCK
 #endif
@@ -40,8 +43,11 @@ typedef int socklen_t;
 #ifndef ECONNRESET
 #define ECONNRESET WSAECONNRESET
 #endif
+#ifndef EINVAL
+#define EINVAL WSAEINVAL
+#endif
 
 #include <efd/Metrics.h>
-#include EE_PLATFORM_SPECIFIC_INCLUDE(efdNetwork, Socket, inl)
+#include EE_PLATFORM_SPECIFIC_INCLUDE(efdNetwork,Socket,inl)
 
 #endif // EE_SOCKET_WIN32_H

@@ -18,27 +18,12 @@
 
 #include <efdNetwork/HostInfo.h>
 #include <efdNetwork/TCPSocket.h>
+#include <efdNetwork/Socket.h>
 
 using namespace efd;
 
 const int MSG_HEADER_LEN = 6;
 
-typedef int socklen_t;
-#ifndef EAGAIN
-    #define EAGAIN WSAEWOULDBLOCK
-#endif
-#ifndef EINPROGRESS
-    #define EINPROGRESS WSAEWOULDBLOCK
-#endif
-#ifndef EALREADY
-    #define EALREADY WSAEALREADY
-#endif
-#ifndef EISCONN
-    #define EISCONN WSAEISCONN
-#endif
-#ifndef ECONNRESET
-    #define ECONNRESET WSAECONNRESET
-#endif
 //-------------------------------------------------------------------------------------------------
 void Socket::setSocketBlocking(bool blocking)
 {
@@ -185,7 +170,7 @@ efd::SInt32 TCPSocket::Connect(const efd::utf8string& serverNameOrAddr, efd::UIn
         m_socketId));
     if (retVal == SOCKET_ERROR)
     {
-        if (errorCode == EINPROGRESS || errorCode == EALREADY || errorCode == WSAEINVAL)
+        if (errorCode == EINPROGRESS || errorCode == EALREADY || errorCode == EINVAL)
         {
             return EE_SOCKET_CONNECTION_IN_PROGRESS;
         }
@@ -273,7 +258,7 @@ efd::SInt32 TCPSocket::SendTo(
     remoteAddr.sin_addr.s_addr = htonl(destinationConnectionID.GetIP());
     remoteAddr.sin_port = htons(destinationConnectionID.GetRemotePort());
     memset(remoteAddr.sin_zero,0,sizeof(remoteAddr.sin_zero));
-    efd::SInt32 datasize = sizeof(remoteAddr);
+    socklen_t datasize = sizeof(remoteAddr);
 
     // Sends the message to the connected host
     numBytes = sendto(
@@ -439,7 +424,7 @@ efd::SInt32 TCPSocket::ReceiveFrom(
 
     // who is this message from?
     struct sockaddr_in fromAddr;
-    efd::SInt32 datasize = sizeof(sockaddr_in);
+    socklen_t datasize = sizeof(sockaddr_in);
     // retrieve the length of the message received
     numBytes = recvfrom(
         m_socketId,
@@ -653,7 +638,7 @@ efd::SInt32 TCPSocket::ReceiveFrom(
     remoteAddr.sin_family = AF_INET;
     memset(remoteAddr.sin_zero,0,sizeof(remoteAddr.sin_zero));
 
-    efd::SInt32 datasize = sizeof(sockaddr_in);
+    socklen_t datasize = sizeof(sockaddr_in);
 
     SInt32 retVal = recvfrom(m_socketId, pData, size, 0,(struct sockaddr *)&remoteAddr, &datasize);
 

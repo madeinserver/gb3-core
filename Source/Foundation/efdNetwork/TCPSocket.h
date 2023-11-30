@@ -74,8 +74,6 @@ public:
     */
     efd::SInt32 Send(const efd::SmartBuffer& buffer);
 
-#if defined(EE_PLATFORM_WIN32)
-
     /**
         Sends a raw buffer to a connected host.
         @param pData Data to send
@@ -124,8 +122,6 @@ public:
         efd::SInt32 size,
         efd::UInt32& hostOrderIPAddr,
         efd::UInt16& hostOrderRemotePort);
-
-#endif // defined(EE_PLATFORM_WIN32)
 
     /**
         Sends a message to a datagram socket.

@@ -17,7 +17,7 @@
 
 /// @cond EMERGENT_INTERNAL
 
-#include EE_PLATFORM_SPECIFIC_INCLUDE(efdNetwork, Net, h)
+#include EE_PLATFORM_SPECIFIC_INCLUDE(efdNetwork,Net,h)
 
 /// @endcond
 

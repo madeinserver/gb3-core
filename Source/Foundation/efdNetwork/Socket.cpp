@@ -17,6 +17,7 @@
 
 #include <efdNetwork/HostInfo.h>
 #include <efdNetwork/Socket.h>
+#include <efdNetwork/Net.h>
 
 using namespace efd;
 

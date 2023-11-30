@@ -111,6 +111,7 @@ efd::utf8string HostInfo::NetworkOrderIPToString(efd::UInt32 networkOrderIP)
 //--------------------------------------------------------------------------------------------------
 void detectErrorGethostbyname(int* errCode, efd::utf8string& errorMsg)
 {
+#ifdef EE_PLATFORM_WIN32
     *errCode = WSAGetLastError();
 
     if (*errCode == WSANOTINITIALISED)
@@ -133,10 +134,28 @@ void detectErrorGethostbyname(int* errCode, efd::utf8string& errorMsg)
     else if (*errCode == WSAEINTR)
         errorMsg.append("A blocking Windows Socket 1.1 call was canceled through "
         "WSACancelBlockingCall.");
+#else
+    *errCode = errno;
+
+    if (*errCode == ENETDOWN)
+        errorMsg.append("The network subsystem has failed.");
+    else if (*errCode == HOST_NOT_FOUND)
+        errorMsg.append("Authoritative Answer Host not found.");
+    else if (*errCode == TRY_AGAIN)
+        errorMsg.append("Non-Authoritative Host not found, or server failure.");
+    else if (*errCode == NO_RECOVERY)
+        errorMsg.append("Nonrecoverable error occurred.");
+    else if (*errCode == NO_DATA || *errCode == NO_ADDRESS)
+        errorMsg.append("Valid name, no data record of requested type.");
+    else if (*errCode == EINPROGRESS)
+        errorMsg.append("A blocking call is in progress, or the service "
+            "provider is still processing a callback function.");
+#endif
 }
 
 void detectErrorGethostbyaddr(int* errCode, efd::utf8string& errorMsg)
 {
+#ifdef EE_PLATFORM_WIN32
     *errCode = WSAGetLastError();
 
     if (*errCode == WSANOTINITIALISED)
@@ -163,4 +182,21 @@ void detectErrorGethostbyaddr(int* errCode, efd::utf8string& errorMsg)
     if (*errCode == WSAEINTR)
         errorMsg.append("A blocking Windows Socket 1.1 call was canceled through "
         "WSACancelBlockingCall.");
+#else
+    * errCode = errno;
+
+    if (*errCode == ENETDOWN)
+        errorMsg.append("The network subsystem has failed.");
+    else if (*errCode == HOST_NOT_FOUND)
+        errorMsg.append("Authoritative Answer Host not found.");
+    else if (*errCode == TRY_AGAIN)
+        errorMsg.append("Non-Authoritative Host not found, or server failure.");
+    else if (*errCode == NO_RECOVERY)
+        errorMsg.append("Nonrecoverable error occurred.");
+    else if (*errCode == NO_DATA || *errCode == NO_ADDRESS)
+        errorMsg.append("Valid name, no data record of requested type.");
+    else if (*errCode == EINPROGRESS)
+        errorMsg.append("A blocking call is in progress, or the service "
+            "provider is still processing a callback function.");
+#endif
 }

@@ -282,7 +282,7 @@ protected:
     bool m_isListening;
 
     /// Last reported LightSpeed error code
-    efd::UInt32 m_lastErr;
+    efd::SInt32 m_lastErr;
 
     /// Description for last reported error
     efd::utf8string m_lastErrString;

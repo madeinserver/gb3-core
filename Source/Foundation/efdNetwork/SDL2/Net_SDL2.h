@@ -18,6 +18,24 @@
 
 /// @cond EMERGENT_INTERNAL
 
+#ifdef EE_PLATFORM_WIN32
+#include <WinSock2.h>
+#include <WS2tcpip.h>
+#else
+#include <netdb.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <sys/ioctl.h>
+#include <sys/socket.h>
+#include <netinet/tcp.h>
+
+typedef int SOCKET;
+#define SOCKET_ERROR -1
+#define INVALID_SOCKET -1
+#define ioctlsocket ioctl
+#endif
+
 /// @endcond
 
 #endif // EE_NET_WIN32_H
