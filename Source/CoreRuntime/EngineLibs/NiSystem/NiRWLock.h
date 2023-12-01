@@ -5,6 +5,7 @@
 // be copied or disclosed except in accordance with the terms of that
 // agreement.
 //
+//      Copyright (c) 2022-2023 Arves100/Made In Server Developers.
 //      Copyright (c) 1996-2009 Emergent Game Technologies.
 //      All Rights Reserved.
 //
@@ -36,18 +37,21 @@ public:
     inline void UnlockRead();
     inline void UnlockWrite();
 protected:
-    volatile NiUInt32 m_uiNumReaders;
-#ifdef _PS3
+    volatile efd::UAtomic m_uiNumReaders;
+#ifdef EE_PLATFORM_PS3
     efd::CriticalSection m_kWriteLock;
     sys_lwcond_t m_kNoReadersCond;
-#elif defined(_XENON) || defined(WIN32)
+#elif EE_PLATFORM_XBOX360
     efd::CriticalSection m_kWriteLock;
     HANDLE m_hNoReadersEvent;
+#elif EE_PLATFORM_SDL2
+    efd::CriticalSection m_kWriteLock;
+    SDL_cond* m_kNoReadersCond;
 #else
     #error Attempt to create reader-writer lock on undefined platform.
 #endif
 };
 
-#include "NiRWLock.inl"
+#include EE_PLATFORM_SPECIFIC_INCLUDE(NiSystem,NiRWLock,inl)
 
 #endif // #ifndef NIRWLOCK_H

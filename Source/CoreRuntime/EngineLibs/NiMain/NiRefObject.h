@@ -32,8 +32,8 @@ public:
     virtual ~NiRefObject();
     inline void IncRefCount();
     inline void DecRefCount();
-    inline unsigned int GetRefCount() const;
-    static unsigned int GetTotalObjectCount();
+    inline efd::UAtomic GetRefCount() const;
+    static efd::UAtomic GetTotalObjectCount();
 protected:
     virtual void DeleteThis();
 private:
@@ -43,8 +43,8 @@ private:
     // a friend to NiRefObject.
     friend class NiNIFImageReader;
 
-    NiUInt32 m_uiRefCount;
-    static NiUInt32 ms_uiObjects;
+    efd::UAtomic m_uiRefCount;
+    static efd::UAtomic ms_uiObjects;
 };
 
 #include "NiRefObject.inl"

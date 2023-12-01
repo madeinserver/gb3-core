@@ -159,3 +159,21 @@ char* NiGetViewerString(const char* pcPrefix, const char* pcValue)
 }
 
 //--------------------------------------------------------------------------------------------------
+char* NiGetViewerString(const char* pcPrefix, long long iValue)
+{
+    size_t stLen = strlen(pcPrefix) + 25;
+    char* pcString = NiAlloc(char, stLen);
+    NiSprintf(pcString, stLen, "%s = %lld", pcPrefix, iValue);
+    return pcString;
+}
+
+//--------------------------------------------------------------------------------------------------
+char* NiGetViewerString(const char* pcPrefix, unsigned long long uiValue)
+{
+    size_t stLen = strlen(pcPrefix) + 24;
+    char* pcString = NiAlloc(char, stLen);
+    NiSprintf(pcString, stLen, "%s = %llu", pcPrefix, uiValue);
+    return pcString;
+}
+
+//--------------------------------------------------------------------------------------------------

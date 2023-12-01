@@ -35,6 +35,7 @@
 #include "NiCriticalSection.h"
 #endif
 
+#include <efd/OS.h>
 #include <efd/Utilities.h>
 #include <efd/ILogger.h>
 
@@ -113,9 +114,7 @@ inline float NiGetCurrentTimeInSec() { return (float)efd::GetCurrentTimeInSec();
 
 #endif
 
-#if defined(WIN32)
-#include "NiSystem.inl"
-#endif
+#include EE_PLATFORM_SPECIFIC_INCLUDE(NiSystem,NiSystem,inl)
 
 #endif
 

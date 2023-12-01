@@ -44,6 +44,7 @@ void NiTransformVectorsPentium (NiUInt32 uiVerts, const float* pModel,
     // change to the data representation in NiMatrix3 could invalidate this
     // code.
 
+#ifdef EE_COMPILER_MSVC
 __asm
 {
     mov edx, uiVerts;
@@ -97,6 +98,9 @@ NIASMVECLOOPTOP:
     jnz NIASMVECLOOPTOP;
 NIASMVECEND:
 }
+#else
+#error "TODO"
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -126,6 +130,7 @@ void NiTransformPointsPentium (NiUInt32 uiVerts, const float* pModel,
     pScaledMat[7] = fWS * pFMatrix[7];
     pScaledMat[8] = fWS * pFMatrix[8];
 
+#ifdef EE_COMPILER_MSVC
 __asm
 {
     mov edx, uiVerts;
@@ -189,6 +194,10 @@ NIASMPTLOOPTOP:
     jnz NIASMPTLOOPTOP;
 NIASMPTEND:
 }
+#else
+#error "TODO"
+#endif
+
 }
 //#pragma optimize("",off)
 

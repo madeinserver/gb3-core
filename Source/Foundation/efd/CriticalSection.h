@@ -87,6 +87,15 @@ public:
     /// @endcond
 #endif
 
+#if defined(EE_PLATFORM_SDL2)
+    /// @cond EMERGENT_INTERNAL
+    
+    // Access to the system mutex id for use in conjunction with NiRWLock
+    inline SDL_mutex* GetSysMutex();
+
+    /// @endcond
+#endif
+
 protected:
 #if defined (EE_MULTITHREADED)
 #if defined (EE_PLATFORM_SDL2)

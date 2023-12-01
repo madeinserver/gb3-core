@@ -5,6 +5,7 @@
 // be copied or disclosed except in accordance with the terms of that
 // agreement.
 //
+//      Copyright (c) 2022-2023 Arves100/Made In Server Developers.
 //      Copyright (c) 1996-2009 Emergent Game Technologies.
 //      All Rights Reserved.
 //
@@ -17,10 +18,20 @@
 #include <efd/Utilities.h>
 #include <efd/StringUtilities.h>
 
-#include "NiMediaPaths_Win32.h"
+#include "NiMediaPaths_SDL2.h"
+
+#ifdef EE_PLATFORM_WIN32
+#define PLATFORM_NAME "Win32"
+#elif defined EE_PLATFORM_MACOSX
+#define PLATFORM_NAME "MacOSX"
+#elif defined EE_PLATFORM_LINUX
+#define PLATFORM_NAME "Linux"
+#else
+#error "Unsupported media path"
+#endif
 
 //--------------------------------------------------------------------------------------------------
-bool NiMediaPaths_Win32::GetEmergentPath(char* pBuffer, size_t bufferSize)
+bool NiMediaPaths_SDL2::GetEmergentPath(char* pBuffer, size_t bufferSize)
 {
     EE_ASSERT((pBuffer != NULL) && (bufferSize > 0));
 
@@ -44,16 +55,16 @@ bool NiMediaPaths_Win32::GetEmergentPath(char* pBuffer, size_t bufferSize)
     return true;
 }
 //--------------------------------------------------------------------------------------------------
-void NiMediaPaths_Win32::AppendShaderPath(char* pBuffer, size_t bufferSize)
+void NiMediaPaths_SDL2::AppendShaderPath(char* pBuffer, size_t bufferSize)
 {
     efd::Strcat(pBuffer, bufferSize, "\\Media\\Shaders\\Data");
 }
 //--------------------------------------------------------------------------------------------------
-bool NiMediaPaths_Win32::FetchAbsoluteShaderPath(NiString& outAbsoluteShaderPath)
+bool NiMediaPaths_SDL2::FetchAbsoluteShaderPath(NiString& outAbsoluteShaderPath)
 {
     char acBuffer[2048];
 
-    if (!NiMediaPaths_Win32::GetEmergentPath(acBuffer, 2048))
+    if (!NiMediaPaths_SDL2::GetEmergentPath(acBuffer, 2048))
         return false;
     AppendShaderPath(acBuffer, 2048);
     
@@ -61,16 +72,16 @@ bool NiMediaPaths_Win32::FetchAbsoluteShaderPath(NiString& outAbsoluteShaderPath
     return true;
 }
 //--------------------------------------------------------------------------------------------------
-void NiMediaPaths_Win32::AppendShaderLibPath(char* pBuffer, size_t bufferSize)
+void NiMediaPaths_SDL2::AppendShaderLibPath(char* pBuffer, size_t bufferSize)
 {
-    efd::Strcat(pBuffer, bufferSize, "\\SDK\\Win32\\DLL\\ShaderLibs");
+    efd::Strcat(pBuffer, bufferSize, "\\SDK\\" PLATFORM_NAME "\\DLL\\ShaderLibs");
 }
 //--------------------------------------------------------------------------------------------------
-bool NiMediaPaths_Win32::FetchAbsoluteShaderLibPath(NiString& outAbsoluteShaderLibPath)
+bool NiMediaPaths_SDL2::FetchAbsoluteShaderLibPath(NiString& outAbsoluteShaderLibPath)
 {
     char acBuffer[2048];
 
-    if (!NiMediaPaths_Win32::GetEmergentPath(acBuffer, 2048))
+    if (!NiMediaPaths_SDL2::GetEmergentPath(acBuffer, 2048))
         return false;
     AppendShaderLibPath(acBuffer, 2048);
     
@@ -78,16 +89,16 @@ bool NiMediaPaths_Win32::FetchAbsoluteShaderLibPath(NiString& outAbsoluteShaderL
     return true;
 }
 //--------------------------------------------------------------------------------------------------
-void NiMediaPaths_Win32::AppendShaderDefaultTexturePath(char* pBuffer, size_t bufferSize)
+void NiMediaPaths_SDL2::AppendShaderDefaultTexturePath(char* pBuffer, size_t bufferSize)
 {
     efd::Strcat(pBuffer, bufferSize, "\\Media\\Shaders\\Data\\Textures");
 }
 //--------------------------------------------------------------------------------------------------
-bool NiMediaPaths_Win32::FetchAbsoluteShaderDefaultTexturePath(NiString& outAbsoluteTexturePath)
+bool NiMediaPaths_SDL2::FetchAbsoluteShaderDefaultTexturePath(NiString& outAbsoluteTexturePath)
 {
     char acBuffer[2048];
 
-    if (!NiMediaPaths_Win32::GetEmergentPath(acBuffer, 2048))
+    if (!NiMediaPaths_SDL2::GetEmergentPath(acBuffer, 2048))
         return false;
     AppendShaderDefaultTexturePath(acBuffer, 2048);
     
@@ -95,13 +106,13 @@ bool NiMediaPaths_Win32::FetchAbsoluteShaderDefaultTexturePath(NiString& outAbso
     return true;
 }
 //--------------------------------------------------------------------------------------------------
-void NiMediaPaths_Win32::AppendMeshProfilePath(char* pBuffer, size_t bufferSize)
+void NiMediaPaths_SDL2::AppendMeshProfilePath(char* pBuffer, size_t bufferSize)
 {
     efd::Strcat(pBuffer, bufferSize, "\\Media\\ToolPluinData\\MeshProfiles");
 }
 //--------------------------------------------------------------------------------------------------
-void NiMediaPaths_Win32::AppendToolPluginsPath(char* pBuffer, size_t bufferSize)
+void NiMediaPaths_SDL2::AppendToolPluginsPath(char* pBuffer, size_t bufferSize)
 {
-    efd::Strcat(pBuffer, bufferSize, "\\SDK\\Win32\\DLL\\ToolPlugins");
+    efd::Strcat(pBuffer, bufferSize, "\\SDK\\" PLATFORM_NAME "\\DLL\\ToolPlugins");
 }
 //--------------------------------------------------------------------------------------------------

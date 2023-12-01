@@ -46,6 +46,6 @@ public:
     // *** end Emergent internal use only ***
 };
 
-#include "NiTransform.inl"
+#include EE_PLATFORM_SPECIFIC_INCLUDE(NiMain,NiTransform,inl)
 
 #endif // NITRANSFORM_H

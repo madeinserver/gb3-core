@@ -5,6 +5,7 @@
 // be copied or disclosed except in accordance with the terms of that
 // agreement.
 //
+//      Copyright (c) 2022-2023 Arves100/Made In Server Developers.
 //      Copyright (c) 1996-2009 Emergent Game Technologies.
 //      All Rights Reserved.
 //
@@ -24,7 +25,7 @@ MessageBoxFunction NiMessageBoxUtilities::ms_pfnMessageBox =
 unsigned int NiMessageBoxUtilities::DefaultMessageBox(const char* pcText,
     const char* pcCaption, void*)
 {
-    MessageBox(NULL, pcText, pcCaption, MB_OK | MB_TOPMOST);
+    SDL_ShowSimpleMessageBox(0, pcText, pcCaption, NULL);
     return 0;
 }
 

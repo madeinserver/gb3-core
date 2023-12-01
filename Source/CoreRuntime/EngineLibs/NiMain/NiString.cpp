@@ -20,9 +20,16 @@
 #include <stdio.h>
 
 #define NI_BUFFER_SIZE_IDX    0
-#define NI_REF_COUNT_IDX      1
-#define NI_STRING_LENGTH_IDX  2
+#define NI_STRING_LENGTH_IDX  1
+
+#if defined(EE_ATOMICS_64) && defined(EE_ARCH_32) // enable support for 64-bit atomics in 32-bit platforms (Vista+/Linux/MacOSX)
+#define NI_REF_COUNT_IDX      2
+#define NI_REF_COUNT_IDX_HIGH 3
+#define NI_HEADER_OFFSET  (4*sizeof(size_t))
+#else
+#define NI_REF_COUNT_IDX      2
 #define NI_HEADER_OFFSET  (3*sizeof(size_t))
+#endif
 
 //--------------------------------------------------------------------------------------------------
 NiString::StringHandle NiString::Allocate(size_t stStrLength)
@@ -37,7 +44,11 @@ NiString::StringHandle NiString::Allocate(size_t stStrLength)
     char* pcBuffer = NiAlloc(char, stBufferSize);
     size_t* pkBuffer = (size_t*) pcBuffer;
     pkBuffer[NI_BUFFER_SIZE_IDX] = stBufferSize;
+#if defined(EE_ATOMICS_64) && defined(EE_ARCH_32)
+    *(efd::UAtomic*)(&pkBuffer[NI_REF_COUNT_IDX]) = 1;
+#else
     pkBuffer[NI_REF_COUNT_IDX] = 1;
+#endif
     pkBuffer[NI_STRING_LENGTH_IDX] = 0;
     return (StringHandle) (pcBuffer + NI_HEADER_OFFSET);
 }
@@ -70,7 +81,11 @@ NiString::StringHandle NiString::AllocateAndCopyHandle(StringHandle kHandle)
     char* pcBuffer = NiAlloc(char, stBufferSize);
     size_t* pkBuffer = (size_t*) pcBuffer;
     pkBuffer[NI_BUFFER_SIZE_IDX] = stBufferSize;
+#if defined(EE_ATOMICS_64) && defined(EE_ARCH_32)
+    * (efd::UAtomic*)(&pkBuffer[NI_REF_COUNT_IDX]) = 1;
+#else
     pkBuffer[NI_REF_COUNT_IDX] = 1;
+#endif
     pkBuffer[NI_STRING_LENGTH_IDX] = stLength;
     StringHandle kNewHandle = (StringHandle) (pcBuffer + NI_HEADER_OFFSET);
     NiMemcpy(kNewHandle, stLength + 1, kHandle, stLength + 1);
@@ -108,7 +123,8 @@ char* NiString::GetRealBufferStart(const StringHandle& kHandle)
         EE_ASSERT(ValidateString(kHandle));
 #endif
     size_t* pkMem = (size_t*)GetRealBufferStart(kHandle);
-    efd::AtomicIncrement(pkMem[NI_REF_COUNT_IDX]);
+    efd::UAtomic* pkAtomic = (efd::UAtomic*)&pkMem[NI_REF_COUNT_IDX];
+    efd::AtomicIncrement(*pkAtomic);
 }
 //--------------------------------------------------------------------------------------------------
 #ifdef NIDEBUG
@@ -125,9 +141,10 @@ char* NiString::GetRealBufferStart(const StringHandle& kHandle)
         EE_ASSERT(ValidateString(kHandle));
 #endif
     size_t* pkMem = (size_t*)GetRealBufferStart(kHandle);
-    efd::AtomicDecrement(pkMem[NI_REF_COUNT_IDX]);
+    efd::UAtomic* pkAtomic = (efd::UAtomic*)&pkMem[NI_REF_COUNT_IDX];
+    efd::AtomicDecrement(*pkAtomic);
 
-    if (pkMem[NI_REF_COUNT_IDX] == 0)
+    if (*pkAtomic == 0)
     {
         Deallocate(kHandle);
     }
@@ -157,14 +174,15 @@ void NiString::Swap(StringHandle& kHandle, const char* pcNewValue,
 #endif
 
     size_t* pkMem = (size_t*)GetRealBufferStart(kHandle);
-    efd::AtomicDecrement(pkMem[NI_REF_COUNT_IDX]);
+    efd::UAtomic* pkMemAtm = (efd::UAtomic*)& pkMem[NI_REF_COUNT_IDX];
+    efd::AtomicDecrement(*pkMemAtm);
 
-    if (pkMem[NI_REF_COUNT_IDX] == 0)
+    if (*pkMemAtm == 0)
     {
         size_t stLength = strlen(pcNewValue);
         if (pkMem[NI_BUFFER_SIZE_IDX] >= (stLength + 1 + NI_HEADER_OFFSET))
         {
-            pkMem[NI_REF_COUNT_IDX] = 1;
+            *pkMemAtm = 1;
         }
         else
         {

@@ -48,5 +48,13 @@ NIMAIN_ENTRY char* NiGetViewerString (const char* pPrefix, double dValue);
 NIMAIN_ENTRY char* NiGetViewerString (const char* pPrefix, void* pValue);
 NIMAIN_ENTRY char* NiGetViewerString (const char* pPrefix,
                                       const char* pValue);
+NIMAIN_ENTRY char* NiGetViewerString(const char* pPrefix,
+                                        unsigned long ulValue);
+
+// mis: 64-bit support
+NIMAIN_ENTRY char* NiGetViewerString(const char* pPrefix,
+                                        unsigned long long ulValue);
+NIMAIN_ENTRY char* NiGetViewerString(const char* pPrefix,
+                                        long long ulValue);
 
 #endif

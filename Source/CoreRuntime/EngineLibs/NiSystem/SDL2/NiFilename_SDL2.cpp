@@ -5,6 +5,7 @@
 // be copied or disclosed except in accordance with the terms of that
 // agreement.
 //
+//      Copyright (c) 2022-2023 Arves100/Made In Server Developers.
 //      Copyright (c) 1996-2009 Emergent Game Technologies.
 //      All Rights Reserved.
 //
@@ -18,7 +19,11 @@
 #include "NiFilename.h"
 #include "NiOS.h"
 
+#ifdef EE_PLATFORM_WIN32
 #define DIR_SEPERATOR_STRING "\\"
+#else
+#define DIR_SEPERATOR_STRING "/"
+#endif
 
 //--------------------------------------------------------------------------------------------------
 NiFilename::NiFilename(const char* pcFullPath)
@@ -40,12 +45,12 @@ bool NiFilename::GetFullPath(char* pcFullPath, unsigned int uiStrLen) const
 // This function _does not_ handle multibyte characters.
 void NiFilename::Splitpath(const char* pcStr)
 {
-#if _MSC_VER >= 1400
+#ifdef EE_HAVE_SECURE_FUNCTIONS
     _splitpath_s(pcStr, m_acDrive, _MAX_DRIVE, m_acDir, _MAX_DIR,
         m_acFname, _MAX_FNAME, m_acExt, _MAX_EXT);
-#else //#if _MSC_VER >= 1400
+#else //#ifdef EE_HAVE_SECURE_FUNCTIONS
     _splitpath(pcStr, m_acDrive, m_acDir, m_acFname, m_acExt);
-#endif //#if _MSC_VER >= 1400
+#endif //#ifdef EE_HAVE_SECURE_FUNCTIONS
 }
 
 //--------------------------------------------------------------------------------------------------

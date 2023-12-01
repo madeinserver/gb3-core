@@ -5,6 +5,7 @@
 // be copied or disclosed except in accordance with the terms of that
 // agreement.
 //
+//      Copyright (c) 2022-2023 Arves100/Made In Server Developers.
 //      Copyright (c) 1996-2009 Emergent Game Technologies.
 //      All Rights Reserved.
 //
@@ -12,11 +13,11 @@
 // http://www.emergent.net
 
 #pragma once
-#ifndef NIMATERIALLIBRARYINTERFACE_H
-#define NIMATERIALLIBRARYINTERFACE_H
+#ifndef NIMATERIALLIBRARYINTERFACE_SDL2_H
+#define NIMATERIALLIBRARYINTERFACE_SDL2_H
 
 // DLL Library interface function
-#if defined(_USRDLL)
+#if defined(_USRDLL) && defined(EE_PLATFORM_WIN32)
 #if defined(NIMAIN_EXPORT)
     // DLL library project uses this
     #define NIMATERIALLIBRARY_ENTRY __declspec(dllimport)

@@ -36,7 +36,7 @@ public:
     static void IncrementUpdates();
 
 protected:
-    static NiUInt32 ms_uiNumUpdates;
+    static efd::UAtomic ms_uiNumUpdates;
 };
 
 #include "NiMainMetrics.inl"

@@ -12,8 +12,8 @@
 // http://www.emergent.net
 
 #pragma once
-#ifndef NIPROCESSOR_H
-#define NIPROCESSOR_H
+#ifndef NIPROCESSOR_SDL2_H
+#define NIPROCESSOR_SDL2_H
 
 #include "NiMainLibType.h"
 #include <NiUniversalTypes.h>

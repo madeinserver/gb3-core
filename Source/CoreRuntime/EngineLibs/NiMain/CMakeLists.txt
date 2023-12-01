@@ -35,6 +35,7 @@ set(NIMAIN_SRC
     NiAVObject.cpp
     NiAVObject.h
     NiAVObject.inl
+    NiProcessor.h
     NiAVObjectPalette.cpp
     NiAVObjectPalette.h
     NiBackToFrontAccumulator.cpp
@@ -671,19 +672,6 @@ set(NIMAIN_SRC
     NiZBufferProperty.cpp
     NiZBufferProperty.h
     NiZBufferProperty.inl
-
-    Win32/NiAVObject_Win32.cpp
-    Win32/NiBound_Win32.cpp
-    Win32/NiMaterialLibraryInterface.h
-    Win32/NiMaterialLibrary_Win32.cpp
-    Win32/NiMatrix3.cpp
-    Win32/NiMediaPaths_Win32.cpp
-    Win32/NiMediaPaths_Win32.h
-    Win32/NiPixelData_Win32.cpp
-    Win32/NiProcessor.cpp
-    Win32/NiProcessor.h
-    Win32/NiTransform.inl
-
     DirectionalShadowWriteMaterialNodeLibrary/NiDirectionalShadowWriteMaterialNodeLibrary.cpp
     PointShadowWriteMaterialNodeLibrary/NiPointShadowWriteMaterialNodeLibrary.cpp
     SpotShadowWriteMaterialNodeLibrary/NiSpotShadowWriteMaterialNodeLibrary.cpp
@@ -696,10 +684,25 @@ set(NIMAIN_SRC
     VSMBlurMaterialNodeLibrary/NiVSMBlurMaterialNodeLibrary.h
 )
 
-add_library(NiMain STATIC ${NIMAIN_SRC})
+set(SDL_FILES
+    SDL2/NiAVObject_SDL2.cpp
+    SDL2/NiBound_SDL2.cpp
+    SDL2/NiMaterialLibraryInterface_SDL2.h
+    SDL2/NiMaterialLibrary_SDL2.cpp
+    SDL2/NiMatrix3_SDL2.cpp
+    SDL2/NiMediaPaths_SDL2.cpp
+    SDL2/NiMediaPaths_SDL2.h
+    SDL2/NiPixelData_SDL2.cpp
+    SDL2/NiProcessor_SDL2.cpp
+    SDL2/NiProcessor_SDL2.h
+    SDL2/NiTransform_SDL2.inl
+)
+
+source_group("SDL2" FILES ${SDL_FILES})
+
+add_library(NiMain STATIC ${NIMAIN_SRC} ${SDL_FILES})
 target_include_directories(NiMain PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}
-    ${CMAKE_CURRENT_LIST_DIR}/Win32
     ${CMAKE_CURRENT_LIST_DIR}/DirectionalShadowWriteMaterialNodeLibrary/
     ${CMAKE_CURRENT_LIST_DIR}/PointShadowWriteMaterialNodeLibrary/
     ${CMAKE_CURRENT_LIST_DIR}/SpotShadowWriteMaterialNodeLibrary/
@@ -714,7 +717,6 @@ if (GB3_BUILD_TOOLS)
     add_library(NiMainDLL SHARED ${NIMAIN_SRC})
     target_include_directories(NiMainDLL PUBLIC
         ${CMAKE_CURRENT_LIST_DIR}
-        ${CMAKE_CURRENT_LIST_DIR}/Win32
         ${CMAKE_CURRENT_LIST_DIR}/DirectionalShadowWriteMaterialNodeLibrary/
         ${CMAKE_CURRENT_LIST_DIR}/PointShadowWriteMaterialNodeLibrary/
         ${CMAKE_CURRENT_LIST_DIR}/SpotShadowWriteMaterialNodeLibrary/

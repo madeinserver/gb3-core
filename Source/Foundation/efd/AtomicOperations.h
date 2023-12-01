@@ -28,9 +28,11 @@ namespace efd
     || defined(EE_PLATFORM_LINUX)
     typedef efd::UInt64 UAtomic;
     typedef efd::SInt64 SAtomic;
+    #define EE_ATOMICS_64 1
 #elif (defined(EE_PLATFORM_WIN32) && _WIN32_WINNT < 0x600)
     typedef efd::UInt32 UAtomic;
     typedef efd::SInt32 SAtomic;
+    #define EE_ATOMICS_32 1
 #else
 #error "Missing atomics for specified platform"
 #endif

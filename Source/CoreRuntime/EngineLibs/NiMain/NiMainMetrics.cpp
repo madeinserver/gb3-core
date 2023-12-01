@@ -20,7 +20,7 @@ const char NiMainMetrics::ms_acNames
     NIMETRICS_MAIN_PREFIX "NumUpdates"
 };
 
-NiUInt32 NiMainMetrics::ms_uiNumUpdates = 0;
+efd::UAtomic NiMainMetrics::ms_uiNumUpdates = 0;
 
 //--------------------------------------------------------------------------------------------------
 void NiMainMetrics::RecordMetrics()

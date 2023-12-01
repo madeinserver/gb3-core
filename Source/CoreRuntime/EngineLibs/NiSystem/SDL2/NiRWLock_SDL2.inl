@@ -5,6 +5,7 @@
 // be copied or disclosed except in accordance with the terms of that
 // agreement.
 //
+//      Copyright (c) 2022-2023 Arves100/Made In Server Developers.
 //      Copyright (c) 1996-2009 Emergent Game Technologies.
 //      All Rights Reserved.
 //
@@ -13,23 +14,23 @@
 
 //--------------------------------------------------------------------------------------------------
 inline NiRWLock::NiRWLock()
-    : m_uiNumReaders(0)
+    : m_kNoReadersCond(NULL)
 {
-    m_hNoReadersEvent = CreateEventA(NULL, true, true, "NoReadersEvent");
+    m_kNoReadersCond = SDL_CreateCond();
 }
 
 //--------------------------------------------------------------------------------------------------
 inline NiRWLock::~NiRWLock()
 {
-    CloseHandle(m_hNoReadersEvent);
+    SDL_DestroyCond(m_kNoReadersCond);
 }
 
 //--------------------------------------------------------------------------------------------------
 inline void NiRWLock::LockRead()
 {
+    SDL_CondSignal(m_kNoReadersCond);
     m_kWriteLock.Lock();
-    efd::AtomicIncrement(static_cast<NiUInt32>(m_uiNumReaders));
-    ResetEvent(m_hNoReadersEvent);
+    efd::AtomicIncrement(m_uiNumReaders);
     m_kWriteLock.Unlock();
 }
 
@@ -37,7 +38,7 @@ inline void NiRWLock::LockRead()
 inline void NiRWLock::LockWrite()
 {
     m_kWriteLock.Lock();
-    WaitForSingleObject(m_hNoReadersEvent, INFINITE);
+    SDL_CondWait(m_kNoReadersCond, m_kWriteLock.GetSysMutex());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -50,9 +51,9 @@ inline void NiRWLock::UnlockWrite()
 inline void NiRWLock::UnlockRead()
 {
     // read unlock
-    if (efd::AtomicDecrement(static_cast<NiUInt32>(m_uiNumReaders)) == 0)
+    if (efd::AtomicDecrement(m_uiNumReaders) == 0)
     {
-        SetEvent(m_hNoReadersEvent);
+        SDL_CondSignal(m_kNoReadersCond);
     }
 }
 

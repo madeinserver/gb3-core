@@ -5,6 +5,7 @@
 // be copied or disclosed except in accordance with the terms of that
 // agreement.
 //
+//      Copyright (c) 2022-2023 Arves100/Made In Server Developers.
 //      Copyright (c) 1996-2009 Emergent Game Technologies.
 //      All Rights Reserved.
 //
@@ -27,7 +28,7 @@ void NiMaterialLibrary::FreeAllModules()
 {
     for (unsigned int ui = 0; ui < ms_kModules.GetSize(); ui++)
     {
-        FreeLibrary(ms_kModules.GetAt(ui));
+        SDL_UnloadObject(ms_kModules.GetAt(ui));
     }
 
     ms_kModules.RemoveAll();
@@ -40,11 +41,16 @@ bool NiMaterialLibrary::LoadMaterialLibraryDLL(const char* pcLibName)
     NIMLI_LOADLIBRARYFUNCTION pfnLoad = NULL;
     NIMLI_GETMATERIALLIBRARYCOUNTFUNCTION pfnLibraryCount = NULL;
 
-    HMODULE hLibrary = GetModuleHandle(pcLibName);
+    void* hLibrary = NULL;
+    
+#ifdef EE_PLATFORM_WIN32
+    // for caching
+    hLibrary = (void*)GetModuleHandle(pcLibName);
     if (hLibrary == NULL)
+#endif
     {
         // Load the interface library
-        hLibrary = LoadLibrary(pcLibName);
+        hLibrary = SDL_LoadObject(pcLibName);
         if (hLibrary == NULL)
         {
 #ifdef NIDEBUG
@@ -63,7 +69,7 @@ bool NiMaterialLibrary::LoadMaterialLibraryDLL(const char* pcLibName)
 
         // Ensure library was built with the same compiler
         NIMLI_GETCOMPILERVERSIONFUNCTION pfnGetCompilerVersionFunc =
-            (NIMLI_GETCOMPILERVERSIONFUNCTION)GetProcAddress(hLibrary,
+            (NIMLI_GETCOMPILERVERSIONFUNCTION)SDL_LoadFunction(hLibrary,
             "GetCompilerVersion");
         if (pfnGetCompilerVersionFunc)
         {
@@ -77,16 +83,16 @@ bool NiMaterialLibrary::LoadMaterialLibraryDLL(const char* pcLibName)
                     ".\n",pcLibName);
                 NiOutputDebugString(acString);
 #endif
-                FreeLibrary(hLibrary);
+                SDL_UnloadObject(hLibrary);
                 return false;
             }
         }
 
         // Fetch the library creation function
-        pfnLoad = (NIMLI_LOADLIBRARYFUNCTION)GetProcAddress(hLibrary,
+        pfnLoad = (NIMLI_LOADLIBRARYFUNCTION)SDL_LoadFunction(hLibrary,
             "LoadMaterialLibrary");
         pfnLibraryCount = (NIMLI_GETMATERIALLIBRARYCOUNTFUNCTION)
-            GetProcAddress(hLibrary, "GetMaterialLibraryCount");
+            SDL_LoadFunction(hLibrary, "GetMaterialLibraryCount");
 
 
         if (pfnLoad == 0)
@@ -97,7 +103,7 @@ bool NiMaterialLibrary::LoadMaterialLibraryDLL(const char* pcLibName)
                 "a LoadMaterialLibrary function.\n",pcLibName);
             NiOutputDebugString(acString);
 #endif
-            FreeLibrary(hLibrary);
+            SDL_UnloadObject(hLibrary);
             return false;
         }
 
@@ -109,19 +115,19 @@ bool NiMaterialLibrary::LoadMaterialLibraryDLL(const char* pcLibName)
                 "a GetMaterialLibraryCount function.\n", pcLibName);
             NiOutputDebugString(acString);
 #endif
-            FreeLibrary(hLibrary);
+            SDL_UnloadObject(hLibrary);
             return false;
         }
     }
     else
     {
         // It was found once; it better be found again!
-        pfnLoad = (NIMLI_LOADLIBRARYFUNCTION)GetProcAddress(hLibrary,
+        pfnLoad = (NIMLI_LOADLIBRARYFUNCTION)SDL_LoadFunction(hLibrary,
             "LoadMaterialLibrary");
         EE_ASSERT(pfnLoad);
 
         pfnLibraryCount = (NIMLI_GETMATERIALLIBRARYCOUNTFUNCTION)
-            GetProcAddress(hLibrary, "GetMaterialLibraryCount");
+            SDL_LoadFunction(hLibrary, "GetMaterialLibraryCount");
         EE_ASSERT(pfnLibraryCount);
     }
 
@@ -140,7 +146,7 @@ bool NiMaterialLibrary::LoadMaterialLibraryDLL(const char* pcLibName)
             NiSprintf(acString, 1024, "Failed to load \"%s\".\n",
                 pcLibName);
             NiOutputDebugString(acString);
-            FreeLibrary(hLibrary);
+            SDL_UnloadObject(hLibrary);
     #endif
             return false;
         }

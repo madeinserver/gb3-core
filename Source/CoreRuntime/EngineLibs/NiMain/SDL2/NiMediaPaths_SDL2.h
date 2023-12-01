@@ -5,6 +5,7 @@
 // be copied or disclosed except in accordance with the terms of that
 // agreement.
 //
+//      Copyright (c) 2022-2023 Arves100/Made In Server Developers.
 //      Copyright (c) 1996-2009 Emergent Game Technologies.
 //      All Rights Reserved.
 //
@@ -12,13 +13,13 @@
 // http://www.emergent.net
 
 #pragma once
-#ifndef NIMEDIAPATHS_WIN32_H
-#define NIMEDIAPATHS_WIN32_H
+#ifndef NIMEDIAPATHS_SDL2_H
+#define NIMEDIAPATHS_SDL2_H
 
 #include <NiMainLibType.h>
 #include <NiString.h>
 
-namespace NiMediaPaths_Win32
+namespace NiMediaPaths_SDL2
 {
     // Places "%EMERGENT_PATH% into pBuffer
     // (returns false if the buffer was too small or the variable was missing)

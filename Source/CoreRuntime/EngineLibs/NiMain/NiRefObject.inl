@@ -40,13 +40,13 @@ inline void NiRefObject::DecRefCount()
 }
 
 //--------------------------------------------------------------------------------------------------
-inline unsigned int NiRefObject::GetRefCount() const
+inline efd::UAtomic NiRefObject::GetRefCount() const
 {
     return m_uiRefCount;
 }
 
 //--------------------------------------------------------------------------------------------------
-inline unsigned int NiRefObject::GetTotalObjectCount()
+inline efd::UAtomic NiRefObject::GetTotalObjectCount()
 {
     return ms_uiObjects;
 }
