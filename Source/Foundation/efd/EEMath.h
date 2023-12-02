@@ -99,7 +99,7 @@ efd::Float32 Sign(efd::Float32 value);
     @param cos Contains the cosine of the specified radians when this method
         returns.
 */
-void SinCos(efd::Float32 radians, efd::Float32& sin, efd::Float32& cos);
+inline void SinCos(efd::Float32 radians, efd::Float32& sin, efd::Float32& cos);
 
 /// Calculates the product of the specified argument with itself.
 efd::Float32 Sqr(efd::Float32 value);

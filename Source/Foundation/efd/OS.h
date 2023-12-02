@@ -21,12 +21,12 @@
 
 /// Detect the compiler.
 #if defined(_MSC_VER)
-#   define EE_MSVC_COMPILER
+#   define EE_MSVC_COMPILER 1
 #elif defined(__GNUC__)
-#   define EE_GCC_COMPILER
+#   define EE_GCC_COMPILER 1
 #endif
 #if defined(__clang__) // mis
-#   define EE_CLANG_COMPILER
+#   define EE_CLANG_COMPILER 1
 #endif
 
 //--------------------------------------------------------------------------------------------------
@@ -37,27 +37,27 @@
 
 #if defined(__linux__) || defined(linux)
 #   if !defined(EE_PLATFORM_LINUX)
-#       define EE_PLATFORM_LINUX
+#       define EE_PLATFORM_LINUX 1
 #   endif
 #elif defined(__APPLE__) // mis
 #   if !defined(EE_PLATFORM_MACOSX)
-#      define EE_PLATFORM_MACOSX
+#      define EE_PLATFORM_MACOSX 1
 #   endif
 /// Warning: _WIN32 will be defined if devenv.exe is used to batch build a SN VSI project instead
 /// of vsibuild.exe, which may produce difficult to diagnose compile errors.  So we check for PS3
 /// first to avoid this situation.
 #elif defined(SN_TARGET_PS3) || defined(_PS3) || defined(PS3)
 #   if !defined(EE_PLATFORM_PS3)
-#       define EE_PLATFORM_PS3
+#       define EE_PLATFORM_PS3 1
 #   endif
 /// Warning: _XBOX_VER check must precede _WIN32 check
 #elif _XBOX_VER >= 200 || defined(_XENON)
 #   if !defined(EE_PLATFORM_XBOX360)
-#       define EE_PLATFORM_XBOX360
+#       define EE_PLATFORM_XBOX360 1
 #   endif
 #elif defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
 #   if !defined(EE_PLATFORM_WIN32)
-#       define EE_PLATFORM_WIN32
+#       define EE_PLATFORM_WIN32 1
 #   endif
 #else
 #   error Could not identify platform
@@ -76,9 +76,13 @@
 
 /// Detect the current hardware architecture.
 #if defined(__x86_64__) || defined(_M_X64) || defined(__LP64__)
-#   define EE_ARCH_64
+#if !defined(EE_ARCH_64)
+#   define EE_ARCH_64 1
+#endif
 #else
-#   define EE_ARCH_32
+#if !defined(EE_ARCH_32)
+#   define EE_ARCH_32 1
+#endif
 #endif
 
 //--------------------------------------------------------------------------------------------------
@@ -127,6 +131,9 @@
 #if defined(EE_PLATFORM_SDL2)
     #define EE_PLATFORM_SPECIFIC_INCLUDE(Directory, File, Extension) \
         <Directory/SDL2/File##_SDL2.Extension>
+#elif defined(EE_PLATFORM_WIN32) // legacy support
+#define EE_PLATFORM_SPECIFIC_INCLUDE(Directory, File, Extension) \
+        <Directory/Win32/File##_Win32.Extension>
 #elif defined(EE_PLATFORM_PS3)
     #define EE_PLATFORM_SPECIFIC_INCLUDE(Directory, File, Extension) \
         <Directory/PS3/File##_PS3.Extension>
