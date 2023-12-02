@@ -21,9 +21,11 @@
 
 #if defined(EE_USE_MEMTRACKER_STACKTRACE) || defined(EE_USE_ASSERT_STACKTRACE) || defined(EE_USE_EXCEPTION_STACKTRACE)
     #if defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_XBOX360)
+        #ifndef EE_PLATFORM_SDL2
 /// @def EE_ENABLE_STACKTRACE
 /// If defined, the various functions in the StackUtils namespace will be implemented.
-        #define EE_ENABLE_STACKTRACE
+            #define EE_ENABLE_STACKTRACE
+        #endif
     #endif
 #endif
 
