@@ -1,18 +1,5 @@
-add_library(NiStripify STATIC
-    NiStripify.cpp
-    NiStripify.h
-    NiStripifyInterface.cpp
-    NiStripifyInterface.h
-    NiStripifyInterface.inl
-    NiStripifyLibType.h
-    NvTriStrip.cpp
-    NvTriStrip.h
-    NvTriStripObjects.cpp
-    NvTriStripObjects.h
-    VertexCache.cpp
-    VertexCache.h
-)
+set(MOD_NAME NiStripify)
+set(MOD_GB_LIBS NiMesh NiPortal)
+set(MOD_INCLUDES ${CMAKE_CURRENT_LIST_DIR})
 
-target_link_libraries(NiStripify PUBLIC NiMesh NiPortal)
-target_include_directories(NiStripify PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-set_target_properties(NiStripify PROPERTIES FOLDER "${GB3_PREFIX}CoreRuntime/ToolLibs")
+generate_project()

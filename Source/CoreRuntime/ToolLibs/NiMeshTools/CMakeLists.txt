@@ -1,14 +1,5 @@
-add_library(NiMeshTools STATIC
-    NiMeshTools.cpp
-    NiMeshTools.h
-    NiMeshTools.inl
-    NiMeshToolsLibType.h
-    NiSkinningUtilities.cpp
-    NiSkinningUtilities.h
-    NiToolPipelineCloneHelper.cpp
-    NiToolPipelineCloneHelper.h
-)
+set(MOD_NAME NiMeshTools)
+set(MOD_GB_LIBS NiMesh)
+set(MOD_INCLUDES ${CMAKE_CURRENT_LIST_DIR})
 
-target_link_libraries(NiMeshTools PUBLIC NiMesh)
-target_include_directories(NiMeshTools PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-set_target_properties(NiMeshTools PROPERTIES FOLDER "${GB3_PREFIX}CoreRuntime/ToolLibs")
+generate_project()

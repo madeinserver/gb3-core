@@ -1,3 +1,3 @@
-function(SwigTarget)
+function(SwigTarget TARGET SOURCES)
 
 endfunction()

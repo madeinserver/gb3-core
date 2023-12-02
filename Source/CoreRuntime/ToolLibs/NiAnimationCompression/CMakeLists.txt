@@ -1,9 +1,5 @@
-add_library(NiAnimationCompression STATIC
-    NiAnimationCompression.cpp
-    NiAnimationCompression.h
-    NiAnimationCompressionLibType.h
-)
+set(MOD_NAME NiAnimationCompression)
+set(MOD_GB_LIBS NiAnimation)
+set(MOD_INCLUDES ${CMAKE_CURRENT_LIST_DIR})
 
-target_link_libraries(NiAnimationCompression PUBLIC NiAnimation)
-target_include_directories(NiAnimationCompression PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-set_target_properties(NiAnimationCompression PROPERTIES FOLDER "${GB3_PREFIX}CoreRuntime/ToolLibs")
+generate_project()

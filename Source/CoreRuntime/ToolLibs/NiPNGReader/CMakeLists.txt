@@ -1,9 +1,6 @@
-add_library(NiPNGReader STATIC
-    NiPNGReader.cpp
-    NiPNGReader.h
-    NiPNGReaderLibType.h
-)
+set(MOD_NAME NiPNGReader)
+set(MOD_GB_LIBS NiMain)
+set(MOD_LIBRARIES png)
+set(MOD_INCLUDES ${CMAKE_CURRENT_LIST_DIR})
 
-target_link_libraries(NiPNGReader PUBLIC NiMain png)
-target_include_directories(NiPNGReader PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-set_target_properties(NiPNGReader PROPERTIES FOLDER "${GB3_PREFIX}CoreRuntime/ToolLibs")
+generate_project()

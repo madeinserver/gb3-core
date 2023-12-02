@@ -1,11 +1,5 @@
-add_library(NiControllerExtractor STATIC
-    NiCommand.cpp
-    NiCommand.h
-    NiControllerExtractor.cpp
-    NiControllerExtractor.h
-    NiControllerExtractorLibType.h
-)
+set(MOD_NAME NiControllerExtractor)
+set(MOD_GB_LIBS NiParticle)
+set(MOD_INCLUDES ${CMAKE_CURRENT_LIST_DIR})
 
-target_link_libraries(NiControllerExtractor PUBLIC NiParticle)
-target_include_directories(NiControllerExtractor PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-set_target_properties(NiControllerExtractor PROPERTIES FOLDER "${GB3_PREFIX}CoreRuntime/ToolLibs")
+generate_project()

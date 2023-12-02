@@ -4,7 +4,10 @@
 cmake_minimum_required(VERSION 3.20)
 project(Gamebryo3)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH};${CMAKE_CURRENT_LIST_DIR}/Source/CMake;${CMAKE_CURRENT_LIST_DIR}/Integrations)
+set(CMAKE_MODULE_PATH
+    ${CMAKE_MODULE_PATH}
+    ${CMAKE_CURRENT_LIST_DIR}/Source/CMake
+)
 
 option(GB3_ENABLE_UNIT_TESTS "Enable unit tests for migrations" ON)
 
@@ -15,6 +18,9 @@ if ("${CMAKE_BUILD_TYPE}" STREQUAL "")
 endif()
 
 set(GB3_ROOT "${CMAKE_CURRENT_LIST_DIR}")
+set(GB3_INTEGRATION_ROOT "${GB3_ROOT}/Integrations")
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH};${GB3_INTEGRATION_ROOT})
 
 # architecture detection
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -66,7 +72,7 @@ if ("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "AMD64" OR
     set(GB3_X86 TRUE)
     set(GB3_CPU_NAME "x86")
 else()
-    message(FATAL_ERROR "Processor not supported")
+    message(FATAL_ERROR "Processor not supported (${CMAKE_SYSTEM_PROCESSOR})")
 endif()
 
 # nasm
@@ -87,9 +93,9 @@ endif()
 if (NOT DEFINED GB3_TARGET_BACKEND OR "${GB3_TARGET_BACKEND}" STREQUAL "")
     set(GB3_TARGET_BACKEND "SDL2")
     set(GB3_BACKEND_ROOT "${GB3_ROOT}/Source")
+    find_package(SDL2 CONFIG REQUIRED)
 endif()
 
-include(FindFBXSDK)
 include(Backend)
 include(Integration)
 include(Swig)
@@ -97,9 +103,8 @@ include(Version)
 include(Project)
 
 # required packages
-find_package(PNG REQUIRED)
 find_package(OpenEXR CONFIG REQUIRED)
-find_package(SDL2 CONFIG REQUIRED)
+find_package(PNG REQUIRED)
 #find_package(tinyxml2 CONFIG REQUIRED)
 
 # for examples in Win32
@@ -115,6 +120,7 @@ message(STATUS "Platform: ${GB3_PLATFORM_NAME} ${GB3_CPU_NAME} ${GB3_ARCH}-bit")
 message(STATUS "Compiler: ${GB3_COMPILER_NAME}")
 message(STATUS "Backend: ${GB3_TARGET_BACKEND}")
 message(STATUS "Integrations:")
+print_integrations()
 message(STATUS "---------------------------------")
 
 add_subdirectory(Source)

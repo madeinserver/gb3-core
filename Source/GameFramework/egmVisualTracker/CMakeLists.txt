@@ -1,12 +1,5 @@
-set(SRC 
-    egmVisualTrackerLibType.h
-    egmVisualTrackerPCH.h
-    VisualTrackerService.cpp
-    VisualTrackerService.h
-    VisualTrackerService.inl
-)
+set(MOD_NAME egmVisualTracker)
+set(MOD_PCH egmVisualTrackerPCH.h)
+set(MOD_GB_LIBS egf ecr NiCollision)
 
-add_library(egmVisualTracker STATIC ${SRC})
-target_precompile_headers(egmVisualTracker PRIVATE egmVisualTrackerPCH.h)
-set_target_properties(egmVisualTracker PROPERTIES FOLDER "${GB3_PREFIX}GameFramework")
-target_link_libraries(egmVisualTracker PUBLIC egf ecr NiCollision)
+generate_project()

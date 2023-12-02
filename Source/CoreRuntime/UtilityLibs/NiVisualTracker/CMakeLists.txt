@@ -1,20 +1,6 @@
-add_library(NiVisualTracker STATIC
-    Courier16.h
-    NiCommonGraphCallbackObjects.cpp
-    NiCommonGraphCallbackObjects.h
-    NiCourierPixelData.inc
-    NiSymbolPixelData.inc
-    NiVisualTracker.cpp
-    NiVisualTracker.h
-    NiVisualTracker.inl
-    NiVisualTrackerLibType.h
-    NiVisualTrackerPCH.h
-    NiVisualTrackerRenderClick.cpp
-    NiVisualTrackerRenderClick.h
-    NiVisualTrackerRenderClick.inl
-)
+set(MOD_NAME NiVisualTracker)
+set(MOD_GB_LIBS NiMain)
+set(MOD_PCH NiVisualTrackerPCH.h)
+set(MOD_INCLUDES ${CMAKE_CURRENT_LIST_DIR})
 
-target_link_libraries(NiVisualTracker PUBLIC NiMesh)
-target_include_directories(NiVisualTracker PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-set_target_properties(NiVisualTracker PROPERTIES FOLDER "${GB3_PREFIX}CoreRuntime/UtilityLibs")
-target_precompile_headers(NiVisualTracker PRIVATE NiVisualTrackerPCH.h)
+generate_project()
