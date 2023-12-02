@@ -1,0 +1,31 @@
+#
+# This is a sample integration for gamebryo3
+#
+message(STATUS "Sample called!!!")
+
+# This function is called when the integration is initialized
+function(bootstrap_integration_sample return_value)
+    message(STATUS "Sample initialization called!!!!")
+    if (DEFINED GB3_INTEGRATION_SAMPLE_RETURN_FALSE)
+        message(STATUS "Sample returned 0!!!!")
+        set(${return_value} 0 PARENT_SCOPE) # always set this or it won't work
+    else()
+        message(STATUS "Sample returned 1!!!!")
+        set(${return_value} 1 PARENT_SCOPE) # always set this or it won't work
+    endif()
+endfunction()
+
+# Any directory integration has to be a macro!
+function(integration_sample_add_foundation)
+    message(STATUS "Called \"Foundation\" integration of directory !!!")
+    add_library(efdSampleStuff ${GB3_ROOT}/Source/Foundation/efd/Archive.cpp)
+    set_target_properties(efdSampleStuff PROPERTIES FOLDER ${MOD_DIR})
+endfunction()
+
+function(integration_sample_add_coreruntime_enginelibs)
+    message(STATUS "Called \"CoreRuntime/EngineLibs\" integration of directory !!!")
+
+    add_library(NiSampleStuff ${GB3_ROOT}/Source/CoreRuntime/EngineLibs/NiMain/Ni2DBuffer.cpp)
+    set_target_properties(NiSampleStuff PROPERTIES FOLDER ${MOD_DIR})
+endfunction()
+
