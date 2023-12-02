@@ -1,14 +1,5 @@
-add_library(efdLogService STATIC
-    efdLogServiceLibType.h
-    efdLogServicePCH.h
-    LogService.cpp
-    LogService.h
-    LogServiceMessages.cpp
-    LogServiceMessages.h
-    NetDestination.cpp
-    NetDestination.h
-)
+set(MOD_NAME "efdLogService")
+set(MOD_PCH efdLogServicePCH.h)
+set(MOD_GB_LIBS efd)
 
-target_link_libraries(efdLogService PUBLIC efd)
-set_target_properties(efdLogService PROPERTIES FOLDER "${GB3_PREFIX}Foundation")
-target_precompile_headers(efdLogService PRIVATE efdLogServicePCH.h)
+generate_project()

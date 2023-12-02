@@ -1,11 +1,21 @@
-add_library(efdXML STATIC 
-    tinystr.h
-    tinystr.cpp
-    tinyxml.h
-    tinyxml.cpp
-    tinyxmlerror.cpp
-    tinyxmlparser.cpp
+set(MOD_INCLUDES ${CMAKE_CURRENT_LIST_DIR}/..)
+set(MOD_NAME efdXML)
+set(MOD_DEFINES
+    # Debug configuration
+    $<$<CONFIG:DEBUG>:EE_CONFIG_DEBUG>;
+    $<$<CONFIG:DEBUG>:EE_EFD_CONFIG_DEBUG>;
+    $<$<CONFIG:DEBUG>:EE_USE_ASSERT_STACKTRACE>;
+    $<$<CONFIG:DEBUG>:EE_USE_MEMORY_MANAGEMENT>;
+    # Release configuration (QA)
+    $<$<CONFIG:RELEASE>:EE_CONFIG_RELEASE>;
+    $<$<CONFIG:RELEASE>:EE_EFD_CONFIG_RELEASE>;
+    # Shipping configuration
+    $<$<CONFIG:SHIPPING>:EE_CONFIG_SHIPPING>;
+    $<$<CONFIG:SHIPPING>:EE_EFD_CONFIG_SHIPPING>;
+    $<$<CONFIG:SHIPPING>:EE_DISABLE_LOGGING>;
 )
-set_target_properties(efdXML PROPERTIES FOLDER "${GB3_PREFIX}Foundation")
-target_include_directories(efdXML PUBLIC ${CMAKE_CURRENT_LIST_DIR}/../)
-target_link_libraries(efdXML efdBase)
+
+generate_project()
+
+# custom add of backend target defines
+add_backend_target_defines(efdXML PUBLIC)
