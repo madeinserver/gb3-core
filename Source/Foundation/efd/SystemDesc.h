@@ -69,9 +69,10 @@ public:
         PLATFORM_PS3 = 2,
         PLATFORM_WII = 3, // No longer supported, but remains for compatibility
         PLATFORM_LINUX = 4,
+        PLATFORM_MACOSX = 5, // mis
 
         // The total number of enumerated platforms
-        PLATFORM_COUNT = 5,
+        PLATFORM_COUNT = 6,
 
         // Compatibility enumerations
         NI_WIN32 = PLATFORM_WIN32,
@@ -120,7 +121,7 @@ public:
     /// Determine the frequency of the performance counter
     inline efd::Float32 GetPerformanceCounterHz() const;
 
-#if defined(WIN32)
+#ifdef EE_ARCH_X86
     /// Determine if the platform supports MMX instructions
     inline bool MMX_Supported(void) const;
 
@@ -143,13 +144,16 @@ public:
     static void _SDMInit();
     static void _SDMShutdown();
     /// @endcond
-protected:
+
+  
+   public:
+//protected:
     SystemDesc();
     SystemDesc(const SystemDesc&);
 
     static SystemDesc* ms_SystemDesc;
 
-#if defined(WIN32)
+#ifdef EE_ARCH_X86 // CPUID is available only in x86
     unsigned int CPUID_Init();
     unsigned int CPUID_CpuIDSupported(void);
     unsigned int CPUID_GenuineIntel(void);
@@ -170,7 +174,6 @@ protected:
                            unsigned int);
     unsigned int CPUID_QueryCacheType(unsigned int Index);
     unsigned int CPUID_CheckCPU_ExtendedFamilyModel(void);
-
 #endif
     // order largest to smallest.
     efd::Float32 m_PCCyclesPerSecond;
@@ -181,10 +184,12 @@ protected:
     // Declared mutable so they can be modified using the constant function GetSystemDesc()
     mutable RendererID m_ToolModeRendererID;
 
+#ifdef EE_ARCH_X86
     // available only on Win32 but we don't sizeof(SystemDesc) to be different on other platforms.
     bool m_bSSE_Supported;
     bool m_bMMX_Supported;
     bool m_bSSE2_Supported;
+#endif
 
     // Declared mutable so they can be modified using the constant function GetSystemDesc()
     mutable bool m_InToolMode;

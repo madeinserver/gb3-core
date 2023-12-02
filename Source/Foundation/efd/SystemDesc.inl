@@ -61,7 +61,7 @@ inline void SystemDesc::SetToolModeRendererID(
     m_ToolModeRendererID = eToolModeRendererID;
 }
 //-------------------------------------------------------------------------------------------------
-#if defined(WIN32)
+#ifdef EE_ARCH_X86
 //-------------------------------------------------------------------------------------------------
 inline bool SystemDesc::MMX_Supported(void) const
 {
