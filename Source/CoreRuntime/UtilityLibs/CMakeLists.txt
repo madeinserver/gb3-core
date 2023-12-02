@@ -1,3 +1,5 @@
+set(MOD_DIR "CoreRuntime/UtilityLibs")
+
 add_subdirectory(NiAudio)
 add_subdirectory(NiCursor)
 add_subdirectory(NiFont)
@@ -9,4 +11,4 @@ add_subdirectory(NiUserInterface)
 add_subdirectory(NiSceneGraphUpdateService)
 add_subdirectory(NiVideo)
 
-add_integrations("UtilityLibs")
+add_integrations("CoreRuntime/UtilityLibs")

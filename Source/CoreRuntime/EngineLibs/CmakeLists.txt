@@ -1,3 +1,5 @@
+set(MOD_DIR "CoreRuntime/EngineLibs")
+
 add_subdirectory(NiSystem)
 add_subdirectory(NiMain)
 add_subdirectory(NiAnimation)
@@ -9,4 +11,4 @@ add_subdirectory(NiParticle)
 add_subdirectory(NiTerrain)
 add_subdirectory(NiEnvironment)
 
-add_integrations("EngineLibs")
+add_integrations("CoreRuntime/EngineLibs")

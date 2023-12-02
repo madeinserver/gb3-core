@@ -18,7 +18,6 @@ set(MOD_DEFINES
     $<$<CONFIG:SHIPPING>:EE_EFD_CONFIG_SHIPPING>;
     $<$<CONFIG:SHIPPING>:EE_DISABLE_LOGGING>;
     # Other configurations
-    EE_USE_PCH; # Enable use of PCH
     EE_USE_NATIVE_STL; # Do not use stlport!
     EE_GAMEBRYO_VERSION=7563629; # 7563629 -> MIS
 )

@@ -1,3 +1,5 @@
+set(MOD_DIR "CoreRuntime/ToolLibs")
+
 add_subdirectory(NiPNGReader)
 add_subdirectory(NiAnimationCompression)
 add_subdirectory(NiControllerExtractor)
@@ -25,4 +27,4 @@ add_subdirectory(NiOptimization)
 add_subdirectory(NiViewMath)
 add_subdirectory(NiStripify)
 
-add_integrations("ToolLibs")
+add_integrations("CoreRuntime/ToolLibs")

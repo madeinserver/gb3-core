@@ -96,6 +96,7 @@ macro(generate_project)
 
     if (DEFINED MOD_PCH)
         target_precompile_headers(${MOD_NAME} PRIVATE ${MOD_PCH})
+        target_compile_definitions(${MOD_NAME} PRIVATE -DNI_USE_PCH -DEE_USE_PCH)
     endif()
 
     # Public target
@@ -112,7 +113,7 @@ macro(generate_project)
         target_compile_definitions(${MOD_NAME} PUBLIC ${MOD_DEFINES})
     endif()
     if (DEFINED MOD_GB_LIBS)
-        target_link_libraries(${MOD_NAME} PRIVATE ${MOD_GB_LIBS})
+        target_link_libraries(${MOD_NAME} PUBLIC ${MOD_GB_LIBS})
     endif()
     # Private target
     if (DEFINED MOD_P_LIBRARIES)
@@ -137,14 +138,17 @@ macro(generate_project)
         target_compile_definitions(${MOD_NAME}DLL
             PRIVATE 
                 -DEE_${MOD_NAME_UP}_EXPORT=1
+                -D${MOD_NAME_UP}_EXPORT=1
                 -D_USRDLL
             INTERFACE
                 -DEE_${MOD_NAME_UP}_IMPORT=1
+                -D${MOD_NAME_UP}_IMPORT=1
 
         ) # dllspec define
 
         if (DEFINED MOD_PCH)
             target_precompile_headers(${MOD_NAME}DLL PRIVATE ${MOD_PCH})
+            target_compile_definitions(${MOD_NAME}DLL PRIVATE -DNI_USE_PCH -DEE_USE_PCH)
         endif()
         # Public target
         if (DEFINED MOD_LIBRARIES)

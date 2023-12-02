@@ -4,6 +4,4 @@ add_subdirectory(UtilityLibs)
 add_subdirectory(AppFrameworks)
 add_subdirectory(ShaderLibs)
 
-if (GB3_ENABLE_PHYSX)
-    add_subdirectory(PhysXLibs)
-endif()
+add_integrations("CoreRuntime")

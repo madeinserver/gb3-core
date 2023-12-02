@@ -1,4 +1,4 @@
-set(MOD_DIR UnitTests)
+set(MOD_DIR "UnitTests")
 
 add_subdirectory(efdAsmTest)
 

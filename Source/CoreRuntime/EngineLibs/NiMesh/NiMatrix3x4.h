@@ -84,6 +84,6 @@ public:
 
 };
 
-#include "NiMatrix3x4.inl"
+#include EE_PLATFORM_SPECIFIC_INCLUDE(NiMesh,NiMatrix3x4,inl)
 
 #endif

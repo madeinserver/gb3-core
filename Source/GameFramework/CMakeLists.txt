@@ -1,3 +1,5 @@
+set(MOD_DIR "GameFramework")
+
 add_subdirectory(egf)
 add_subdirectory(ecr)
 add_subdirectory(ecrInput)
