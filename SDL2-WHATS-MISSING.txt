@@ -1,2 +1,6 @@
 efd:
     SDL2PlatformService::SetWindowIcon (EE_PLATFORM_WIN32)
+
+
+Regression:
+    efd::SystemDesc::GetPhysicalCoreCount is invalid

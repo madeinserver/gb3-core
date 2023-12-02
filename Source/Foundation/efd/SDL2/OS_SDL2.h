@@ -27,16 +27,28 @@
 #if EE_PLATFORM_WIN32
 #include <winsock2.h>
 #include <windows.h>
+
+#define EE_ASM_DECOR(x) x
+#else
+#include <unistd.h>
+#include <dirent.h>
+#include <errno.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+#ifdef EE_PLATFORM_LINUX
+#include <sched.h>
+#endif
+
+#define EE_ASM_DECOR(x) _##x
 #endif
 
 #if EE_COMPILER_MSVC
 #pragma warning(pop)
 #endif
 
-#if defined(EE_PLATFORM_LINUX) || defined(EE_PLATFORM_MACOSX)
-#include <unistd.h>
-#endif
-
+/// Helper macro for unused warnings
 #define EE_UNUSED
 
 /// A helper macro that declares the argument as unused. Useful when building at warning level-4
@@ -51,10 +63,18 @@
 #define EE_NOINLINE __declspec(noinline)
 
 #if (_MSC_VER >= 1400) //VC8.0
+    /// Restrict pointer overlapping
     #define EE_RESTRICT __restrict
+    
+    /// Enable "_s" functions (only on Windows)
     #define EE_HAVE_SECURE_FUNCTIONS 1
 #else
+    /// Restrict pointer overlapping
     #define EE_RESTRICT
+#endif
+
+#ifndef _WIN64
+    #define EE_ASM_CALL __cdecl
 #endif
 
 #elif EE_COMPILER_GCC || EE_COMPILER_CLANG
@@ -64,14 +84,25 @@
 /// Attempt to force the compiler to never inline the function.
 #define EE_NOINLINE __attribute__ ((noinline))
 
+/// Restrict pointer overlapping
 #define EE_RESTRICT __restrict__
 
 #ifdef _WIN32
-#define EE_HAVE_SECURE_FUNCTIONS 1
+    /// Enable "_s" functions (only on Windows)
+    #define EE_HAVE_SECURE_FUNCTIONS 1
+
+    #ifndef _WIN64
+        #define EE_ASM_CALL __cdecl
+    #endif
 #endif
 
 #endif
 
+#ifndef EE_ASM_CALL
+#define EE_ASM_CALL
+#endif
+
+/// throw an exception
 #define EE_EMPTY_THROW throw()
 
 #if EE_COMPILER_MSVC
