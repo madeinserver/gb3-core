@@ -18,6 +18,16 @@
 
 using namespace efd;
 
+// mis: assembly links
+extern "C" int EE_ASM_CALL EE_ASM_DECOR(ee_cpuid_support)(void);
+extern "C" efd::UInt32 EE_ASM_CALL EE_ASM_DECOR(ee_cpuid_querycachetype)(efd::UInt32 lv);
+extern "C" int EE_ASM_CALL EE_ASM_DECOR(ee_cpuid_extfamilymodel)(void);
+extern "C" efd::UInt32 EE_ASM_CALL EE_ASM_DECOR(ee_cpuid_apicid)(void);
+extern "C" efd::UInt32 EE_ASM_CALL EE_ASM_DECOR(ee_cpuid1)(void);
+extern "C" void EE_ASM_CALL EE_ASM_DECOR(ee_cpuid_genuineintel)(UInt32* data);
+extern "C" void EE_ASM_CALL EE_ASM_DECOR(ee_cpuid_maskwidth)(efd::UInt32 count, efd::UInt32* MaskWidth);
+extern "C" efd::UInt32 EE_ASM_CALL EE_ASM_DECOR(ee_cpuid_maxcorephys)();
+
 //--------------------------------------------------------------------------------------------------
 void SystemDesc::_SDMInit()
 {
@@ -35,21 +45,20 @@ void SystemDesc::_SDMShutdown()
 //--------------------------------------------------------------------------------------------------
 SystemDesc::SystemDesc()
 {
+#ifdef EE_ARCH_X86
     m_bSSE_Supported = false;
     m_bMMX_Supported = false;
     m_bSSE2_Supported = false;
 
     // CPUID code is not 64bit safe, ensure we're running in a Win32 platform.
     // Otherwise, we'll just use the SYSTEM_INFO struct.
-#ifdef EE_ARCH_32
+
     // CPUID_Init, if successful, will fill in m_uiNum variables
     if (CPUID_Init() != 0)
     {
-        SYSTEM_INFO kInfo;
-        GetSystemInfo(&kInfo);
         m_NumPhysicalProcessors = 1;
-        m_NumPhysicalCores = kInfo.dwNumberOfProcessors;
-        m_NumLogicalProcessors = kInfo.dwNumberOfProcessors;
+        m_NumPhysicalCores = SDL_GetCPUCount();
+        m_NumLogicalProcessors = SDL_GetCPUCount();
     }
     else
     {
@@ -57,13 +66,9 @@ SystemDesc::SystemDesc()
         m_bMMX_Supported = (CPUID_MMX_Supported() != 0);
         m_bSSE2_Supported = (CPUID_SSE2_Supported() != 0);
     }
-#else
-#error SystemDesc::SystemDesc() CPUID logic needs to be made 64bit safe.
 #endif
 
-    LARGE_INTEGER ticksPerSec;
-    QueryPerformanceFrequency(&ticksPerSec);
-    m_PCCyclesPerSecond = (efd::Float32)ticksPerSec.QuadPart;
+    m_PCCyclesPerSecond = (efd::Float32)SDL_GetPerformanceFrequency();
 
     m_InToolMode = false;
     m_ToolModeRendererID = RENDERER_GENERIC;
@@ -84,6 +89,8 @@ bool SystemDesc::IsLittleEndian() const
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------
+
+#ifdef EE_ARCH_X86
 
 // The code below this point is:
 // Copyright (c) 1996-2009 Intel Corporation
@@ -250,24 +257,13 @@ UInt32 SystemDesc::CPUID_Init()
 //
 UInt32 SystemDesc::CPUID_CpuIDSupported(void)
 {
-    UInt32 MaxInputValue;
     // The CPUID instruction is not supported in many 486 class
     // and earlier processors and may cause abnormal termination.
     // AP-485 provides examples of detecting 486, 386 and 286 processors.
     // For simplicity, we simply omit any exception handling here since
     // Gamebryo requires a Pentium processor or better and does not use
     // exception handling.
-    MaxInputValue = 0;
-
-    // call cpuid with eax = 0
-    __asm
-    {
-        xor eax, eax
-        cpuid
-        mov MaxInputValue, eax
-    }
-
-    return MaxInputValue;
+    return EE_ASM_DECOR(ee_cpuid_support)();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -277,21 +273,22 @@ UInt32 SystemDesc::CPUID_CpuIDSupported(void)
 //
 UInt32 SystemDesc::CPUID_GenuineIntel(void)
 {
+#ifdef EE_ARCH_64
+    UInt64 VendorID[3] = { 0, 0, 0 };
+#else
     UInt32 VendorID[3] = {0, 0, 0};
+#endif
+    EE_ASM_DECOR(ee_cpuid_genuineintel)((UInt32*)VendorID);
 
-    // Get vendor id string
-    __asm
-    {
-        xor eax, eax            // call cpuid with eax = 0
-           cpuid                    // Get vendor id string
-        mov VendorID, ebx
-        mov VendorID + 4, edx
-        mov VendorID + 8, ecx
-    }
-
-    return ((VendorID[0] == 'uneG') &&
-             (VendorID[1] == 'Ieni') &&
-             (VendorID[2] == 'letn'));
+    return 
+        // GenuineIntel
+        ((VendorID[0] == 0x756E6547) && // Genu
+        (VendorID[1] == 0x49656E69) && // ineI
+        (VendorID[2] == 0x6C65746E)) || // ntel
+        // AuthenticAMD
+        ((VendorID[0] == 0x68747541) && // Auth
+        (VendorID[1] == 0x69746E65) && // enti
+        (VendorID[2] == 0x444D4163)); // cAMD
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -304,18 +301,11 @@ UInt32 SystemDesc::CPUID_GenuineIntel(void)
 // three-level processor topology enumeration.
 UInt32 SystemDesc::CPUID_CheckCPU_ExtendedFamilyModel(void)
 {
-    UInt32 Regeax = 0;
+    UInt32 Regeax = EE_ASM_DECOR(ee_cpuid_extfamilymodel)();
     unsigned char ExtFam = 0;
     unsigned char ExtModel = 0;
     unsigned char Fam = 0;
     unsigned char Model = 0;
-
-    __asm
-    {
-            mov eax, 1
-            cpuid
-            mov Regeax, eax
-    };
 
     ExtFam = static_cast<unsigned char>((Regeax >> 20) & 0xff);
     ExtModel = static_cast<unsigned char>((Regeax >> 16) & 0x0f);
@@ -323,7 +313,8 @@ UInt32 SystemDesc::CPUID_CheckCPU_ExtendedFamilyModel(void)
     Model = static_cast<unsigned char>((Regeax >>4) & 0x0f);
 
     // Processors based on Intel NetBurst Microarchitecture
-    if (!ExtFam && Fam == 15)
+    // or any CPU greater than that (eg: K10, AMD)
+    if (Fam == 15)
         return 1;
     // Processors based on Core and Core2 Microarchtecture
     if (!ExtFam && !ExtModel && Fam == 6 &&
@@ -350,23 +341,7 @@ UInt32 SystemDesc::CPUID_MaxCorePerPhysicalProc(void)
     if (!CPUID_HWD_MTSupported())
         return (UInt32) 1;
 
-    __asm
-    {
-        xor eax, eax
-        cpuid
-        cmp eax, 4            // check if cpuid supports leaf 4
-        jl single_core1        // Single core
-        mov eax, 4
-        mov ecx, 0            // start with index = 0; Leaf 4 reports
-        cpuid                // at least one valid cache level
-        mov Regeax, eax
-        jmp multi_core
-
-        single_core1:
-            mov Regeax, 1
-
-        multi_core:
-    }
+    Regeax = EE_ASM_DECOR(ee_cpuid_maxcorephys)();
 
     return (UInt32)((Regeax & NUM_CORE_BITS) >> 26)+1;
 }
@@ -378,26 +353,12 @@ UInt32 SystemDesc::CPUID_MaxCorePerPhysicalProc(void)
 //
 UInt32 SystemDesc::CPUID_QueryCacheType(UInt32 Index)
 {
-
     UInt32 Regeax = 0;
-    UInt32 lv = Index;
 
     if (!CPUID_HWD_MTSupported())
         return 1U;  // Single core
 
-    __asm
-    {
-        xor eax, eax
-        cpuid
-        cmp eax, 4            // check if cpuid supports leaf 4
-        jl single_core2        // Single core
-        mov eax, 4
-        mov ecx, lv
-        cpuid                // at least one valid cache level
-        mov Regeax, eax
-
-        single_core2:
-    }
+    Regeax = EE_ASM_DECOR(ee_cpuid_querycachetype)(Index);
 
     return (UInt32)(Regeax);
 }
@@ -412,12 +373,7 @@ UInt32 SystemDesc::CPUID_HWD_MTSupported(void)
 
     if ((CPUID_CpuIDSupported() >= 1) && CPUID_GenuineIntel())
     {
-        __asm
-        {
-            mov eax, 1
-            cpuid
-            mov Regedx, edx
-        }
+        Regedx = EE_ASM_DECOR(ee_cpuid1)();
     }
     return (Regedx & HWD_MT_BIT);
 }
@@ -432,12 +388,7 @@ UInt32 SystemDesc::CPUID_MMX_Supported(void)
 
     if ((CPUID_CpuIDSupported() >= 1))
     {
-        __asm
-        {
-            mov eax, 1
-            cpuid
-            mov Regedx, edx
-        }
+        Regedx = EE_ASM_DECOR(ee_cpuid1)();
     }
     return ((Regedx >> 23) & 0x1);
 }
@@ -452,12 +403,7 @@ UInt32 SystemDesc::CPUID_SSE_Supported(void)
 
     if ((CPUID_CpuIDSupported() >= 1))
     {
-        __asm
-        {
-            mov eax, 1
-            cpuid
-            mov Regedx, edx
-        }
+        Regedx = EE_ASM_DECOR(ee_cpuid1)();
     }
     return ((Regedx >> 25) & 0x1);
 }
@@ -473,12 +419,7 @@ UInt32 SystemDesc::CPUID_SSE2_Supported(void)
 
     if ((CPUID_CpuIDSupported() >= 1))
     {
-        __asm
-        {
-            mov eax, 1
-            cpuid
-            mov Regedx, edx
-        }
+        Regedx = EE_ASM_DECOR(ee_cpuid1)();
     }
     return ((Regedx >> 26) & 0x1);
 }
@@ -499,12 +440,8 @@ UInt32 SystemDesc::CPUID_MaxLogicalProcPerPhysicalProc(void)
     if (!CPUID_HWD_MTSupported())
         return 1U;
 
-    __asm
-    {
-        mov eax, 1
-        cpuid
-        mov Regebx, ebx
-    }
+    Regebx = EE_ASM_DECOR(ee_cpuid_apicid)();
+
     return (UInt32) ((Regebx & NUM_LOGICAL_BITS) >> 16);
 }
 
@@ -517,12 +454,7 @@ unsigned char SystemDesc::CPUID_GetAPIC_ID(void)
 {
     UInt32 Regebx = 0;
 
-    __asm
-    {
-        mov eax, 1
-        cpuid
-        mov Regebx, ebx
-    }
+    Regebx = EE_ASM_DECOR(ee_cpuid_apicid)();
 
     return (unsigned char) ((Regebx & INITIAL_APIC_ID_BITS) >> 24);
 }
@@ -536,20 +468,8 @@ UInt32 SystemDesc::CPUID_Find_Maskwidth(UInt32 CountItem)
 {
     UInt32 MaskWidth = 0xffffffff;
     UInt32 count = CountItem;
-    __asm
-    {
-        mov eax, count
-        mov ecx, 0
-        mov MaskWidth, ecx
-        dec eax
-        bsr cx, ax
-        jz next
-        inc cx
-        mov MaskWidth, ecx
 
-        next:
-
-    }
+    EE_ASM_DECOR(ee_cpuid_maskwidth)(count, &MaskWidth);
 
     return MaskWidth;
 }
@@ -585,7 +505,7 @@ unsigned char SystemDesc::CPUID_CPUCount(UInt32 *TotAvailLogical,
 {
     unsigned char StatusFlag = 0;
     UInt32 numLPEnabled = 0;
-    DWORD dwAffinityMask;
+    UInt32 dwAffinityMask;
     int j = 0;
     UInt32 MaxLPPerCore;
     UInt32 MaxNumLPSharingCache;
@@ -599,10 +519,19 @@ unsigned char SystemDesc::CPUID_CPUCount(UInt32 *TotAvailLogical,
     *PhysicalNum  = 1;
     *CacheNum  = 1;
 
+#ifdef EE_PLATFORM_WIN32
     DWORD dwProcessAffinity, dwSystemAffinity;
     GetProcessAffinityMask(GetCurrentProcess(),
                            &dwProcessAffinity,
                            &dwSystemAffinity);
+#elif defined(EE_PLATFORM_LINUX)
+    cpu_set_t cpuMask, cpuThMask;
+    CPU_ZERO(&cpuMask);
+    CPU_ZERO(&cpuThMask);
+    sched_getaffinity(getpid(), sizeof(cpuMask), &cpuMask);
+#else
+#error "Missing process affinity code"
+#endif
 
     // In rare cases, dwProcessAffinity may not match dwSystemAffinity if
     // someone is modifying affinity masks.  This will provide information
@@ -617,16 +546,33 @@ unsigned char SystemDesc::CPUID_CPUCount(UInt32 *TotAvailLogical,
         CPUID_MaxCorePerPhysicalProc();
     dwAffinityMask = 1;
 
-    while (dwAffinityMask && dwAffinityMask <= dwProcessAffinity)
+    while (dwAffinityMask && 
+
+#ifdef EE_PLATFORM_WIN32
+        dwAffinityMask <= dwProcessAffinity
+#elif EE_PLATFORM_LINUX
+        CPU_EQUAL(&cpuMask, &cpuThMask) == 0
+#else
+#error "Missing affinity code"
+#endif
+    )
     {
+#ifdef EE_PLATFORM_WIN32
         // Check to see if we can set the thread affinity
         if (!SetThreadAffinityMask(GetCurrentThread(), dwAffinityMask))
+#elif EE_PLATFORM_LINUX
+        CPU_ZERO(&cpuThMask);
+        CPU_SET((int)dwAffinityMask ,&cpuThMask);
+        if (sched_setaffinity(getpid(), sizeof(cpuThMask), &cpuThMask) == -1)
+#else
+#error "Missing affinity code"
+#endif
         {
             return SET_THREAD_AFFINITY_ERROR;
         }
         else
         {
-            Sleep(0);  // Ensure system to switch to the right CPU
+            SDL_Delay(0);  // Ensure system to switch to the right CPU
             apicID = CPUID_GetAPIC_ID();
 
             // Store SMT ID and core ID of each logical processor
@@ -659,9 +605,16 @@ unsigned char SystemDesc::CPUID_CPUCount(UInt32 *TotAvailLogical,
         dwAffinityMask = 1 << j;
     } // while
 
+#ifdef EE_PLATFORM_WIN32
     // restore the affinity setting to its original state
     SetThreadAffinityMask(GetCurrentThread(), dwProcessAffinity);
-    Sleep(0);
+#elif EE_PLATFORM_LINUX
+    sched_setaffinity(getpid(), sizeof(cpuMask), &cpuMask);
+#else
+#error "Missing code for affinity"
+#endif
+
+    SDL_Delay(0);
 
     *TotAvailLogical = numLPEnabled;
 
@@ -669,7 +622,7 @@ unsigned char SystemDesc::CPUID_CPUCount(UInt32 *TotAvailLogical,
     // Count available cores (TotAvailCore) in the system
     //
     unsigned char CoreIDBucket[256];
-    DWORD ProcessorMask, pCoreMask[256];
+    UInt32 ProcessorMask, pCoreMask[256];
     UInt32 i;
     UInt32 ProcessorNum;
 
@@ -708,7 +661,7 @@ unsigned char SystemDesc::CPUID_CPUCount(UInt32 *TotAvailLogical,
     // Count physical processor (PhysicalNum) in the system
     //
     unsigned char PackageIDBucket[256];
-    DWORD pPackageMask[256];
+    UInt32 pPackageMask[256];
 
     PackageIDBucket[0] = tblPkgID[0];
     ProcessorMask = 1;
@@ -748,7 +701,7 @@ unsigned char SystemDesc::CPUID_CPUCount(UInt32 *TotAvailLogical,
     /* INTEL_COMMENTS: This portion of code will determine cache information.
     // Reinsert if cache information is desired.
     unsigned char CacheIDBucket[256];
-    DWORD pCacheMask[256];
+    UInt32 pCacheMask[256];
 
     CacheIDBucket[0] = tblCacheID[0];
     ProcessorMask = 1;
@@ -807,3 +760,5 @@ unsigned char SystemDesc::CPUID_CPUCount(UInt32 *TotAvailLogical,
 }
 
 //--------------------------------------------------------------------------------------------------
+
+#endif

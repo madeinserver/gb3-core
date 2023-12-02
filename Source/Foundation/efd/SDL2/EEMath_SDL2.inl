@@ -16,6 +16,8 @@
 namespace efd
 {
 
+    extern "C" void EE_ASM_CALL EE_ASM_DECOR(ee_sincos_asm)(efd::Float32 radians, efd::Float32 * sin, efd::Float32 * cos);
+
 //------------------------------------------------------------------------------------------------
 inline efd::Float32 Abs(efd::Float32 value)
 {
@@ -115,31 +117,10 @@ inline efd::Float32 Sin(efd::Float32 radians)
 }
 
 //------------------------------------------------------------------------------------------------
-#if !defined(_WIN64) && defined(EE_COMPILER_MSVC)
 inline void SinCos(efd::Float32 radians, efd::Float32& sin, efd::Float32& cos)
 {
-    efd::Float32 s, c;
-
-#if defined(EE_COMPILER_MSVC)
-    __asm fld radians
-    __asm fsincos
-    __asm fstp c
-    __asm fstp s
-#else
-    asm("fld %2\n\t"
-        "fsincos\n\t"
-        "fstp %0\n\t"
-        "fstp %1\n\t"
-        :"=r"(c)
-        :"=r"(s)
-        :"r"(radians)
-    );
-#endif
-
-    sin = s;
-    cos = c;
+    EE_ASM_DECOR(ee_sincos_asm)(radians, &sin, &cos);
 }
-#endif
 
 //------------------------------------------------------------------------------------------------
 inline efd::Float32 Sqr(efd::Float32 value)
