@@ -19,11 +19,6 @@
 #include "NiWaterMaterial.h"
 #include "NiWater.h"
 
-// Include DX9 Renderer for device reset callbacks
-#ifdef WIN32
-#include <NiDX9Renderer.h>
-#endif
-
 NiSourceTexturePtr NiWater::ms_spBlankNormals = 0;
 
 NiImplementRTTI(NiWater, NiNode);
@@ -1270,28 +1265,24 @@ void NiWater::SubscribeToDXDeviceResetNotification()
     m_uiDXDeviceResetCallbackIndex = 0;
     m_bRegisteredDXDeviceResetCallback = false;
 
-#ifdef WIN32
-    NiDX9Renderer* pkRenderer = NiDX9Renderer::GetRenderer();
+    NiRenderer* pkRenderer = NiRenderer::GetRenderer();
     if (pkRenderer)
     {
         m_uiDXDeviceResetCallbackIndex = pkRenderer->AddResetNotificationFunc(
-            (NiDX9Renderer::RESETNOTIFYFUNC)&HandleDXDeviceReset, this);
+            &HandleDXDeviceReset, this);
         m_bRegisteredDXDeviceResetCallback = true;
     }
-#endif
 }
 
 //--------------------------------------------------------------------------------------------------
 void NiWater::UnsubscribeToDXDeviceResetNotification()
 {
-#ifdef WIN32
-    NiDX9Renderer* pkRenderer = NiDX9Renderer::GetRenderer();
+    NiRenderer* pkRenderer = NiRenderer::GetRenderer();
     if (pkRenderer && m_bRegisteredDXDeviceResetCallback)
     {
         pkRenderer->RemoveResetNotificationFunc(
             m_uiDXDeviceResetCallbackIndex);
     }
-#endif
 }
 
 //--------------------------------------------------------------------------------------------------

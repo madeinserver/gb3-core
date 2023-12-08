@@ -15,7 +15,7 @@
 #ifndef NICALCULATEBONEMATRICESKERNEL_H
 #define NICALCULATEBONEMATRICESKERNEL_H
 
-#include <NiSPKernelMacros.h>
+#include EE_PLATFORM_SPECIFIC_INCLUDE(NiFloodgate,NiSPKernelMacros,h)
 #include <NiTransform.h>
 
 /**

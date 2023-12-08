@@ -486,6 +486,16 @@ public:
     virtual void EnforceModifierPoliciy(NiVisibleArray* pkArray) = 0;
 #endif
 
+    // Callbacks for improved response to D3D device reset
+    typedef bool (*RESETNOTIFYFUNC)(bool bBeforeReset, void* pvData);
+
+    // this are used for D3D9, but I prefer exposing them than depending on Dx9 renderer
+    virtual unsigned int AddResetNotificationFunc(RESETNOTIFYFUNC pfnNotify,
+        void* pvData) = 0;
+    virtual bool RemoveResetNotificationFunc(RESETNOTIFYFUNC pfnNotify) = 0;
+    virtual bool RemoveResetNotificationFunc(unsigned int uiIndex) = 0;
+    virtual void RemoveAllResetNotificationFuncs() = 0;
+
     // Message/Warning/Error reporting functions
     static void Message(const char* pcFormat, ...);
     static void Warning(const char* pcFormat, ...);

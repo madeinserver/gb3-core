@@ -25,7 +25,7 @@
 #include <NiString.h>
 
 #include "NiSPStream.h"
-#include "NiSPTaskImpl.h"
+#include EE_PLATFORM_SPECIFIC_INCLUDE(NiFloodgate,NiSPTaskImpl,h)
 
 class NiSPKernel;
 class NiSPStreamPartitioner;

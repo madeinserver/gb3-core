@@ -25,7 +25,7 @@
 #include "NiSPKernel.h"
 #include "NiSPTask.h"
 #include "NiSPThreadPool.h"
-#include "NiSPWorkflowImpl.h"
+#include EE_PLATFORM_SPECIFIC_INCLUDE(NiFloodgate,NiSPWorkflowImpl,h)
 
 class NiSPWorkflow;
 NiSmartPointer(NiSPWorkflow);
@@ -303,7 +303,7 @@ protected:
 
 private:
     /// Number of efd::SmartPointer references to this object.
-    NiUInt32 m_uiRefCount;
+    efd::UAtomic m_uiRefCount;
 
     /// The priority of the workflow.
     int m_iPriority;

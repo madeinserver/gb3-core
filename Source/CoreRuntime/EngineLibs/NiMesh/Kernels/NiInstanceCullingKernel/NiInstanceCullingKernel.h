@@ -16,7 +16,7 @@
 #ifndef NIINSTANCECULLINGKERNEL_H
 #define NIINSTANCECULLINGKERNEL_H
 
-#include <NiSPKernelMacros.h>
+#include EE_PLATFORM_SPECIFIC_INCLUDE(NiFloodgate,NiSPKernelMacros,h)
 
 
 /**

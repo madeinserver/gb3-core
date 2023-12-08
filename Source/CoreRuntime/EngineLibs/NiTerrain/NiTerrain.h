@@ -1225,14 +1225,14 @@ public:
     */
     NiNode* GetLowDetailScene();
 
-    /// Register for notification of a DX9 device reset
-    void SubscribeToDXDeviceResetNotification();
+    /// Register for notification of a device reset
+    void SubscribeToDeviceResetNotification();
 
-    /// Unregister from DX9 device reset notifications
-    void UnsubscribeToDXDeviceResetNotification();
+    /// Unregister from device reset notifications
+    void UnsubscribeToDeviceResetNotification();
 
-    /// Handle a DX9 device reset by regenerating the blend mask textures
-    static bool HandleDXDeviceReset(bool bBeforeReset, void* pvVoid);
+    /// Handle a device reset by regenerating the blend mask textures
+    static bool HandleDeviceReset(bool bBeforeReset, void* pvVoid);
 
     /**
         Set the debug rendering mode to use on this terrain. This can be 

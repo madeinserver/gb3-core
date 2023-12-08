@@ -19,7 +19,7 @@
 #include <NiFilename.h>
 #include <NiSourceTexture.h>
 
-#ifdef WIN32
+#ifdef EE_ENABLE_DX9_OPTIMIZATIONS
 #include <NiDX9Renderer.h>
 #include <NiDX9Defines.h>
 #include <NiDX9SourceTextureData.h>
@@ -996,6 +996,7 @@ void UpdateTextureRegion(NiSourceTexture* pkDstTexture, NiRect<efd::SInt32> kReg
     NiPixelData* pkSrcData = pkDstTexture->GetSourcePixelData();
     EE_ASSERT(pkSrcData);
 
+#ifdef EE_ENABLE_DX9_OPTIMIZATIONS
     // Facilitate updating of the texture according to different renderers
     bool bUseFallback = false;
     switch(NiRenderer::GetRenderer()->GetRendererID())
@@ -1095,6 +1096,8 @@ void UpdateTextureRegion(NiSourceTexture* pkDstTexture, NiRect<efd::SInt32> kReg
     }
 
     if (bUseFallback)
+#endif
+
     {
         // We do not have any renderer specific code available to increase performance
         // use the standard gamebryo method

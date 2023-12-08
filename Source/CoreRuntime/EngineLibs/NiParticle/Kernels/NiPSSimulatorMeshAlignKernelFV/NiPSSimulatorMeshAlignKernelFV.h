@@ -15,7 +15,7 @@
 #define NIPSSIMULATORMESHALIGNKERNELFV_H
 
 #include <NiParticleLibType.h>
-#include <NiSPKernelMacros.h>
+#include EE_PLATFORM_SPECIFIC_INCLUDE(NiFloodgate,NiSPKernelMacros,h)
 #include <NiUniversalTypes.h>
 
 /**

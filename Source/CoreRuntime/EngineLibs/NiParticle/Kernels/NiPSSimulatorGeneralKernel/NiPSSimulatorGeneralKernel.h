@@ -17,7 +17,7 @@
 
 #include <NiParticleLibType.h>
 #include <NiPSKernelDefinitions.h>
-#include <NiSPKernelMacros.h>
+#include EE_PLATFORM_SPECIFIC_INCLUDE(NiFloodgate,NiSPKernelMacros,h)
 #include <NiUniversalTypes.h>
 
 /// A structure containing data required by the NiPSSimulatorGeneralKernel

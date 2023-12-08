@@ -15,7 +15,7 @@
 #ifndef NISKINNINGKERNELPN32_H
 #define NISKINNINGKERNELPN32_H
 
-#include <NiSPKernelMacros.h>
+#include EE_PLATFORM_SPECIFIC_INCLUDE(NiFloodgate,NiSPKernelMacros,h)
 
 /**
     The NiSkinningKernels is a Floodgate kernel class used

@@ -16,7 +16,7 @@
 #define NIPSSIMULATORCOLLIDERSKERNEL_H
 
 #include <NiParticleLibType.h>
-#include <NiSPKernelMacros.h>
+#include EE_PLATFORM_SPECIFIC_INCLUDE(NiFloodgate,NiSPKernelMacros,h)
 #include <NiPSColliderDefinitions.h>
 
 /// A structure containing data required by the NiPSSimulatorCollidersKernel

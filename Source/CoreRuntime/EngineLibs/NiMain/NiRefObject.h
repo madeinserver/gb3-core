@@ -18,6 +18,7 @@
 #include "NiMainLibType.h"
 #include <NiMemObject.h>
 #include <NiUniversalTypes.h>
+#include <efd/AtomicOperations.h>
 
 // NiRefObject provides the reference counting functionality needed for use
 // of Gamebryo smart pointers. A class derived from NiRefObject can be used

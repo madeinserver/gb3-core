@@ -32,11 +32,6 @@
 
 #include <NiFixedString.h>
 
-// Include DX9 Renderer for device reset callbacks
-#ifdef WIN32 
-#include <NiDX9Renderer.h>
-#endif
-
 using namespace efd;
 
 //--------------------------------------------------------------------------------------------------
@@ -85,7 +80,7 @@ void NiTerrain::Initialize()
     m_spTerrainMaterial = NiTerrainMaterial::Create();
 
     // Hook into the DX9 renderer for context events
-    SubscribeToDXDeviceResetNotification();
+    SubscribeToDeviceResetNotification();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -101,7 +96,7 @@ void NiTerrain::DestroyData()
     if (m_bObjDestroyed)
         return;
 
-    UnsubscribeToDXDeviceResetNotification();
+    UnsubscribeToDeviceResetNotification();
 
     // Wait for all loading/unloading tasks to complete
     m_kStreamingManager.WaitForAllTasksCompleted();
@@ -710,38 +705,34 @@ bool NiTerrain::Callback_EndUsingRenderTargetGroup(NiRenderStep* pkCurrentStep,
 }
 
 //--------------------------------------------------------------------------------------------------
-void NiTerrain::SubscribeToDXDeviceResetNotification()
+void NiTerrain::SubscribeToDeviceResetNotification()
 {
     m_uiDXDeviceResetCallbackIndex = 0;
     m_bRegisteredDXDeviceResetCallback = false;
 
-#ifdef WIN32
-    NiDX9Renderer* pkRenderer = 
-        NiDynamicCast(NiDX9Renderer, NiRenderer::GetRenderer());
+    NiRenderer* pkRenderer = NiRenderer::GetRenderer();
+
     if (pkRenderer)
     {
         m_uiDXDeviceResetCallbackIndex = pkRenderer->AddResetNotificationFunc(
-            (NiDX9Renderer::RESETNOTIFYFUNC)&HandleDXDeviceReset, this);
+            &HandleDeviceReset, this);
         m_bRegisteredDXDeviceResetCallback = true;
     }
-#endif
 }
 
 //--------------------------------------------------------------------------------------------------
-void NiTerrain::UnsubscribeToDXDeviceResetNotification()
+void NiTerrain::UnsubscribeToDeviceResetNotification()
 {
-#ifdef WIN32
-    NiDX9Renderer* pkRenderer = 
-        NiDynamicCast(NiDX9Renderer, NiRenderer::GetRenderer());
+    NiRenderer* pkRenderer = NiRenderer::GetRenderer();
+
     if (pkRenderer && m_bRegisteredDXDeviceResetCallback)
     {
         pkRenderer->RemoveResetNotificationFunc(m_uiDXDeviceResetCallbackIndex);
     }
-#endif
 }
 
 //--------------------------------------------------------------------------------------------------
-bool NiTerrain::HandleDXDeviceReset(bool bBeforeReset, void* pvVoid)
+bool NiTerrain::HandleDeviceReset(bool bBeforeReset, void* pvVoid)
 {
     if (!bBeforeReset) // Wait until after device reset
     {

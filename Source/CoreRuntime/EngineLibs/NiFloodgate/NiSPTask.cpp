@@ -16,7 +16,7 @@
 #include "NiSPTask.h"
 #include "NiSPStream.h"
 #include "NiSPKernel.h"
-#include "NiSPWorkload.h"
+#include EE_PLATFORM_SPECIFIC_INCLUDE(NiFloodgate,NiSPWorkload,h)
 
 //--------------------------------------------------------------------------------------------------
 const NiUInt32 NiSPTask::AUTO_BLOCK_COUNT = 0xFFFFFFFF;

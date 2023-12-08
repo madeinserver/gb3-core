@@ -15,7 +15,7 @@
 #ifndef NIMORPHINGKERNEL_H
 #define NIMORPHINGKERNEL_H
 
-#include <NiSPKernelMacros.h>
+#include EE_PLATFORM_SPECIFIC_INCLUDE(NiFloodgate,NiSPKernelMacros,h)
 
 /// Maximum morph targets supported by the kernel.
 /// This number is to maintain some sanity. Some renderers may not actually

@@ -18,7 +18,7 @@
 #include <NiSystem.h>
 #include <NiString.h>
 #include "NiFloodgateLibType.h"
-#include "NiSPWorkload.h"
+#include EE_PLATFORM_SPECIFIC_INCLUDE(NiFloodgate,NiSPWorkload,h)
 
 class NiSPTask;
 class NiSPPPUWorkload;

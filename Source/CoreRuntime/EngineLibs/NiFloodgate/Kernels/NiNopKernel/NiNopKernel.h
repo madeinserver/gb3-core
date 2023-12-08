@@ -15,7 +15,7 @@
 #ifndef NINOPKERNEL_H
 #define NINOPKERNEL_H
 
-#include <NiSPKernelMacros.h>
+#include EE_PLATFORM_SPECIFIC_INCLUDE(NiFloodgate,NiSPKernelMacros,h)
 
 /**
     A Floodgate kernel with an empty Execute function for use with Signal

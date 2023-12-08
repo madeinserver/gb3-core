@@ -178,7 +178,7 @@ protected:
     NiSemaphore m_kShutdownThreadAssignedSemaphore;
 
     /// Counter to specify the number of worker threads actively paused.
-    volatile NiUInt32 m_uiPausedThreads;
+    volatile efd::SAtomic m_uiPausedThreads;
 
     /// List of what workflow each worker thread is working on
     NiUInt32* m_pCurrentWorkflowList;
