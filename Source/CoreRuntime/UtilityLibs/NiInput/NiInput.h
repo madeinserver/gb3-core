@@ -16,18 +16,10 @@
 #define NIINPUT_H
 
 // This must be first
-#if defined(_XENON)
-    #include "NiInput_Xbox360.h"
-#elif defined(WIN32)
-    #include <NiSystem.h>
-    #include "NiInput_DI8.h"
-#elif defined(_PS3)
-    #include "NiInput_PS3.h"
-#else
-    #error Unknown platform
-#endif
-
 #include <NiSystem.h>
+
+#include EE_PLATFORM_SPECIFIC_INCLUDE(NiInput,NiInput,h)
+
 #include <NiSmartPointer.h>
 
 #include "NiInputLibType.h"
