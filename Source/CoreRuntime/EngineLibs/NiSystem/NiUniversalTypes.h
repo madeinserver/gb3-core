@@ -50,27 +50,18 @@ typedef efd::UInt64 NiUInt64;
 typedef efd::WindowRef NiWindowRef;
 typedef efd::StatusWindowRef NiStatusWindowRef;
 
-#ifndef EE_PLATFORM_SDL2
 typedef efd::ContextRef NiContextRef;
 typedef efd::OglRenderContextRef NiOglRenderContextRef;
-#endif
 
-#ifdef EE_PLATFORM_WIN32
 typedef efd::InstanceRef NiInstanceRef;
-#endif
-
-#ifndef EE_PLATFORM_SDL2
 typedef efd::AcceleratorRef NiAcceleratorRef;
 typedef efd::ModuleRef NiModuleRef;
-#endif
 
 typedef efd::EventRecord NiEventRecord;
 typedef efd::EventRecordPtr NiEventRef;
 
-#ifndef EE_PLATFORM_SDL2
 typedef efd::CreateStructRef NiCreateStructRef;
 typedef efd::MenuRef NiMenuRef;
-#endif
 
 #define NI_RESTRICT EE_RESTRICT
 
