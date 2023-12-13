@@ -17,8 +17,6 @@
 
 #if defined(NI_USE_PCH)
 
-#include <NiD3DRendererPCH.h>
-
 #include "NiBinaryShaderLibLibType.h"
 #include "NiBinaryShader.h"
 #include "NiBinaryShaderLib.h"
