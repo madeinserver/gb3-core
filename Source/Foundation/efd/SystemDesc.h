@@ -48,11 +48,10 @@ public:
         RENDERER_GENERIC = 5,
 
         // Begin of MIS work (2022/2023)
-        RENDERER_BGFX = 7, // 27/07/2022 MADE IN SERVER
-        RENDERER_DILIGENT = 8, // 07/03/2023 MADE IN SERVER
+        RENDERER_OPENGL = 7,
 
         // The total number of enumerated renderers
-        RENDERER_COUNT = 9,
+        RENDERER_COUNT = 10,
 
         // Compatibility enumerations
         RENDERER_NUM = RENDERER_COUNT,

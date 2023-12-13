@@ -67,12 +67,26 @@ typedef double              Float64;
 
 #if !defined(SWIG)
 
-#ifdef EE_PLATFORM_WIN32 // Specifically required for resources...
+#ifdef EE_PLATFORM_WIN32
+// Special windows types
 typedef HINSTANCE InstanceRef;
+typedef HACCEL AcceleratorRef;
+typedef LPCREATESTRUCT CreateStructRef;
+typedef HMENU MenuRef;
+typedef HDC ContextRef;
+#else
+// dummy types
+typedef void* InstanceRef;
+typedef void* AcceleratorRef;
+typedef void* ContextRef;
+typedef void* MenuRef;
+typedef void* CreateStructRef;
 #endif
 
 typedef SDL_Window* WindowRef;
 typedef SDL_Window* StatusWindowRef;
+typedef SDL_GLContext* OglRenderContextRef;
+typedef void* ModuleRef;
 
 typedef struct
 {

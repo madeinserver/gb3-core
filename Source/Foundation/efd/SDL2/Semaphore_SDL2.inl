@@ -26,19 +26,19 @@ inline Semaphore::Semaphore() :
     EE_ASSERT(m_hSemaphore != NULL);
 }
 //-------------------------------------------------------------------------------------------------
-inline Semaphore::Semaphore(efd::SInt32 count) :
+inline Semaphore::Semaphore(efd::SAtomic count) :
     m_count(count),
     m_maxCount(count + 1)
 {
-    m_hSemaphore = SDL_CreateSemaphore(m_count);
+    m_hSemaphore = SDL_CreateSemaphore((Uint32)m_count);
     EE_ASSERT(m_hSemaphore != NULL);
 }
 //-------------------------------------------------------------------------------------------------
-inline Semaphore::Semaphore(efd::SInt32 count, efd::SInt32 maxCount) :
+inline Semaphore::Semaphore(efd::SAtomic count, efd::SAtomic maxCount) :
     m_count(count),
     m_maxCount(maxCount)
 {
-    m_hSemaphore = SDL_CreateSemaphore(m_count);
+    m_hSemaphore = SDL_CreateSemaphore((Uint32)m_count);
     EE_ASSERT(m_hSemaphore != NULL);
 }
 //-------------------------------------------------------------------------------------------------
@@ -48,28 +48,26 @@ inline Semaphore::~Semaphore()
     m_hSemaphore = NULL;
 }
 //-------------------------------------------------------------------------------------------------
-inline efd::SInt32 Semaphore::GetCount()
+inline efd::SAtomic Semaphore::GetCount()
 {
     return m_count;
 }
 //-------------------------------------------------------------------------------------------------
-inline efd::SInt32 Semaphore::GetMaxCount()
+inline efd::SAtomic Semaphore::GetMaxCount()
 {
     return m_maxCount;
 }
 //-------------------------------------------------------------------------------------------------
-inline efd::SInt32 Semaphore::Signal()
+inline efd::SAtomic Semaphore::Signal()
 {
-    int count = SDL_SemPost(m_hSemaphore);
-    Atomic::SetValue(&m_count, count);
-    return m_count;
+    SDL_SemPost(m_hSemaphore);
+    return AtomicIncrement(m_count);
 }
 //-------------------------------------------------------------------------------------------------
-inline efd::SInt32 Semaphore::Wait()
+inline efd::SAtomic Semaphore::Wait()
 {
-    int count = SDL_SemWait(m_hSemaphore);
-    Atomic::SetValue(&m_count, count);
-    return m_count;
+    SDL_SemWait(m_hSemaphore);
+    return AtomicDecrement(m_count);
 }
 //-------------------------------------------------------------------------------------------------
 }; //namespace efd

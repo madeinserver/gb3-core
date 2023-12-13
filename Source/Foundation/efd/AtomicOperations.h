@@ -5,6 +5,7 @@
 // be copied or disclosed except in accordance with the terms of that
 // agreement.
 //
+//      Copyright (c) 2022-2023 Arves100/Made In Server Developers.
 //      Copyright (c) 1996-2009 Emergent Game Technologies.
 //      All Rights Reserved.
 //
@@ -189,22 +190,24 @@ private:
     template <int Size, typename T>
     struct SelectMatchingUIntBySize;
 
-#if defined(EE_PLATFORM_PS3) || defined(EE_PLATFORM_XBOX360) || defined(EE_ARCH_64)
+#ifdef EE_ATOMICS_64
     template <typename T>
     struct SelectMatchingUIntBySize<8, T>
     {
-        typedef UInt64 Result;
+        typedef efd::UAtomic Result;
     };
 #endif
 
     template <typename T>
     struct SelectMatchingUIntBySize<4, T>
     {
-        typedef UInt32 Result;
+        typedef efd::UAtomic Result;
     };
 };
 
 } // end namespace efd
+
+#include "AtomicOperations.inl"
 
 // Include the platform specific inline functions
 #include EE_PLATFORM_SPECIFIC_INCLUDE(efd,AtomicOperations,inl)

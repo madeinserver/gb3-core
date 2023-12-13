@@ -122,7 +122,7 @@ enum MemEventType
     #define EE_MEM_ALIGNMENT_DEFAULT  16
 #elif defined(EE_PLATFORM_PS3)
     #define EE_MEM_ALIGNMENT_DEFAULT  16
-#elif defined(EE_PLATFORM_LINUX)
+#elif defined(EE_PLATFORM_LINUX) || defined(EE_PLATFORM_MACOSX)
     //GNU libc malloc() always returns 8-byte aligned memory addresses
     #define EE_MEM_ALIGNMENT_DEFAULT  8
 #elif defined(EE_PLATFORM_WIN32)

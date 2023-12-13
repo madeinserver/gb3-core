@@ -17,6 +17,8 @@
 #if defined(EE_PLATFORM_WIN32) && !defined(EE_PLATFORM_XBOX360)
 #include <Rpc.h>
 #include <ShlObj.h>
+#elif defined(EE_PLATFORM_LINUX) || defined(EE_PLATFORM_MACOSX)
+#include <uuid/uuid.h>
 #endif
 #include <efd/PathUtils.h>
 #include <efd/AssetUriReader.h>
@@ -606,7 +608,7 @@ efd::Bool AssetWeb::updateVersion()
 //------------------------------------------------------------------------------------------------
 void AssetWeb::updateSyncTime()
 {
-#ifdef EE_PLATFORM_WIN32
+#if defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_SDL2)
     // Check if there was a previous, successful metadata sync
     utf8string chk;
 
@@ -681,7 +683,7 @@ void AssetWeb::getDataFileHash(const utf8string& file_name, utf8string& hash)
 }
 
 //------------------------------------------------------------------------------------------------
-#ifdef EE_PLATFORM_WIN32
+#if defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_SDL2)
 void AssetWeb::GetLastSyncTime(PathUtils::FileTimestamp* timestamp)
 {
     *timestamp = m_last_sync;
@@ -1115,7 +1117,7 @@ void AssetWeb::assetLoadPersistentMetadata(const efd::utf8string& uuri)
 {
     EE_ASSERT(isWritable());
 
-#ifdef EE_PLATFORM_WIN32
+#if defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_SDL2)
     // Determine the name of the asset's metadata file
     utf8string relative_path, nt_file_name;
     assetPropertyValue(uuri, URIReader::GlobalNamespace_relpath, relative_path);
@@ -1557,9 +1559,16 @@ void AssetWeb::generateUUID(efd::utf8string& assetId)
     RpcStringFree(&ustring);
 
     assetId = "urn:uuid:" + temp;
+#elif defined(EE_PLATFORM_LINUX) || defined(EE_PLATFORM_MACOSX)
+    char temp[100];
+    uuid_t uid;
+
+    uuid_generate(uid);
+    uuid_unparse(uid, temp);
+
+    assetId = "urn:uuid:" + temp;
 #else
-    // Only supported on WIN32
-    EE_FAIL_MESSAGE(("%s only supported on Win32", __FUNCTION__));
+    EE_FAIL_MESSAGE(("%s is not supported on this platform", __FUNCTION__));
 #endif
 }
 

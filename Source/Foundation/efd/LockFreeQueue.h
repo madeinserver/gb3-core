@@ -20,6 +20,10 @@
 #include <efd/MemObject.h>
 #include <efd/FixedNodePool.h>
 
+#if defined(EE_ATOMICS_32) && defined(EE_ARCH_64)
+#error "32-bit atomics not supported on 64-bit platforms"
+#endif
+
 namespace efd
 {
 /**
@@ -122,6 +126,11 @@ private:
     struct Node : public MemObject
     {
         Node* m_pNext;
+
+#if defined(EE_ATOMICS_64) && defined(EE_ARCH_32)
+        efd::UInt32 padding; // padding for 64-bit atomics on 32-bit
+#endif
+
         T m_value;
     };
 

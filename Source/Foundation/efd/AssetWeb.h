@@ -376,7 +376,7 @@ public:
     /// Sets a value indicating if we should pre-loading graphs.
     void SetPreloadGraphs(bool bPreload);
 
-#ifdef EE_PLATFORM_WIN32
+#if defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_SDL2)
     /// Retrieve the last time of synchronizing metadata
     void GetLastSyncTime(PathUtils::FileTimestamp* timestamp);
 #endif
@@ -407,7 +407,7 @@ private:
     efd::utf8string m_meta_location;
     /// Access mode specified when openWeb() is called. @see openWeb()
     AWebAccessMode m_mode;
-#ifdef EE_PLATFORM_WIN32
+#if defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_SDL2)
     /// Last time asset metadata was synced
     PathUtils::FileTimestamp m_last_sync;
 #endif
@@ -474,7 +474,7 @@ private:
         efd::UInt32 tag_count);
     efd::Bool resolveOverridePath(const efd::utf8string& tag_value, TripleSet& triples);
     void pruneAssetClasses(TripleSet& triples, efd::UInt32 max_classes);
-#ifdef EE_PLATFORM_WIN32
+#if defined(EE_PLATFORM_WIN32)
     bool getSystemAuthorId(efd::utf8string& guid);
 #endif
     utf8string m_instanceIdentifier;

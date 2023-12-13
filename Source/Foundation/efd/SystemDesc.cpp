@@ -37,6 +37,8 @@ const char* SystemDesc::GetRendererString(const SystemDesc::RendererID eRenderer
         return "D3D10";
     case SystemDesc::RENDERER_D3D11:
         return "D3D11";
+    case SystemDesc::RENDERER_OPENGL:
+        return "OpenGL";
     case SystemDesc::RENDERER_GENERIC:
         return "Generic";
     default:

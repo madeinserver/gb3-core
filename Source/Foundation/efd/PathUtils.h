@@ -432,18 +432,6 @@ namespace efd
     } // end namespace PathUtils
 } // end namespace efd
 
-#if defined (EE_PLATFORM_SDL2)
-#include <efd/SDL2/PathUtils_SDL2.inl>
-#elif defined (EE_PLATFORM_WIN32)
-#include <efd/Win32/PathUtils_Win32.inl>
-#elif defined (EE_PLATFORM_LINUX)
-#include <efd/Linux/PathUtils_Linux.inl>
-#elif defined (EE_PLATFORM_MACOSX)
-#include <efd/Linux/PathUtils_MacOSX.inl>
-#elif defined (EE_PLATFORM_PS3)
-#include <efd/PS3/PathUtils_PS3.inl>
-#elif defined (EE_PLATFORM_XBOX360)
-#include <efd/XBox360/PathUtils_XBox360.inl>
-#endif
+#include EE_PLATFORM_SPECIFIC_INCLUDE(efd,PathUtils,inl)
 
 #endif // __PathUtils_h__

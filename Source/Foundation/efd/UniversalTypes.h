@@ -17,20 +17,9 @@
 
 #include <efd/OS.h>
 
-#if defined(EE_PLATFORM_SDL2)
-#include <efd/SDL2/UniversalTypes_SDL2.h>
-#elif defined(EE_PLATFORM_WIN32)
-#include <efd/Win32/UniversalTypes_Win32.h>
-#elif defined(EE_PLATFORM_LINUX)
-#include <efd/Linux/UniversalTypes_Linux.h>
-#elif defined(EE_PLATFORM_XBOX360)
-#include <efd/XBox360/UniversalTypes_XBox360.h>
-#elif defined(EE_PLATFORM_PS3)
-#include <efd/PS3/UniversalTypes_PS3.h>
-#else
-    #ifndef SWIG // we don't use this file in swig
-    #error Platform undefined.
-    #endif
+#ifndef SWIG // we don't use this file in swig
+#include EE_PLATFORM_SPECIFIC_INCLUDE(efd,UniversalTypes,h)
 #endif
+
 
 #endif //EE_UNIVERSALTYPES_H

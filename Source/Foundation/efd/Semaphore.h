@@ -52,7 +52,7 @@ public:
 
         @param count Initial count.  This value must be greater than or equal to 0.
     */
-    Semaphore(efd::SInt32 count);
+    Semaphore(efd::SAtomic count);
 
     /**
         Creates a Semaphore object with a count equal to iCount and the maximum count set to
@@ -66,8 +66,8 @@ public:
         @param maxCount Maximum count.  This value must be greater than zero.
     */
     Semaphore(
-        efd::SInt32 count,
-        efd::SInt32 maxCount);
+        efd::SAtomic count,
+        efd::SAtomic maxCount);
 
     /// Virtual destructor.
     virtual ~Semaphore();
@@ -81,21 +81,21 @@ public:
 
         @return A signed 32-bit integer representing the current count.
     */
-    inline efd::SInt32 GetCount();
+    inline efd::SAtomic GetCount();
 
     /**
         Get the maximum count of the semaphore, set during construction.
 
         @return A signed 32-bit integer representing the current maximum count.
     */
-    inline efd::SInt32 GetMaxCount();
+    inline efd::SAtomic GetMaxCount();
 
     /**
         Signal the semaphore and increase the count by 1.
 
         @return The count of the semaphore after the signal operation.
     */
-    inline efd::SInt32 Signal();
+    inline efd::SAtomic Signal();
 
     /**
         Wait on the semaphore.
@@ -105,7 +105,7 @@ public:
 
         @return The count of the semaphore after the wait operation.
     */
-    inline efd::SInt32 Wait();
+    inline efd::SAtomic Wait();
 
 protected:
 
@@ -114,14 +114,14 @@ protected:
         Initial count.
         This value must be greater than or equal to 0 and less than or equal to maxCount.
     */
-    volatile efd::SInt32 m_count;
+    volatile efd::SAtomic m_count;
 #endif
 
     /*
         Maximum count.
         This value must be greater than zero.
     */
-    efd::SInt32 m_maxCount;
+    efd::SAtomic m_maxCount;
 
     // Platform-specific semaphore member variable declaration.
 #if defined (EE_PLATFORM_SDL2)
@@ -139,18 +139,6 @@ protected:
 }   // End namespace efd.
 
 // Include platform-specific header.
-#if defined (EE_PLATFORM_SDL2)
-#include <efd/SDL2/Semaphore_SDL2.inl>
-#elif defined (EE_PLATFORM_WIN32)
-#include <efd/Win32/Semaphore_Win32.inl>
-#elif defined (EE_PLATFORM_LINUX)
-#include <efd/Linux/Semaphore_Linux.inl>
-#elif defined (EE_PLATFORM_MACOSX)
-#include <efd/MacOSX/Semaphore_MacOSX.inl>
-#elif defined (EE_PLATFORM_PS3)
-#include <efd/PS3/Semaphore_PS3.inl>
-#elif defined (EE_PLATFORM_XBOX360)
-#include <efd/XBox360/Semaphore_XBox360.inl>
-#endif
+#include EE_PLATFORM_SPECIFIC_INCLUDE(efd,Semaphore,inl)
 
 #endif //EE_SEMAPHORE_H

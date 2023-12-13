@@ -107,7 +107,7 @@ void AssetFactoryManager::FgConstructor(const size_t requestQueueSize)
     m_pLoaderThread =
         Thread::Create(m_pLoaderThreadFunctor, Thread::DEFAULT_STACK_SIZE, "AssetLoaderThread");
 
-#if (EE_PLATFORM_WIN32)
+#if (EE_PLATFORM_WIN32) || (EE_PLATFORM_SDL2)
     m_pLoaderThread->SetThreadAffinity(ProcessorAffinity(
         ProcessorAffinity::PROCESSOR_1,
         (efd::UInt32)ProcessorAffinity::PROCESSOR_DONT_CARE));
