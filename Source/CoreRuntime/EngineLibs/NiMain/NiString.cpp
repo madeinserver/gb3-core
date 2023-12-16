@@ -657,7 +657,7 @@ unsigned int NiString::FindReverse(char c, unsigned int uiStartIdx) const
 unsigned int NiString::FindOneOf(const char* pcStr,
     unsigned int uiIndex) const
 {
-    if (pcStr == NULL || pcStr == '\0' || m_kHandle == NULL)
+    if (pcStr == NULL || pcStr[0] == '\0' || m_kHandle == NULL)
         return (unsigned int) INVALID_INDEX;
     char* pcSubStr = strpbrk(GetString(m_kHandle) + uiIndex, pcStr);
     if (pcSubStr == NULL)

@@ -570,7 +570,7 @@ NiPixelData* NiTGAReader::ReadFile(efd::File &kIst, NiPixelData* pkOptDest)
     if (!ReadHeader(kIst, uiW, uiH, kFmt, bMipmap, uiNumFaces))
     {
         m_kReadCriticalSection.Unlock();
-        return false;
+        return NULL;
     }
 
     unsigned int uiRowSize = m_uiBytesPerPixel * m_usWidth;

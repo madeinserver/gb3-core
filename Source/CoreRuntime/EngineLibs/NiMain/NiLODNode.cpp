@@ -189,8 +189,8 @@ void NiLODNode::GetViewerStrings(NiViewerStringsArray* pkStrings)
         NiSprintf(cStr, sizeof(cStr), "NULL LOD Data");
         pkStrings->Add(cStr);
 #else
-        char* pStr = "NULL LOD Data";
-        pkStrings->Add(pStr);
+        const char* pStr = "NULL LOD Data";
+        pkStrings->Add((char*)pStr);
 #endif
     }
 }

@@ -20,7 +20,10 @@
 #include "NiSmartPointer.h"
 #include "NiFixedString.h"
 
-class efd::BinaryStream;
+namespace efd
+{
+    class BinaryStream;
+}
 
 class NIMAIN_ENTRY NiStreamOutSettings : public NiRefObject
 {

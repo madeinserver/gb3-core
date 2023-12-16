@@ -265,7 +265,7 @@ NiPixelData* NiSGIReader::ReadFile(efd::File &kIst, NiPixelData* pkOptDest)
         if (pulSGIStartTable == NULL)
         {
             m_kReadCriticalSection.Unlock();
-            return false;
+            return NULL;
         }
 
         NiStreamLoadBinary(kIst, pulSGIStartTable, uiTableSize);

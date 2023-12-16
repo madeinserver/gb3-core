@@ -42,7 +42,11 @@ EE_COMPILETIME_ASSERT(sizeof(NiUInt32) == 4);
 EE_COMPILETIME_ASSERT(sizeof(NiInt64) == 8);
 EE_COMPILETIME_ASSERT(sizeof(NiUInt64) == 8);
 
+#ifdef EE_PLATFORM_WIN32
 EE_COMPILETIME_ASSERT(sizeof(NiWChar) == 2);
+#else
+EE_COMPILETIME_ASSERT(sizeof(NiWChar) == 4);
+#endif
 
 //--------------------------------------------------------------------------------------------------
 

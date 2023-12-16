@@ -32,7 +32,7 @@ static NiFloodgateSDM NiFloodgateSDMObject;
 
 class NiFloodgateEventQueue;
 
-#if defined(WIN32) || defined(_XENON)
+#if defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_XBOX360)
 
 typedef SLIST_HEADER SLIST_HEADER_GB;
 typedef SLIST_ENTRY SLIST_ENTRY_GB;
@@ -243,7 +243,7 @@ public:
     /// Shuts down the streaming task manager. Called by NiFloodgateSDM.
     static bool Shutdown();
 
-#if defined(WIN32) || defined(_XENON)
+#if defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_XBOX360) || defined(EE_PLATFORM_SDL2)
     /**
         Submits a workflow for finalization.
         This function should only be called by NiSPThreadPool after all
@@ -319,7 +319,7 @@ protected:
     // Declare the atomic SLIST items first. They are aligned and generate
     // warnings if previous data members disrupt that alignment and
     // introduce padding to the class.
-#if defined(WIN32) || defined(_XENON)
+#if defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_XBOX360)
     /// Free entries for the finalization queue.
     SLIST_HEADER_GB m_kFreeFinalizationEntries;
 

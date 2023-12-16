@@ -90,7 +90,7 @@ typedef void* ModuleRef;
 
 typedef struct
 {
-    SDL_Window* hWnd;
+    SDL_Event* evt;
 } EventRecord, *EventRecordPtr;
 
 #endif

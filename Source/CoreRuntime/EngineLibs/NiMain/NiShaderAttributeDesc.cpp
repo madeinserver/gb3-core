@@ -439,28 +439,28 @@ void NiShaderAttributeDesc::SetType(
         if (m_eType == ATTRIB_TYPE_STRING)
         {
             NiFree(m_pcValue);
-            m_uiLen = NULL;
+            m_uiLen = 0;
         }
         else if (m_eType == ATTRIB_TYPE_ARRAY)
         {
             NiFree(m_kArrayValue.m_pvValue);
             NiFree(m_pvHigh);
             NiFree(m_pvLow);
-            m_uiLen = NULL;
+            m_uiLen = 0;
         }
 
         m_eType = eType;
         if (eType == ATTRIB_TYPE_STRING)
         {
             m_pcValue = NULL;
-            m_uiLen = NULL;
+            m_uiLen = 0;
         }
         else if (eType == ATTRIB_TYPE_ARRAY)
         {
             m_kArrayValue.m_pvValue = NULL;
             m_pvHigh = NULL;
             m_pvLow = NULL;
-            m_uiLen = NULL;
+            m_uiLen = 0;
         }
     }
 }

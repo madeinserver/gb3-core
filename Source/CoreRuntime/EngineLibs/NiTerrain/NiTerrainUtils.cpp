@@ -1199,10 +1199,11 @@ NiSourceTexture* CombineImageChannelsToTexture(
             NiSystemDesc::GetSystemDesc().IsLittleEndian());
 
         efd::UInt32 auiDstChannelOffset[4] = {
-            pkPixelData->GetPixelFormat().GetShift(aeDestinationComponent[0]) / 8,
-            pkPixelData->GetPixelFormat().GetShift(aeDestinationComponent[1]) / 8,
-            pkPixelData->GetPixelFormat().GetShift(aeDestinationComponent[2]) / 8,
-            pkPixelData->GetPixelFormat().GetShift(aeDestinationComponent[3]) / 8};
+            (efd::UInt32)(pkPixelData->GetPixelFormat().GetShift(aeDestinationComponent[0]) / 8),
+            (efd::UInt32)(pkPixelData->GetPixelFormat().GetShift(aeDestinationComponent[1]) / 8),
+            (efd::UInt32)(pkPixelData->GetPixelFormat().GetShift(aeDestinationComponent[2]) / 8),
+            (efd::UInt32)(pkPixelData->GetPixelFormat().GetShift(aeDestinationComponent[3]) / 8)
+        };
 
         // Restore endian bit
         const_cast<NiPixelFormat&>(pkPixelData->GetPixelFormat()).SetLittleEndian(isLittleEndian);

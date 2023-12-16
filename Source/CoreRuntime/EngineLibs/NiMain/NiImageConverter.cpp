@@ -129,7 +129,7 @@ NiPixelData* NiImageConverter::ReadImageFile(const char* pcFilename,
         if ((!kIst) || (!(*kIst)))
         {
             NiDelete kIst;
-            return false;
+            return NULL;
         }
         NiPixelData* pkDest = m_kReader.ReadFile(*kIst, pkOptDest);
 

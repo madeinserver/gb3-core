@@ -45,12 +45,33 @@ bool NiFilename::GetFullPath(char* pcFullPath, unsigned int uiStrLen) const
 // This function _does not_ handle multibyte characters.
 void NiFilename::Splitpath(const char* pcStr)
 {
+#ifdef EE_PLATFORM_WIN32
 #ifdef EE_HAVE_SECURE_FUNCTIONS
     _splitpath_s(pcStr, m_acDrive, _MAX_DRIVE, m_acDir, _MAX_DIR,
         m_acFname, _MAX_FNAME, m_acExt, _MAX_EXT);
 #else //#ifdef EE_HAVE_SECURE_FUNCTIONS
     _splitpath(pcStr, m_acDrive, m_acDir, m_acFname, m_acExt);
 #endif //#ifdef EE_HAVE_SECURE_FUNCTIONS
+
+#else
+    char* extpos;
+
+    m_acDrive[0] = '\0'; // Unix doesn't have drives
+    strcpy(m_acDir, dirname((char*)pcStr));
+    strcpy(m_acFname, basename((char*)pcStr));
+    extpos = strrchr(m_acFname, '.');
+
+    if (extpos)
+    {
+        size_t len = strlen(m_acFname);
+        size_t pp = extpos - m_acFname;
+        strcpy(m_acExt, extpos);
+        memset(m_acFname + pp, 0, len - pp);
+    }
+    else
+        m_acExt[0] = '\0';
+
+#endif // #ifdef EE_PLATFORM_WIN32
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -1566,7 +1566,8 @@ void AssetWeb::generateUUID(efd::utf8string& assetId)
     uuid_generate(uid);
     uuid_unparse(uid, temp);
 
-    assetId = "urn:uuid:" + temp;
+    assetId = "urn:uuid:";
+    assetId += temp;
 #else
     EE_FAIL_MESSAGE(("%s is not supported on this platform", __FUNCTION__));
 #endif

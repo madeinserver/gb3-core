@@ -476,7 +476,7 @@ NiShader* NiDirectionalShadowWriteMaterial::CreateShader(
 {
     NiRenderer* pkRenderer = NiRenderer::GetRenderer();
     if (pkRenderer == NULL)
-        return false;
+        return NULL;
 
     return pkRenderer->GetShadowWriteShader(pkMaterialDescriptor);
 }

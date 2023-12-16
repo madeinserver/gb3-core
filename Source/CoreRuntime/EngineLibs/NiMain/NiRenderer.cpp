@@ -180,11 +180,11 @@ void NiRenderer::Message(const char* pcFormat, ...)
     if (acOutput[stIndex-1] != '\n')
     {
         acOutput[stIndex  ] = '\n';
-        acOutput[stIndex+1] = NULL;
+        acOutput[stIndex+1] = '\0';
     }
     else
     {
-        acOutput[stIndex] = NULL;
+        acOutput[stIndex] = '\0';
     }
 
     //Invoke the callback object
@@ -214,11 +214,11 @@ void NiRenderer::Warning(const char* pcFormat, ...)
     if (acOutput[stIndex-1] != '\n')
     {
         acOutput[stIndex  ] = '\n';
-        acOutput[stIndex+1] = NULL;
+        acOutput[stIndex+1] = '\0';
     }
     else
     {
-        acOutput[stIndex] = NULL;
+        acOutput[stIndex] = '\0';
     }
 
     //Invoke the callback object
@@ -248,11 +248,11 @@ void NiRenderer::Error(const char* pcFormat, ...)
     if (acOutput[stIndex-1] != '\n')
     {
         acOutput[stIndex  ] = '\n';
-        acOutput[stIndex+1] = NULL;
+        acOutput[stIndex+1] = '\0';
     }
     else
     {
-        acOutput[stIndex] = NULL;
+        acOutput[stIndex] = '\0';
     }
 
     //Invoke the callback object

@@ -373,7 +373,7 @@ bool NiPointShadowWriteMaterial::SetupTransformPipeline(Context& kContext,
         NiMaterialResource* pkTangentView = NULL;
 
         if (!HandleViewVectorFragment(kContext,
-            pkWorldPos, pkWorldNormal, false, NULL,
+            pkWorldPos, pkWorldNormal, NULL, NULL,
             false, pkWorldView, pkTangentView))
         {
             return false;
@@ -498,7 +498,7 @@ NiShader* NiPointShadowWriteMaterial::CreateShader(
 {
     NiRenderer* pkRenderer = NiRenderer::GetRenderer();
     if (pkRenderer == NULL)
-        return false;
+        return NULL;
 
     return pkRenderer->GetShadowWriteShader(pkMaterialDescriptor);
 }

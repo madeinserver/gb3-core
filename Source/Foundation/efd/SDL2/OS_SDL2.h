@@ -36,9 +36,18 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <libgen.h>
 
 #ifdef EE_PLATFORM_LINUX
 #include <sched.h>
+#endif
+
+#ifdef LOCK_READ
+#undef LOCK_READ
+#endif
+
+#ifdef LOCK_WRITE
+#undef LOCK_WRITE
 #endif
 
 #define EE_ASM_DECOR(x) _##x
