@@ -5,6 +5,7 @@
 // be copied or disclosed except in accordance with the terms of that
 // agreement.
 //
+//      Copyright (c) 2022-2023 Arves100/Made In Server Developers.
 //      Copyright (c) 1996-2009 Emergent Game Technologies.
 //      All Rights Reserved.
 //
@@ -90,7 +91,7 @@ inline bool NiApplication::GetMultiThread() const
 }
 
 //--------------------------------------------------------------------------------------------------
-#if defined(WIN32)
+#if defined(EE_PLATFORM_SDL2)
 inline void NiApplication::SetRendererID(efd::SystemDesc::RendererID eRendererID)
 {
     m_eRendererID = eRendererID;
@@ -100,22 +101,6 @@ inline void NiApplication::SetRendererID(efd::SystemDesc::RendererID eRendererID
 inline efd::SystemDesc::RendererID NiApplication::GetRendererID() const
 {
     return m_eRendererID;
-}
-
-//--------------------------------------------------------------------------------------------------
-inline void NiApplication::SetD3D10Renderer(bool bD3D10Renderer)
-{
-    // Default to DX9 renderer if false
-    if (bD3D10Renderer)
-        SetRendererID(efd::SystemDesc::RENDERER_D3D10);
-    else
-        SetRendererID(efd::SystemDesc::RENDERER_DX9);
-}
-
-//--------------------------------------------------------------------------------------------------
-inline bool NiApplication::GetD3D10Renderer() const
-{
-    return (GetRendererID() == efd::SystemDesc::RENDERER_D3D10);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -189,7 +174,7 @@ inline NiWindowRef NiApplication::GetWindowReference() const
 //--------------------------------------------------------------------------------------------------
 inline NiWindowRef NiApplication::GetRenderWindowReference() const
 {
-    return m_pkAppWindow->GetRenderWindowReference();
+    return m_pkAppWindow->GetWindowReference();
 }
 
 //--------------------------------------------------------------------------------------------------

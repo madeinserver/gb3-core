@@ -5,6 +5,7 @@
 // be copied or disclosed except in accordance with the terms of that
 // agreement.
 //
+//      Copyright (c) 2022-2023 Arves100/Made In Server Developers.
 //      Copyright (c) 1996-2009 Emergent Game Technologies.
 //      All Rights Reserved.
 //
@@ -24,6 +25,7 @@
 #include <NiNavFlyController.h>
 #include <NiNavOrbitController.h>
 #include <NiUIGroup.h>
+#include <efd/Utilities.h>
 
 //------------------------------------------------------------------------------------------------
 NiSample::NiSample(const char* pcWindowCaption,
@@ -55,23 +57,23 @@ NiSample::NiSample(const char* pcWindowCaption,
     m_kCursorRenderStepName = "NiSample Cursor Render Step";
     m_kCursorRenderClickName = "NiSample Cursor Render Click";
 
-#if defined(WIN32)
+#if defined(EE_PLATFORM_SDL2) || defined(EE_PLATFORM_WIN32)
     // Disable system cursor since we're using NiCursor.
     m_bExclusiveMouse = true;
-#endif // #if defined(WIN32)
+#endif // #if defined(EE_PLATFORM_SDL2)
 
-#if defined(WIN32)
+#if defined(EE_PLATFORM_SDL2) || defined(EE_PLATFORM_WIN32)
     // Create the cursor render click.
     m_spCursorRenderClick = NiNew NiCursorRenderClick;
     m_spCursorRenderClick->SetName(m_kCursorRenderClickName);
-#endif // #if defined(WIN32)
+#endif // #if defined(EE_PLATFORM_SDL2)
 
     // Set the default skin filename
-#if defined(_XENON)
+#if defined(EE_PLATFORM_XBOX360)
     SetUISkinFilename("D:\\Data\\UISkinFull.dds");
-#elif defined(_PS3)
+#elif defined(EE_PLATFORM_PS3)
     EE_VERIFY(FindSampleDataFile("UISkinFull_ps3.dds", m_acSkinPath));
-#elif defined(WIN32)
+#elif defined(EE_PLATFORM_SDL2) || defined(EE_PLATFORM_WIN32)
     EE_VERIFY(FindSampleDataFile("UISkinFull.dds", m_acSkinPath));
 #else
 #error "Unsupported platform"
@@ -152,7 +154,7 @@ bool NiSample::Initialize()
 }
 
 //------------------------------------------------------------------------------------------------
-#if defined(WIN32)
+#if defined(EE_PLATFORM_SDL2)
 MessageBoxFunction g_pfnGlobalFunction;
 
 unsigned int NiSample::NiSampleMessageBoxFunc(const char* pcText,
@@ -160,12 +162,12 @@ unsigned int NiSample::NiSampleMessageBoxFunc(const char* pcText,
 {
     bool bExclusiveMouse = NiApplication::ms_pkApplication->IsExclusiveMouse();
     if (bExclusiveMouse)
-        ::ShowCursor(TRUE);
+        efd::ShowCursor();
 
     unsigned int uiValue = g_pfnGlobalFunction(pcText, pcCaption, pvExtraData);
 
     if (bExclusiveMouse)
-        ::ShowCursor(FALSE);
+        efd::HideCursor();
     return uiValue;
 }
 #endif
@@ -173,7 +175,7 @@ unsigned int NiSample::NiSampleMessageBoxFunc(const char* pcText,
 //------------------------------------------------------------------------------------------------
 bool NiSample::CreateInputSystem()
 {
-#if defined(WIN32)
+#if defined(EE_PLATFORM_SDL2) || defined(EE_PLATFORM_WIN32)
     if (!m_bDumpShotAtFixedInterval)
     {
         g_pfnGlobalFunction = NiMessageBoxUtilities::GetMessageBoxFunction();
@@ -193,7 +195,7 @@ bool NiSample::CreateShaderSystem()
 {
     NiShaderFactory::RegisterErrorCallback(ShaderErrorCallback);
 
-#if defined(WIN32)
+#if defined(EE_PLATFORM_SDL2)
     NiRenderer* pkRenderer = NiRenderer::GetRenderer();
     EE_ASSERT(pkRenderer);
     const char* pcShaderProgramDir;
@@ -204,13 +206,15 @@ bool NiSample::CreateShaderSystem()
         pcShaderProgramDir = "Shaders/D3D10";
     else if (pkRenderer->GetRendererID() == efd::SystemDesc::RENDERER_D3D11)
         pcShaderProgramDir = "Shaders/D3D11";
+    else if (pkRenderer->GetRendererID() == efd::SystemDesc::RENDERER_OPENGL)
+        pcShaderProgramDir = "Shaders/OpenGL";
     else
         pcShaderProgramDir = NULL;
 
     EE_ASSERT(pcShaderProgramDir);
-#elif defined(_XENON)
+#elif defined(EE_PLATFORM_XBOX360)
     const char* pcShaderProgramDir = "Shaders\\Xbox360";
-#elif defined(_PS3)
+#elif defined(EE_PLATFORM_PS3)
     const char* pcShaderProgramDir = "Shaders/PS3";
 #else
     #error "Unknown platform";
@@ -293,7 +297,7 @@ unsigned int NiSample::ShaderErrorCallback(const char*,
 }
 
 //------------------------------------------------------------------------------------------------
-#if defined(WIN32) || defined(_PS3)
+#if defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_PS3) || defined(EE_PLATFORM_SDL2)
 bool NiSample::FindSampleDataFile(const char* pcFilename, char* pcFullPath)
 {
     EE_ASSERT(pcFilename && pcFullPath);
@@ -301,7 +305,7 @@ bool NiSample::FindSampleDataFile(const char* pcFilename, char* pcFullPath)
     // Build "primary" relative path:
     //   (up some # of directories) + "Media\Samples\SampleUI\" + filename
 
-#if defined(WIN32)  // Up 5 directories for Win32...
+#if defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_SDL2)  // Up 5 directories for Win32...
     const char pcRelativePath[] = "..\\..\\..\\..\\..\\Media\\Samples\\SampleUI\\";
 #else   // Up 6 directories for PS3...
     const char pcRelativePath[] = "../../../../../../Media/Samples/SampleUI/";
@@ -316,7 +320,7 @@ bool NiSample::FindSampleDataFile(const char* pcFilename, char* pcFullPath)
 
     // Add another directory step up for "secondary" path - e.g., for:
     //   Samples\Tutorials\Graphics\03-Shaders
-#if defined(WIN32)  // Win32
+#if defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_SDL2)  // Win32
     NiSprintf(pcSecondaryRelativeFullPath, NI_MAX_PATH, "..\\%s", pcRelativeFullPath);
 #else   // PS3
     NiSprintf(pcSecondaryRelativeFullPath, NI_MAX_PATH, "../%s", pcRelativeFullPath);
@@ -336,20 +340,14 @@ bool NiSample::FindSampleDataFile(const char* pcFilename, char* pcFullPath)
     else
     {
 
-#if defined(WIN32)  // Win32
+#if defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_SDL2)  // Win32
         // Determine path for the file using environment variable "EMERGENT_PATH" as follows:
         //   EMERGENT_PATH + /Media/Samples/SampleUI/ + filename
         char pcSourcePath[NI_MAX_PATH];
         pcSourcePath[0] = '\0';
 
-#if _MSC_VER >= 1400
         size_t stSize = 0;
-        getenv_s(&stSize, pcSourcePath, NI_MAX_PATH, "EMERGENT_PATH");
-#else //#if _MSC_VER >= 1400
-        char* pcEnvPathTemp = getenv("EMERGENT_PATH");
-        if (pcEnvPathTemp)
-            NiStrcpy(pcSourcePath, NI_MAX_PATH, pcEnvPathTemp);
-#endif //#if _MSC_VER >= 1400
+        efd::GetEnvironmentVariable(&stSize, pcSourcePath, NI_MAX_PATH, "EMERGENT_PATH");
 
         if (pcSourcePath[0] != '\0')
         {
@@ -386,7 +384,7 @@ bool NiSample::FindSampleDataFile(const char* pcFilename, char* pcFullPath)
 //------------------------------------------------------------------------------------------------
 bool NiSample::CreateCursor()
 {
-#if defined(WIN32)
+#if defined(EE_PLATFORM_SDL2) || defined(EE_PLATFORM_WIN32)
     const NiRenderTargetGroup* pkRTGroup = m_spRenderer->
         GetDefaultRenderTargetGroup();
     EE_ASSERT(pkRTGroup);
@@ -413,7 +411,7 @@ bool NiSample::CreateCursor()
 
     m_spCursor->SetPosition(0.0f, uiMouseStartX, uiMouseStartY);
     m_spCursor->Show(true);
-    ShowCursor(FALSE);
+    efd::HideCursor();
 
     m_spCursorRenderClick->AppendCursor(m_spCursor);
 #endif
@@ -453,7 +451,7 @@ bool NiSample::CreateUISystem()
     }
 
     NiCursor* pkCursor = NULL;
-#if defined(WIN32)
+#if defined(EE_PLATFORM_SDL2) || defined(EE_PLATFORM_WIN32)
     pkCursor = m_spCursor;
 #endif
 
@@ -582,7 +580,7 @@ bool NiSample::CreateFrame()
     EE_ASSERT(m_spFrame);
     m_spFrame->AppendRenderStep(pkUIManagerRenderStep);
 
-#if defined(WIN32)
+#if defined(EE_PLATFORM_SDL2) || defined(EE_PLATFORM_WIN32)
     // Create cursor render step.
     NiDefaultClickRenderStep* pkCursorRenderStep = NiNew
         NiDefaultClickRenderStep;
@@ -591,7 +589,7 @@ bool NiSample::CreateFrame()
 
     // Append cursor render step to frame.
     m_spFrame->AppendRenderStep(pkCursorRenderStep);
-#endif  // #if defined(WIN32)
+#endif  // #if defined(EE_PLATFORM_SDL2)
 
     return true;
 }
@@ -642,7 +640,7 @@ void NiSample::RenderUIElements()
 {
     NiUIManager::GetUIManager()->Draw(m_spRenderer);
 
-#if defined(WIN32)
+#if defined(EE_PLATFORM_SDL2) || defined(EE_PLATFORM_WIN32)
     m_spCursor->Draw();
 #endif
 }
@@ -660,7 +658,7 @@ void NiSample::Terminate()
     m_spFrameRateLabel = NULL;
     m_kNavHelpRenderGroups.RemoveAll();
 
-#if defined(WIN32)
+#if defined(EE_PLATFORM_SDL2) || defined(EE_PLATFORM_WIN32)
     m_spCursorRenderClick = NULL;
     m_spCursor = NULL;
 
@@ -681,7 +679,7 @@ void NiSample::UpdateFrame()
 {
     NiApplication::UpdateFrame();
 
-#if defined(WIN32)
+#if defined(EE_PLATFORM_SDL2) || defined(EE_PLATFORM_WIN32)
     NiInputMouse* pkMouse = GetInputSystem()->GetMouse();
     if ((pkMouse != NULL) && (m_spCursor != NULL))
     {

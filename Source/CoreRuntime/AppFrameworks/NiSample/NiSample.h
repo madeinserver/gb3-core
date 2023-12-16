@@ -126,7 +126,7 @@ protected:
     bool m_bShowNavHelp;
     NiTObjectArray<NiUIRenderGroupPtr> m_kNavHelpRenderGroups;
 
-#if defined(WIN32)
+#if defined(EE_PLATFORM_SDL2)
     NiCursorPtr m_spCursor;
     NiCursorRenderClickPtr m_spCursorRenderClick;
 
@@ -135,7 +135,7 @@ protected:
         const char* pcCaption, void* pvExtraData = NULL);
 #endif
 
-#if defined(WIN32) || defined(_PS3)
+#if defined(EE_PLATFORM_SDL2) || defined(EE_PLATFORM_PS3)
     bool FindSampleDataFile(const char* pcFilename, char* pcFullPath);
 #endif
 

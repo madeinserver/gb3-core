@@ -17,7 +17,6 @@
 
 #if defined(NI_USE_PCH)
 
-#include <winerrordxgi_d3d10.h>
 #include <NiMainPCH.h>
 #include "NiSample.h"
 

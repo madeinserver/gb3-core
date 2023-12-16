@@ -17,22 +17,21 @@
 
 #if defined(NI_USE_PCH)
 
-#include <winerrordxgi_d3d10.h>
-
 #include <NiMainPCH.h>
 #include <NiInput.h>
 
-#include "NiAppWindow.h"
+#include EE_PLATFORM_SPECIFIC_INCLUDE(NiApplication,NiAppWindow,h)
+
 #include "NiApplication.h"
 #include "NiApplicationMetrics.h"
 #include "NiCommand.h"
 #include "NiFrameRate.h"
 #include "NiTurret.h"
 
-#if defined(WIN32)
+#if defined(EE_PLATFORM_SDL2) || defined(EE_PLATFORM_WIN32)
     #include "NiSettingsDialog.h"
     #include "NiRendererSettings.h"
-#endif //#if defined(WIN32)
+#endif //#if defined(EE_PLATFORM_SDL2) || defined(EE_PLATFORM_WIN32)
 
 #if defined(_PS3)
     #include <NiPS3Renderer.h>

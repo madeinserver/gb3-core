@@ -5,6 +5,7 @@
 // be copied or disclosed except in accordance with the terms of that
 // agreement.
 //
+//      Copyright (c) 2022-2023 Arves100/Made In Server Developers.
 //      Copyright (c) 1996-2009 Emergent Game Technologies.
 //      All Rights Reserved.
 //
@@ -29,7 +30,7 @@
 #include "NiCommand.h"
 
 // application-level classes
-#include "NiAppWindow.h"
+#include EE_PLATFORM_SPECIFIC_INCLUDE(NiApplication,NiAppWindow,h)
 
 // input devices
 #include "NiInputSystem.h"
@@ -45,9 +46,10 @@
 #include <NiUniversalTypes.h>
 #include <NiVersion.h>
 
-#if defined(WIN32)
+#if defined(EE_PLATFORM_SDL2)
 #include <NiRendererSettings.h>
-#endif //#if defined(WIN32)
+#include <SDL2/NiSDL2InputSystem.h>
+#endif //#if defined(EE_PLATFORM_SDL2)
 
 #if defined(_PS3)
 #include <NiPS3Renderer.h>
@@ -129,11 +131,9 @@ public:
     inline bool GetRendererDialog() const;
     inline void SetMultiThread(bool bMultithread);
     inline bool GetMultiThread() const;
-#if defined(WIN32)
+#if defined(EE_PLATFORM_SDL2)
     inline void SetRendererID(efd::SystemDesc::RendererID eRendererID);
     inline efd::SystemDesc::RendererID GetRendererID() const;
-    inline void SetD3D10Renderer(bool bD3D10Renderer);
-    inline bool GetD3D10Renderer() const;
     inline void SetRefRast(bool bRefRast);
     inline bool GetRefRast() const;
     inline void SetPerfHUD(bool bPerfHUD);
@@ -143,7 +143,7 @@ public:
     void SyncToRendererSettings();
     void SyncFromRendererSettings();
     static void LoadRendererSettings();
-#endif //#if defined(WIN32)
+#endif //#if defined(EE_PLATFORM_SDL2)
 
     // Frame rate
     virtual void EnableFrameRate(bool bEnable);
@@ -242,10 +242,14 @@ public:
     virtual void UpdateMetrics();
 
 
-#if defined(WIN32)
+#if defined(EE_PLATFORM_SDL2)
+    void SDLProc(SDL_Event* evt);
+#elif defined(EE_PLATFORM_WIN32)
     static LRESULT CALLBACK WinProc(HWND hWnd, UINT uiMsg, WPARAM wParam,
         LPARAM lParam);
+#endif
 
+#if defined(EE_PLATFORM_SDL2) || defined(EE_PLATFORM_WIN32)
     // windows messages
     virtual bool OnWindowResize(int iWidth, int iHeight,
         unsigned int uiSizeType, NiWindowRef pWnd);
@@ -255,7 +259,7 @@ public:
 
     static unsigned int DebugOutMessageBoxFunc(const char* pcText,
         const char* pcCaption, void* pvExtraData);
-#endif //#if defined(WIN32)
+#endif //#if defined(EE_PLATFORM_SDL2)
 
 protected:
     // Types of interesting per-frame events
@@ -359,13 +363,13 @@ protected:
     static char ms_acMediaPath[NI_MAX_PATH];
     static char ms_acTempMediaFilename[NI_MAX_PATH];
 
-#if defined(_XENON)
+#if defined(EE_PLATFORM_XBOX360)
     //  App-specific setup flags
     unsigned int m_uiSetupFlags;
     bool m_bVsync;
-#endif //#if defined(_XENON)
+#endif //#if defined(EE_PLATFORM_XBOX360)
 
-#if defined(WIN32) && !defined(_XENON)
+#if (defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_SDL2)) && !defined(EE_PLATFORM_XBOX360)
     virtual bool Process();
 
     // Runtime-setting flags
@@ -376,11 +380,15 @@ protected:
     bool m_bSWVertex;
     bool m_bNVPerfHUD;
     bool m_bExclusiveMouse;
-#else   //#if defined(WIN32) && !defined(_XENON)
+#ifdef EE_PLATFORM_SDL2
     bool m_bQuitApp;
-#endif  //#if defined(WIN32) && !defined(_XENON)
+    NiSDL2InputSystem::SDL2InputCallback m_pInputCB;
+#endif // #ifdef EE_PLATFORM_SDL2
+#else   //#if (defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_SDL2)) && !defined(EE_PLATFORM_XBOX360)
+    bool m_bQuitApp;
+#endif  //#if (defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_SDL2)) && !defined(EE_PLATFORM_XBOX360)
 
-#if defined(_PS3)
+#if defined(EE_PLATFORM_PS3)
     // Enter a render-loop that displays a message, flips the display, and
     // waits for the user to quit.  This should be used only in exceptional
     // circumstances.
@@ -392,7 +400,7 @@ protected:
 
     // Renderer init options
     NiPS3Renderer::InitOptions m_kPS3GLInitParameters;
-#endif
+#endif // #if defined(EE_PLATFORM_PS3)
 
     // culling (separate from display)
     NiVisibleArray m_kVisible;
@@ -431,60 +439,32 @@ private:
     NiApplication & operator=(const NiApplication &);
 };
 
-#if defined(WIN32)
+#if defined(EE_PLATFORM_SDL2)
 
-#ifdef EE_NIAPP_USE_DX9_RENDERER
-
-    #include <NiDX9Renderer.h>
-    #include <NiDX9RendererSetup.h>
-    #ifdef NIDX9RENDERERSETUP_IMPORT
-        #pragma comment(lib, "NiDX9RendererSetup" NI_DLL_SUFFIX ".lib")
-        #pragma comment(lib, "NiDX9Renderer" NI_DLL_SUFFIX ".lib")
-    #else // #ifdef NIDX9RENDERERSETUP_IMPORT
-        #pragma comment(lib, "NiDX9RendererSetup.lib")
-    #endif // #ifdef NIDX9RENDERERSETUP_IMPORT
-
-#endif //#ifdef EE_NIAPP_USE_DX9_RENDERER
+#ifdef EE_PLATFORM_WIN32
+    #ifdef EE_USE_DX9_RENDERER
+        #include <NiDX9Renderer.h>
+        #include <NiDX9RendererSetup.h>
+    #endif //#ifdef EE_USE_DX9_RENDERER
 
 
-#ifdef EE_NIAPP_USE_D3D10_RENDERER
+    #ifdef EE_USE_D3D10_RENDERER
+        #include <NiD3D10Renderer.h>
+        #include <NiD3D10RendererSetup.h>
+    #endif //#ifdef EE_USE_D3D10_RENDERER
 
-    #include <NiD3D10Renderer.h>
-    #include <NiD3D10RendererSetup.h>
-    #ifdef NID3D10RENDERERSETUP_IMPORT
-        #pragma comment(lib, "NiD3D10RendererSetup" NI_DLL_SUFFIX ".lib")
-        #pragma comment(lib, "NiD3D10Renderer" NI_DLL_SUFFIX ".lib")
-    #else // #ifdef NID3D10RENDERERSETUP_IMPORT
-        #pragma comment(lib, "NiD3D10RendererSetup.lib")
-    #endif // #ifdef NID3D10RENDERERSETUP_IMPORT
+    #ifdef EE_USE_D3D11_RENDERER
+        #include <ecrD3D11Renderer/D3D11Renderer.h>
+        #include <ecrD3D11RendererSetup/D3D11RendererSetup.h>
+    #endif //#ifdef EE_USE_D3D11_RENDERER
+#endif // #ifdef EE_PLATFORM_WIN32
 
-#endif //#ifdef EE_NIAPP_USE_D3D10_RENDERER
+#ifdef EE_USE_OPENGL_RENDERER
+    #include <NiOpenGLRenderer.h>
+    #include <NiOpenGLRendererSetup.h>
+#endif //#ifdef EE_USE_OPENGL_RENDERER
 
-#ifdef EE_NIAPP_USE_D3D11_RENDERER
-
-    #include <ecrD3D11Renderer/D3D11Renderer.h>
-    #include <ecrD3D11RendererSetup/D3D11RendererSetup.h>
-    #ifdef EE_ECRD3D11RENDERERSETUP_IMPORT
-        #pragma comment(lib, "ecrD3D11RendererSetup" NI_DLL_SUFFIX ".lib")
-        #pragma comment(lib, "ecrD3D11Renderer" NI_DLL_SUFFIX ".lib")
-    #else // #ifdef EE_ECRD3D11RENDERERSETUP_IMPORT
-        #pragma comment(lib, "ecrD3D11RendererSetup.lib")
-    #endif // #ifdef EE_ECRD3D11RENDERERSETUP_IMPORT
-
-#endif //#ifdef EE_NIAPP_USE_D3D11_RENDERER
-
-#ifdef EE_NIAPP_USE_BGFX_RENDERER
-    #include <ecrBGFXRenderer/BGFXRenderer.h>
-    #include <ecrBGFXRendererSetup/BGFXRendererSetup.h>
-    #ifdef EE_ECRD3D11RENDERERSETUP_IMPORT
-    #pragma comment(lib, "ecrBGFXRendererSetup" NI_DLL_SUFFIX ".lib")
-    #pragma comment(lib, "ecrBGFXRenderer" NI_DLL_SUFFIX ".lib")
-    #else // #ifdef EE_ECRBGFXRENDERERSETUP_IMPORT
-    #pragma comment(lib, "ecrBGFXRendererSetup.lib")
-    #endif // #ifdef EE_ECRBGFXRENDERERSETUP_IMPORT
-#endif
-
-#endif //#if defined(WIN32)
+#endif //#if defined(EE_PLATFORM_SDL2)
 
 #include "NiApplication.inl"
 

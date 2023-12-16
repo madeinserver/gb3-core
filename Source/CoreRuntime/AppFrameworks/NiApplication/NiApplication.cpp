@@ -188,7 +188,7 @@ bool NiApplication::MeasureTime()
         m_fCurrentTime = NiGetCurrentTimeInSec();
         float fDeltaTime = m_fCurrentTime - m_fLastTime;
 
-#if defined(WIN32)
+#if defined(EE_PLATFORM_WIN32)
         // NVPerfHUD support!
         if (m_bNVPerfHUD && fDeltaTime == 0.0f)
             return true;
@@ -720,9 +720,14 @@ void NiApplication::GetScreenshotFilename(char* pcBuffer, unsigned int pcBufferS
         NiSprintf(pcBuffer, pcBufferSize, "Screenshots_D3D11/%s_%d%s", acBlanksRemoved,
             m_uiScreenShotId, pcSuffix);
     }
+    else if (eRendererID == efd::SystemDesc::RENDERER_OPENGL)
+    {
+        NiSprintf(pcBuffer, pcBufferSize, "Screenshots_OpenGL/%s_%d%s", acBlanksRemoved,
+            m_uiScreenShotId, pcSuffix);
+    }
     else
     {
-        EE_FAIL("NiApplication::GetScreenshotFilename:  Unknown Win32 Renderer");
+        EE_FAIL("NiApplication::GetScreenshotFilename:  Unknown Renderer");
     }
 
 #else
