@@ -1,6 +1,8 @@
 efd:
     SDL2PlatformService::SetWindowIcon (EE_PLATFORM_WIN32)
 
+NiInput:
+    Missing GamePad/Joystick code
 
 Regression:
     efd::SystemDesc::GetPhysicalCoreCount is invalid
