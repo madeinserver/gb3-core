@@ -38,11 +38,11 @@ class NIINPUT_ENTRY NiInputSystem : public NiRefObject
 public:
     enum
     {
-#if defined(_XENON)
+#if defined(EE_PLATFORM_XBOX360)
         MAX_GAMEPADS    = 4
-#elif defined (_PS3)
+#elif defined (EE_PLATFORM_PS3)
         MAX_GAMEPADS    = 4
-#elif defined(_WIN32)
+#elif defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_SDL2)
         MAX_DI_GAMEPADS = 4,
         MAX_XINPUT_GAMEPADS = 4,
         MAX_GAMEPADS    = MAX_DI_GAMEPADS + MAX_XINPUT_GAMEPADS
