@@ -49,6 +49,8 @@ const char* BehaviorAPI::GetPlatformName()
     return "PS3";
 #elif defined(EE_PLATFORM_WIN32)
     return "Win32";
+#elif defined(EE_PLATFORM_MACOSX)
+    return "MacOSX";
 #elif defined(EE_PLATFORM_XBOX360)
     return "Xbox360";
 #else

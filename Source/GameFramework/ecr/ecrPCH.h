@@ -32,10 +32,13 @@
     #include <NiDX9Renderer.h>
     #include <NiD3D10Renderer.h>
     #include <ecrD3D11Renderer/D3D11Renderer.h>
+    #include <NiOpenGLRenderer.h>
 #elif defined (EE_PLATFORM_PS3)
     #include <NiPS3Renderer.h>
 #elif defined (EE_PLATFORM_LINUX)
-    #error Linux not supported by ecr!
+    #include <NiOpenGLRenderer.h>
+#elif defined (EE_PLATFORM_MACOSX)
+    #error "MacOSX does not support ecr"
 #else
     #error Unknown platform!
 #endif
