@@ -74,6 +74,7 @@ typedef HACCEL AcceleratorRef;
 typedef LPCREATESTRUCT CreateStructRef;
 typedef HMENU MenuRef;
 typedef HDC ContextRef;
+typedef HWND WindowNativeRef;
 #else
 // dummy types
 typedef void* InstanceRef;
@@ -81,6 +82,7 @@ typedef void* AcceleratorRef;
 typedef void* ContextRef;
 typedef void* MenuRef;
 typedef void* CreateStructRef;
+typedef void* WindowNativeRef;
 #endif
 
 typedef SDL_Window* WindowRef;

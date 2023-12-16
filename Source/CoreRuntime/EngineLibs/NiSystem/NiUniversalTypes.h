@@ -49,6 +49,7 @@ typedef efd::UInt64 NiUInt64;
 
 typedef efd::WindowRef NiWindowRef;
 typedef efd::StatusWindowRef NiStatusWindowRef;
+typedef efd::WindowNativeRef NiWindowNativeRef;
 
 typedef efd::ContextRef NiContextRef;
 typedef efd::OglRenderContextRef NiOglRenderContextRef;
