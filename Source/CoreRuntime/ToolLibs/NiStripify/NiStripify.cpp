@@ -24,7 +24,6 @@
 #include <NiStencilProperty.h>
 #include <NiStringExtraData.h>
 #include <NiSystem.h>
-#include <NiRoom.h>
 
 // static class data
 NiStripify::OkayCallback NiStripify::ms_pfnOkayCallback = NULL;

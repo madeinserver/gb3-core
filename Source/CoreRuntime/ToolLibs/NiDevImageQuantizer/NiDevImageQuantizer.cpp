@@ -24,18 +24,6 @@
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "ddraw.lib")
 
-#include <D3DX9.h>
-#if defined(NIDEBUG)
-    // In February 2005 SDK update, D3DX9dt.lib no longer exists
-    #if D3DX_SDK_VERSION >= 24
-        #pragma comment(lib, "D3DX9d.lib")
-    #else //#if D3DX_SDK_VERSION >= 24
-        #pragma comment(lib, "D3DX9dt.lib")
-    #endif //#if D3DX_SDK_VERSION >= 24
-#else //#if defined(NIDEBUG)
-    #pragma comment(lib, "D3DX9.lib")
-#endif //#if defined(NIDEBUG)
-
 NiImplementRTTI(NiDevImageQuantizer,NiDevImageConverter);
 
 //--------------------------------------------------------------------------------------------------

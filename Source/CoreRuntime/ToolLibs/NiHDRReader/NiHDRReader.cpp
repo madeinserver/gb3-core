@@ -18,19 +18,6 @@
 #include <NiSystem.h>
 #include <NiBinaryStream.h>
 
-#include <NiD3DDefines.h>
-
-#if defined(NIDEBUG)
-    // In February 2005 SDK update, D3DX9dt.lib no longer exists
-    #if D3DX_SDK_VERSION >= 24
-        #pragma comment(lib, "D3DX9d.lib")
-    #else //#if D3DX_SDK_VERSION >= 24
-        #pragma comment(lib, "D3DX9dt.lib")
-    #endif //#if D3DX_SDK_VERSION >= 24
-#else //#if defined(NIDEBUG)
-    #pragma comment(lib, "D3DX9.lib")
-#endif //#if defined(NIDEBUG)
-
 // NOTE:
 // As of right now, NiHDRReader always exports RGBA64 textures.  This loses
 // 3 bits of mantissa precision from full RGBA128 textures.  If for some
