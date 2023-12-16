@@ -19,7 +19,11 @@
 // recursiving include other things (which is a good thing, we don't want "-includeall" because
 // it would pull in WAY too much cruft).  This means we are forced to directly include the
 // platform specific stuff.
-#if defined( EE_PLATFORM_WIN32 )
+
+%if defined( EE_PLATFORM_SDL2 )
+%import "efd/SDL2/UniversalTypes_SDL2.h"
+
+#elif defined( EE_PLATFORM_WIN32 )
 %import "efd/Win32/UniversalTypes_Win32.h"
 
 #elif defined( EE_PLATFORM_XBOX360 )
