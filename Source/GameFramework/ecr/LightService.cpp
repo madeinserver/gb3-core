@@ -1537,9 +1537,9 @@ void LightService::SetAffectedNodeLists(bool sortAxisChanged)
             continue;
 
         // Clear the light priority queues.
-        m_PointPriorityQueue.empty();
-        m_SpotPriorityQueue.empty();
-        m_DirPriorityQueue.empty();
+        m_PointPriorityQueue = efd::priority_queue<LightPriority, efd::vector<LightPriority> >();
+        m_SpotPriorityQueue = efd::priority_queue<LightPriority, efd::vector<LightPriority> >();
+        m_DirPriorityQueue = efd::priority_queue<LightPriority, efd::vector<LightPriority> >();
 
         NiNode* pNode = pReceiverData->m_spNode;
 

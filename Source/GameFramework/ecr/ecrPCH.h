@@ -25,6 +25,7 @@
 #include <NiParticle.h>
 #include <NiCollision.h>
 
+#if 0
 // Platform specific renderer includes. Aborts if a non-supported platform is found.
 #if defined (EE_PLATFORM_XBOX360)
     #include <NiXenonRenderer.h>
@@ -41,6 +42,7 @@
     #error "MacOSX does not support ecr"
 #else
     #error Unknown platform!
+#endif
 #endif
 
 #include <egf/egfLogIDs.h>

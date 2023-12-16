@@ -24,12 +24,26 @@
 #include <NiDrawSceneUtility.h>
 #include <NiMeshCullingProcess.h>
 
-#ifdef EE_PLATFORM_WIN32
+#if defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_SDL2)
+
+#ifdef EE_USE_D3D11_RENDERER
     #include <ecrD3D11Renderer/D3D11RenderedTextureData.h>
     #include <ecrD3D11Renderer/D3D11ResourceManager.h>
+#endif
+
+#ifdef EE_USE_D3D10_RENDERER
     #include <NiD3D10RenderedTextureData.h>
     #include <NiD3D10ResourceManager.h>
+#endif
+
+#ifdef EE_USE_DX9_RENDERER
     #include <NiDX9RenderedTextureData.h>
+#endif
+
+#ifdef EE_USE_OPENGL_RENDERER
+    #include <NiOpenGLRenderedTextureData.h>
+#endif
+
 #elif defined EE_PLATFORM_XBOX360
     #include <NiD3DRendererHeaders.h>
     #include <NiXenonRenderedTextureData.h>
@@ -324,7 +338,8 @@ bool SnapshotGenerator::GenerateImage(
     }
     efd::Archive& ar = spResultsMessage->GetArchive();
 
-#ifdef EE_PLATFORM_WIN32
+#if defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_SDL2)
+#ifdef EE_USE_DX9_RENDERER
     if (pRenderer->GetRendererID() == efd::SystemDesc::RENDERER_DX9)
     {
         // Get pointer to D3D device
@@ -376,8 +391,10 @@ bool SnapshotGenerator::GenerateImage(
             pBuffer->GetBufferSize(),
             ar);
         pBuffer->Release();
-    }
-    else if (pRenderer->GetRendererID() == efd::SystemDesc::RENDERER_D3D10)
+    } else
+#endif
+#ifdef EE_USE_D3D10_RENDERER
+    if (pRenderer->GetRendererID() == efd::SystemDesc::RENDERER_D3D10)
     {
         // Get pointer to D3D resource manager
         NiD3D10Renderer* pD3D10Renderer = NiDynamicCast(NiD3D10Renderer, pRenderer);
@@ -441,8 +458,10 @@ bool SnapshotGenerator::GenerateImage(
             pBuffer->GetBufferSize(),
             ar);
         pBuffer->Release();
-    }
-    else if (pRenderer->GetRendererID() == efd::SystemDesc::RENDERER_D3D11)
+    } else
+#endif
+#ifdef EE_USE_D3D11_RENDERER
+    if (pRenderer->GetRendererID() == efd::SystemDesc::RENDERER_D3D11)
     {
         // Get pointer to D3D resource manager
         ecr::D3D11Renderer* pD3D11Renderer = NiDynamicCast(ecr::D3D11Renderer, pRenderer);
@@ -509,8 +528,13 @@ bool SnapshotGenerator::GenerateImage(
             pBuffer->GetBufferSize(),
             ar);
         pBuffer->Release();
-    }
-    else
+    } else
+#endif
+#ifdef EE_USE_OPENGL_RENDERER
+    if (pRenderer->GetRendererID() == efd::SystemDesc::RENDERER_OPENGL)
+#error "TODO: Add OpenGL snapshot code"
+    } else
+#endif
     {
         return false;
     }

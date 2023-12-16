@@ -131,7 +131,7 @@ public:
     inline bool GetRendererDialog() const;
     inline void SetMultiThread(bool bMultithread);
     inline bool GetMultiThread() const;
-#if defined(EE_PLATFORM_SDL2)
+#if defined(EE_PLATFORM_SDL2) || defined(EE_PLATFORM_WIN32)
     inline void SetRendererID(efd::SystemDesc::RendererID eRendererID);
     inline efd::SystemDesc::RendererID GetRendererID() const;
     inline void SetRefRast(bool bRefRast);
@@ -439,32 +439,27 @@ private:
     NiApplication & operator=(const NiApplication &);
 };
 
-#if defined(EE_PLATFORM_SDL2)
 
-#ifdef EE_PLATFORM_WIN32
-    #ifdef EE_USE_DX9_RENDERER
-        #include <NiDX9Renderer.h>
-        #include <NiDX9RendererSetup.h>
-    #endif //#ifdef EE_USE_DX9_RENDERER
+#ifdef EE_USE_DX9_RENDERER
+    #include <NiDX9Renderer.h>
+    #include <NiDX9RendererSetup.h>
+#endif //#ifdef EE_USE_DX9_RENDERER
 
 
-    #ifdef EE_USE_D3D10_RENDERER
-        #include <NiD3D10Renderer.h>
-        #include <NiD3D10RendererSetup.h>
-    #endif //#ifdef EE_USE_D3D10_RENDERER
+#ifdef EE_USE_D3D10_RENDERER
+    #include <NiD3D10Renderer.h>
+    #include <NiD3D10RendererSetup.h>
+#endif //#ifdef EE_USE_D3D10_RENDERER
 
-    #ifdef EE_USE_D3D11_RENDERER
-        #include <ecrD3D11Renderer/D3D11Renderer.h>
-        #include <ecrD3D11RendererSetup/D3D11RendererSetup.h>
-    #endif //#ifdef EE_USE_D3D11_RENDERER
-#endif // #ifdef EE_PLATFORM_WIN32
+#ifdef EE_USE_D3D11_RENDERER
+    #include <ecrD3D11Renderer/D3D11Renderer.h>
+    #include <ecrD3D11RendererSetup/D3D11RendererSetup.h>
+#endif //#ifdef EE_USE_D3D11_RENDERER
 
 #ifdef EE_USE_OPENGL_RENDERER
     #include <NiOpenGLRenderer.h>
     #include <NiOpenGLRendererSetup.h>
 #endif //#ifdef EE_USE_OPENGL_RENDERER
-
-#endif //#if defined(EE_PLATFORM_SDL2)
 
 #include "NiApplication.inl"
 

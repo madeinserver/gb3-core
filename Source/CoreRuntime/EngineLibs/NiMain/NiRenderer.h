@@ -489,12 +489,23 @@ public:
     // Callbacks for improved response to D3D device reset
     typedef bool (*RESETNOTIFYFUNC)(bool bBeforeReset, void* pvData);
 
+    typedef bool (*LOSTDEVICENOTIFYFUNC)(void* pvData);
+
     // this are used for D3D9, but I prefer exposing them than depending on Dx9 renderer
+    virtual unsigned int AddLostDeviceNotificationFunc(
+        LOSTDEVICENOTIFYFUNC pfnNotify,
+        void* pvData) = 0;
+    virtual bool RemoveLostDeviceNotificationFunc(
+        LOSTDEVICENOTIFYFUNC pfnNotify) = 0;
+    virtual bool RemoveLostDeviceNotificationFunc(unsigned int uiIndex) = 0;
+    virtual void RemoveAllLostDeviceNotificationFuncs() = 0;
     virtual unsigned int AddResetNotificationFunc(RESETNOTIFYFUNC pfnNotify,
         void* pvData) = 0;
     virtual bool RemoveResetNotificationFunc(RESETNOTIFYFUNC pfnNotify) = 0;
     virtual bool RemoveResetNotificationFunc(unsigned int uiIndex) = 0;
     virtual void RemoveAllResetNotificationFuncs() = 0;
+    virtual bool LostDeviceRestore() = 0;
+    // end of DX9 import functions
 
     // Message/Warning/Error reporting functions
     static void Message(const char* pcFormat, ...);

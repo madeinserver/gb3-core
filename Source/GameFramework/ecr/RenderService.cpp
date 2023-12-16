@@ -24,7 +24,9 @@
 #include <efd/IConfigManager.h>
 #include <efd/PathUtils.h>
 
-#ifdef EE_PLATFORM_WIN32
+#ifdef EE_PLATFORM_SDL2
+#include <efd/SDL2/SDL2PlatformService.h>
+#elif defined(EE_PLATFORM_WIN32)
 #include <efd/Win32/Win32PlatformService.h>
 #endif
 
@@ -73,7 +75,11 @@ SyncResult RenderService::OnPreInit(efd::IDependencyRegistrar* pDependencyRegist
 {
     EE_ASSERT(!m_spRenderer);
 
-#ifdef EE_PLATFORM_WIN32
+#ifdef EE_PLATFORM_SDL2
+    // If we're on Win32, we need the platform service initialized so that we can get the window
+    // handle.
+    pDependencyRegistrar->AddDependency<SDL2PlatformService>(sdf_Optional);
+#elif defined(EE_PLATFORM_WIN32)
     // If we're on Win32, we need the platform service initialized so that we can get the window
     // handle.
     pDependencyRegistrar->AddDependency<Win32PlatformService>(sdf_Optional);
