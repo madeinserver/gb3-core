@@ -16,11 +16,12 @@
 #include "NiBaseRendererDesc.h"
 #include "NiSettingsDialogResource.hrc"
 #include "NiSettingsDialog.h"
+#include <SDL_syswm.h>
 
 //------------------------------------------------------------------------------------------------
 // Functions to create dialog and initialize controls in it
 //------------------------------------------------------------------------------------------------
-NiWindowRef NiBaseRendererOptionsView::InitDialog(NiWindowRef pParentWnd)
+NiWindowNativeRef NiBaseRendererOptionsView::InitDialog(NiWindowNativeRef pParentWnd)
 {
     LONG_PTR pkTemp = GetWindowLongPtr(pParentWnd, GWL_HINSTANCE);
     NiInstanceRef pInstance = (NiInstanceRef)pkTemp;
@@ -69,7 +70,7 @@ NiWindowRef NiBaseRendererOptionsView::InitDialog(NiWindowRef pParentWnd)
     RECT kRect;
     RECT kAdvRect;
     GetWindowRect(m_pDlgHandle, &kRect);
-    NiWindowRef pAdvGroup = GetDlgItem(m_pDlgHandle, IDC_ADVANCED_GROUP);
+    HWND pAdvGroup = GetDlgItem(m_pDlgHandle, IDC_ADVANCED_GROUP);
     GetWindowRect(pAdvGroup, &kAdvRect);
     m_uiAdvancedHeight = kAdvRect.bottom - kRect.top;
     m_uiBasicHeight = kAdvRect.top - kRect.top;
@@ -329,7 +330,7 @@ unsigned int NiBaseRendererOptionsView::SetAdvancedHeight()
 // Helper function, that fills a combo box from array of strings
 //------------------------------------------------------------------------------------------------
 void NiBaseRendererOptionsView::FillComboboxFromArray(
-    NiWindowRef pWnd,
+    NiWindowNativeRef pWnd,
     int iControlId,
     NiTObjectArray<NiFixedString>& kList,
     unsigned int uiCurSel)
@@ -742,7 +743,7 @@ bool NiBaseRendererOptionsView::ChangeDSFormat()
 // Window messages processing functions
 //------------------------------------------------------------------------------------------------
 bool NiBaseRendererOptionsView::ProcessCommand(
-    NiWindowRef,
+    NiWindowNativeRef,
     WORD wID,
     WORD wNotifyCode)
 {
@@ -836,7 +837,7 @@ BOOL CALLBACK NiBaseRendererOptionsView::RendererOptionsViewWndProc(
         // corresponding OptionsView which controls given dialog.
         WORD wID = LOWORD(wParam);
         WORD wNotifyCode = HIWORD(wParam);
-        NiWindowRef pDlgHandle = (NiWindowRef)lParam;
+        NiWindowNativeRef pDlgHandle = (NiWindowNativeRef)lParam;
 
         if (!pkOptionsView)
             return FALSE;

@@ -28,8 +28,8 @@ public:
     virtual ~NiRendererTabController();
 
     // Creates and initializes a dialog
-    virtual NiWindowRef InitDialog(NiRendererSettings* pkSettings,
-        NiWindowRef pParentWnd);
+    virtual NiWindowNativeRef InitDialog(NiRendererSettings* pkSettings,
+        NiWindowNativeRef pParentWnd);
 
     // Returns name of a tab
     virtual char* GetCaption();
@@ -42,7 +42,7 @@ protected:
     NiTPrimitiveArray<NiBaseRendererOptionsView*> m_kViewArray;
     unsigned int m_uiCurrentViewIdx;
     unsigned int m_uiChildDlgOffset;
-    NiWindowRef m_pDlgHandle;
+    NiWindowNativeRef m_pDlgHandle;
 
     // NiXXXOptionsView's creating / initializing / deleting
     bool CreateOptionsViews(NiRendererSettings* pkSettings);

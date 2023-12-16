@@ -27,15 +27,20 @@ const char* NiRendererSettings::ms_pcScreenHeight = "ScreenHeight";
 const char* NiRendererSettings::ms_pcMinScreenWidth = "MinScreenWidth";
 const char* NiRendererSettings::ms_pcMinScreenHeight = "MinScreenHeight";
 const char* NiRendererSettings::ms_pcVertexProcessing = "VertexProcessing";
+#ifdef EE_USE_DX9_RENDERER
 const char* NiRendererSettings::ms_pcDX9RenderTargetMode = "DX9RenderTargetMode";
 const char* NiRendererSettings::ms_pcDX9DepthSurfaceMode = "DX9DepthSurfaceMode";
 const char* NiRendererSettings::ms_pcDX9FrameBufferMode = "DX9FrameBufferMode";
+#endif
+#ifdef EE_USE_D3D10_RENDERER
 const char* NiRendererSettings::ms_pcD3D10OutputIdx = "D3D10OutputIdx";
 const char* NiRendererSettings::ms_pcD3D10MultisampleCount = "D3D10MultisampleCount";
 const char* NiRendererSettings::ms_pcD3D10MultisampleQuality = "D3D10MultisampleQuality";
 const char* NiRendererSettings::ms_pcD3D10DSFormat = "D3D10DSFormat";
 const char* NiRendererSettings::ms_pcD3D10RTFormat = "D3D10RTFormat";
 const char* NiRendererSettings::ms_pcD3D10Renderer = "UseD3D10Renderer";
+#endif
+#ifdef EE_USE_D3D11_RENDERER
 const char* NiRendererSettings::ms_pcD3D11OutputIdx = "D3D11OutputIdx";
 const char* NiRendererSettings::ms_pcD3D11MultisampleCount = "D3D11MultisampleCount";
 const char* NiRendererSettings::ms_pcD3D11MultisampleQuality = "D3D11MultisampleQuality";
@@ -47,6 +52,7 @@ const char* NiRendererSettings::ms_pcD3D11FeatureLevel9_3 = "D3D11FeatureLevel9_
 const char* NiRendererSettings::ms_pcD3D11FeatureLevel10_0 = "D3D11FeatureLevel10_0";
 const char* NiRendererSettings::ms_pcD3D11FeatureLevel10_1 = "D3D11FeatureLevel10_1";
 const char* NiRendererSettings::ms_pcD3D11FeatureLevel11_0 = "D3D11FeatureLevel11_0";
+#endif
 const char* NiRendererSettings::ms_pcRendererID = "RendererID";
 const char* NiRendererSettings::ms_pcFullscreen = "Fullscreen";
 const char* NiRendererSettings::ms_pcNVPerfHUD = "NVPerfHUD";
@@ -57,10 +63,6 @@ const char* NiRendererSettings::ms_pcVSync = "VSync";
 const char* NiRendererSettings::ms_pcMultiThread = "MultiThread";
 const char* NiRendererSettings::ms_pcRendererDialog = "RendererDialog";
 const char* NiRendererSettings::ms_pcSaveSettings = "SaveSettings";
-const char* NiRendererSettings::ms_pcBGFXBackend = "BGFXBackend";
-const char* NiRendererSettings::ms_pcBGFXMSAA = "BGFXMSAA";
-const char* NiRendererSettings::ms_pcBGFXRTFormat = "BGFXRTFormat";
-const char* NiRendererSettings::ms_pcBGFXDSFormat = "BGFXDSFormat";
 
 //--------------------------------------------------------------------------------------------------
 // Constructor - here all settings are initialized to default values
@@ -85,16 +87,21 @@ NiRendererSettings::NiRendererSettings() :
     m_bSaveSettings(false),
     m_uiAdapterIdx(0),
     m_uiNVPerfHUDAdapterIdx(0),
-    m_eVertexProcessing(VERTEX_HARDWARE),
-    m_eDX9RTFormat(NiDX9Renderer::FBFMT_X8R8G8B8),
+    m_eVertexProcessing(VERTEX_HARDWARE)
+#ifdef EE_USE_DX9_RENDERER
+    ,m_eDX9RTFormat(NiDX9Renderer::FBFMT_X8R8G8B8),
     m_eDX9DSFormat(NiDX9Renderer::DSFMT_D24S8),
-    m_eDX9FBFormat(NiDX9Renderer::FBMODE_DEFAULT),
-    m_uiD3D10OutputIdx(0),
+    m_eDX9FBFormat(NiDX9Renderer::FBMODE_DEFAULT)
+#endif
+#ifdef EE_USE_D3D10_RENDERER
+    ,m_uiD3D10OutputIdx(0),
     m_uiD3D10MultisampleCount(1),
     m_uiD3D10MultisampleQuality(0),
     m_eD3D10DSFormat(DXGI_FORMAT_D24_UNORM_S8_UINT),
-    m_eD3D10RTFormat(DXGI_FORMAT_R8G8B8A8_UNORM),
-    m_uiD3D11OutputIdx(0),
+    m_eD3D10RTFormat(DXGI_FORMAT_R8G8B8A8_UNORM)
+#endif
+#ifdef EE_USE_D3D11_RENDERER
+    ,m_uiD3D11OutputIdx(0),
     m_uiD3D11MultisampleCount(1),
     m_uiD3D11MultisampleQuality(0),
     m_eD3D11DSFormat(DXGI_FORMAT_D24_UNORM_S8_UINT),
@@ -104,12 +111,8 @@ NiRendererSettings::NiRendererSettings() :
     m_bD3D11FeatureLevel9_3(true),
     m_bD3D11FeatureLevel10_0(true),
     m_bD3D11FeatureLevel10_1(true),
-    m_bD3D11FeatureLevel11_0(true),
-    // BGFX------
-    m_eBGFXRenderType(ecr::BGFXRenderType::RENDER_TYPE_DIRECT3D9),
-    m_eBGFXDSFormat(bgfx::TextureFormat::D24S8),
-    m_eBGFXRTFormat(bgfx::TextureFormat::RGBA8U),
-    m_nBGFXMSAA(0)
+    m_bD3D11FeatureLevel11_0(true)
+#endif
 {
 
 }
@@ -168,16 +171,19 @@ void NiRendererSettings::LoadSettings(const char* pcFileName)
     ReadUInt(pcFileName, ms_pcMinScreenHeight, m_uiMinScreenHeight);
     ReadUInt(pcFileName, ms_pcVertexProcessing, (unsigned int&)(m_eVertexProcessing));
 
+#ifdef EE_USE_DX9_RENDERER
     ReadUInt(pcFileName, ms_pcDX9RenderTargetMode, (unsigned int&)(m_eDX9RTFormat));
     ReadUInt(pcFileName, ms_pcDX9DepthSurfaceMode, (unsigned int&)(m_eDX9DSFormat));
     ReadUInt(pcFileName, ms_pcDX9FrameBufferMode, (unsigned int&)(m_eDX9FBFormat));
-    
+#endif
+#ifdef EE_USE_D3D10_RENDERER
     ReadUInt(pcFileName, ms_pcD3D10OutputIdx, m_uiD3D10OutputIdx);
     ReadUInt(pcFileName, ms_pcD3D10MultisampleCount, m_uiD3D10MultisampleCount);
     ReadUInt(pcFileName, ms_pcD3D10MultisampleQuality, m_uiD3D10MultisampleQuality);
     ReadUInt(pcFileName, ms_pcD3D10DSFormat, (unsigned int&)(m_eD3D10DSFormat));
     ReadUInt(pcFileName, ms_pcD3D10RTFormat, (unsigned int&)(m_eD3D10RTFormat));
-    
+#endif
+#ifdef EE_USE_D3D11_RENDERER
     ReadUInt(pcFileName, ms_pcD3D11OutputIdx, m_uiD3D11OutputIdx);
     ReadUInt(pcFileName, ms_pcD3D11MultisampleCount, m_uiD3D11MultisampleCount);
     ReadUInt(pcFileName, ms_pcD3D11MultisampleQuality, m_uiD3D11MultisampleQuality);
@@ -189,12 +195,16 @@ void NiRendererSettings::LoadSettings(const char* pcFileName)
     ReadBool(pcFileName, ms_pcD3D11FeatureLevel10_0, m_bD3D11FeatureLevel10_0);
     ReadBool(pcFileName, ms_pcD3D11FeatureLevel10_1, m_bD3D11FeatureLevel10_1);
     ReadBool(pcFileName, ms_pcD3D11FeatureLevel11_0, m_bD3D11FeatureLevel11_0);
+#endif
 
     // Support deprecated key in old settings files
     // Value from old key will only be used if new key not found
     bool bD3D10Renderer = false;
+
+#ifdef EE_USE_D3D10_RENDERER
     ReadBool(pcFileName, ms_pcD3D10Renderer, bD3D10Renderer);
-    
+#endif
+
     efd::SystemDesc::RendererID eInitialValue = m_eRendererID;
     m_eRendererID = efd::SystemDesc::RENDERER_COUNT;
     ReadUInt(pcFileName, ms_pcRendererID, (unsigned int&)(m_eRendererID));
@@ -218,16 +228,6 @@ void NiRendererSettings::LoadSettings(const char* pcFileName)
     ReadBool(pcFileName, ms_pcMultiThread, m_bMultiThread);
     ReadBool(pcFileName, ms_pcRendererDialog, m_bRendererDialog);
 
-    // BGFX ----
-    ReadUInt(pcFileName, ms_pcBGFXBackend, (unsigned int&)m_eBGFXRenderType);
-    ReadUInt(pcFileName, ms_pcBGFXMSAA, (unsigned int&)m_nBGFXMSAA);
-    ReadUInt(pcFileName, ms_pcBGFXRTFormat, (unsigned int&)m_eBGFXRTFormat);
-    ReadUInt(pcFileName, ms_pcBGFXDSFormat, (unsigned int&)m_eBGFXDSFormat);
-    if (m_eBGFXRenderType == ecr::BGFXRenderType::RENDER_COUNT)
-    {
-        m_eBGFXRenderType = ecr::BGFXRenderType::RENDER_TYPE_DIRECT3D9;
-    }
-
     // Don't read SaveSettings from file - it always defaults to false.
     m_bSaveSettings = false;
 }
@@ -241,16 +241,19 @@ void NiRendererSettings::SaveSettings(const char* pcFileName)
     WriteUInt(pcFileName, ms_pcMinScreenHeight, m_uiMinScreenHeight);
     WriteUInt(pcFileName, ms_pcVertexProcessing, m_eVertexProcessing);
     
+#ifdef EE_USE_DX9_RENDERER
     WriteUInt(pcFileName, ms_pcDX9RenderTargetMode, m_eDX9RTFormat);
     WriteUInt(pcFileName, ms_pcDX9DepthSurfaceMode, m_eDX9DSFormat);
     WriteUInt(pcFileName, ms_pcDX9FrameBufferMode, m_eDX9FBFormat);
-    
+#endif
+#ifdef EE_USE_D3D10_RENDERER
     WriteUInt(pcFileName, ms_pcD3D10OutputIdx, m_uiD3D10OutputIdx);
     WriteUInt(pcFileName, ms_pcD3D10MultisampleCount, m_uiD3D10MultisampleCount);
     WriteUInt(pcFileName, ms_pcD3D10MultisampleQuality, m_uiD3D10MultisampleQuality);
     WriteUInt(pcFileName, ms_pcD3D10DSFormat, m_eD3D10DSFormat);
     WriteUInt(pcFileName, ms_pcD3D10RTFormat, m_eD3D10RTFormat);
-    
+#endif
+#ifdef EE_USE_D3D11_RENDERER
     WriteUInt(pcFileName, ms_pcD3D11OutputIdx, m_uiD3D11OutputIdx);
     WriteUInt(pcFileName, ms_pcD3D11MultisampleCount, m_uiD3D11MultisampleCount);
     WriteUInt(pcFileName, ms_pcD3D11MultisampleQuality, m_uiD3D11MultisampleQuality);
@@ -262,7 +265,7 @@ void NiRendererSettings::SaveSettings(const char* pcFileName)
     WriteBool(pcFileName, ms_pcD3D11FeatureLevel10_0, m_bD3D11FeatureLevel10_0);
     WriteBool(pcFileName, ms_pcD3D11FeatureLevel10_1, m_bD3D11FeatureLevel10_1);
     WriteBool(pcFileName, ms_pcD3D11FeatureLevel11_0, m_bD3D11FeatureLevel11_0);
-
+#endif
     WriteUInt(pcFileName, ms_pcRendererID, m_eRendererID);
     WriteBool(pcFileName, ms_pcFullscreen, m_bFullscreen);
     WriteBool(pcFileName, ms_pcNVPerfHUD, m_bNVPerfHUD);
@@ -272,12 +275,6 @@ void NiRendererSettings::SaveSettings(const char* pcFileName)
     WriteBool(pcFileName, ms_pcVSync, m_bVSync);
     WriteBool(pcFileName, ms_pcMultiThread, m_bMultiThread);
     WriteBool(pcFileName, ms_pcRendererDialog, m_bRendererDialog);
-
-    // BGFX ----
-    WriteUInt(pcFileName, ms_pcBGFXBackend, m_eBGFXRenderType);
-    WriteUInt(pcFileName, ms_pcBGFXMSAA, m_nBGFXMSAA);
-    WriteUInt(pcFileName, ms_pcBGFXRTFormat, m_eBGFXRTFormat);
-    WriteUInt(pcFileName, ms_pcBGFXDSFormat, m_eBGFXDSFormat);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -297,17 +294,19 @@ void NiRendererSettings::LoadFromConfigManager(IConfigManager* pkConfigManager)
     ReadConfig(pkSection, ms_pcMinScreenWidth, m_uiMinScreenWidth);
     ReadConfig(pkSection, ms_pcMinScreenHeight, m_uiMinScreenHeight);
     ReadConfig(pkSection, ms_pcVertexProcessing, (unsigned int&)(m_eVertexProcessing));
-    
+#ifdef EE_USE_DX9_RENDERER
     ReadConfig(pkSection, ms_pcDX9RenderTargetMode, (unsigned int&)(m_eDX9RTFormat));
     ReadConfig(pkSection, ms_pcDX9DepthSurfaceMode, (unsigned int&)(m_eDX9DSFormat));
     ReadConfig(pkSection, ms_pcDX9FrameBufferMode, (unsigned int&)(m_eDX9FBFormat));
-    
+#endif
+#ifdef EE_USE_D3D10_RENDERER
     ReadConfig(pkSection, ms_pcD3D10OutputIdx, m_uiD3D10OutputIdx);
     ReadConfig(pkSection, ms_pcD3D10MultisampleCount, m_uiD3D10MultisampleCount);
     ReadConfig(pkSection, ms_pcD3D10MultisampleQuality, m_uiD3D10MultisampleQuality);
     ReadConfig(pkSection, ms_pcD3D10DSFormat, (unsigned int&)(m_eD3D10DSFormat));
     ReadConfig(pkSection, ms_pcD3D10RTFormat, (unsigned int&)(m_eD3D10RTFormat));
-    
+#endif
+#ifdef EE_USE_D3D11_RENDERER
     ReadConfig(pkSection, ms_pcD3D11OutputIdx, m_uiD3D11OutputIdx);
     ReadConfig(pkSection, ms_pcD3D11MultisampleCount, m_uiD3D11MultisampleCount);
     ReadConfig(pkSection, ms_pcD3D11MultisampleQuality, m_uiD3D11MultisampleQuality);
@@ -319,11 +318,13 @@ void NiRendererSettings::LoadFromConfigManager(IConfigManager* pkConfigManager)
     ReadConfig(pkSection, ms_pcD3D11FeatureLevel10_0, m_bD3D11FeatureLevel10_0);
     ReadConfig(pkSection, ms_pcD3D11FeatureLevel10_1, m_bD3D11FeatureLevel10_1);
     ReadConfig(pkSection, ms_pcD3D11FeatureLevel11_0, m_bD3D11FeatureLevel11_0);
-
+#endif
     // Support deprecated key in old settings files
     // Value from old key will only be used if new key not found
     bool bD3D10Renderer = false;
+#ifdef EE_USE_D3D10_RENDERER
     ReadConfig(pkSection, ms_pcD3D10Renderer, bD3D10Renderer);
+#endif
 
     if (!ReadConfig(pkSection, ms_pcRendererID, (unsigned int&)(m_eRendererID)))
     {
@@ -344,16 +345,6 @@ void NiRendererSettings::LoadFromConfigManager(IConfigManager* pkConfigManager)
     ReadConfig(pkSection, ms_pcVSync, m_bVSync);
     ReadConfig(pkSection, ms_pcMultiThread, m_bMultiThread);
     ReadConfig(pkSection, ms_pcRendererDialog, m_bRendererDialog);
-
-    // BGFX-----
-    ReadConfig(pkSection, ms_pcBGFXBackend, (unsigned int&)(m_eBGFXRenderType));
-    ReadConfig(pkSection, ms_pcBGFXMSAA, m_nBGFXMSAA);
-    ReadConfig(pkSection, ms_pcBGFXRTFormat, (unsigned int&)m_eBGFXRTFormat);
-    ReadConfig(pkSection, ms_pcBGFXDSFormat, (unsigned int&)m_eBGFXDSFormat);
-    if (m_eBGFXRenderType == ecr::BGFXRenderType::RENDER_COUNT)
-    {
-        m_eBGFXRenderType = ecr::BGFXRenderType::RENDER_TYPE_DIRECT3D9;
-    }
 
     // Don't read SaveSettings from file - it always defaults to false.
     m_bSaveSettings = false;

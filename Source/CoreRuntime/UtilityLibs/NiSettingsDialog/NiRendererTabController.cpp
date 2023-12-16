@@ -78,7 +78,7 @@ bool NiRendererTabController::CreateOptionsViews(
 //--------------------------------------------------------------------------------------------------
 bool NiRendererTabController::InitOptionsView(NiBaseRendererOptionsView* pkOV)
 {
-    NiWindowRef pDlg = pkOV->InitDialog(m_pDlgHandle);
+    NiWindowNativeRef pDlg = pkOV->InitDialog(m_pDlgHandle);
     if (pDlg == NULL)
         return false;
 
@@ -104,9 +104,9 @@ void NiRendererTabController::DeleteOptionsViews()
 //--------------------------------------------------------------------------------------------------
 // Functions to create dialog and initialize controls
 //--------------------------------------------------------------------------------------------------
-NiWindowRef NiRendererTabController::InitDialog(
+NiWindowNativeRef NiRendererTabController::InitDialog(
     NiRendererSettings* pkSettings,
-    NiWindowRef pParentWnd)
+    NiWindowNativeRef pParentWnd)
 {
     LONG_PTR pkTemp = GetWindowLongPtr(pParentWnd, GWL_HINSTANCE);
     NiInstanceRef pInstance = (NiInstanceRef)pkTemp;
@@ -153,7 +153,7 @@ NiWindowRef NiRendererTabController::InitDialog(
         return NULL;
     }
 
-    NiWindowRef pRendererCombo =
+    NiWindowNativeRef pRendererCombo =
         GetDlgItem(m_pDlgHandle, IDC_RENDERER_SEL_COMBO);
 
     // Save bottom point of renderer selection combo for child dlg repos

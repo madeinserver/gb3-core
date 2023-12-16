@@ -50,7 +50,7 @@ bool NiSettingsDialog::AddTabController(NiBaseTabController* pkTabCtrl)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool NiSettingsDialog::CreateInternalTabControllers(NiWindowRef)
+bool NiSettingsDialog::CreateInternalTabControllers(NiWindowNativeRef)
 {
     NiBaseTabController* pkTC = NiNew NiRendererTabController();
     if (pkTC)
@@ -64,14 +64,14 @@ bool NiSettingsDialog::CreateInternalTabControllers(NiWindowRef)
 }
 
 //--------------------------------------------------------------------------------------------------
-NiWindowRef NiSettingsDialog::InitTabController(unsigned int uiIdx)
+NiWindowNativeRef NiSettingsDialog::InitTabController(unsigned int uiIdx)
 {
     NiBaseTabController* pkTabControl = m_kTabArray[uiIdx];
     if (pkTabControl == NULL)
         return NULL;
 
     // Create child dialog
-    NiWindowRef pChildDlg = pkTabControl->InitDialog(m_pkSettings,
+    NiWindowNativeRef pChildDlg = pkTabControl->InitDialog(m_pkSettings,
         m_pDlgHandle);
     if (pChildDlg == NULL)
         return NULL;
@@ -95,7 +95,7 @@ NiWindowRef NiSettingsDialog::InitTabController(unsigned int uiIdx)
     // Reposition tab control dialog
     RECT kTabRect;
     POINT kPoint;
-    NiWindowRef pTab = GetDlgItem(m_pDlgHandle, IDC_SETTINGSTAB);
+    NiWindowNativeRef pTab = GetDlgItem(m_pDlgHandle, IDC_SETTINGSTAB);
     GetWindowRect(pTab, &kTabRect);
     TabCtrl_AdjustRect(pTab, FALSE, &kTabRect);
     kPoint.x = kTabRect.left;
@@ -118,7 +118,7 @@ void NiSettingsDialog::DeleteTabControllers()
 //--------------------------------------------------------------------------------------------------
 // Functions to create dialog, show it and initialize its controls
 //--------------------------------------------------------------------------------------------------
-bool NiSettingsDialog::InitDialog(NiInstanceRef pInstance, NiWindowRef pParentWnd /* = NULL */)
+bool NiSettingsDialog::InitDialog(NiInstanceRef pInstance, NiWindowNativeRef pParentWnd /* = NULL */)
 {
     SetLastError(0);
     m_pDlgHandle = CreateDialog(
@@ -191,10 +191,10 @@ bool NiSettingsDialog::InitDialogControls()
         0);
 
     // Init tabs and child dialogs, create tabcontrollers
-    NiWindowRef pFirstTabDlg = NULL;
+    NiWindowNativeRef pFirstTabDlg = NULL;
     for (unsigned int i = 0; i < m_kTabArray.GetSize(); i++)
     {
-        NiWindowRef pChildDlg = InitTabController(i);
+        NiWindowNativeRef pChildDlg = InitTabController(i);
 
         if (pChildDlg == NULL)
             return false;
@@ -241,7 +241,7 @@ bool NiSettingsDialog::InitDialogControls()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool NiSettingsDialog::ShowDialog(NiWindowRef pWnd, NiAcceleratorRef pAccel)
+bool NiSettingsDialog::ShowDialog(NiWindowNativeRef pWnd, NiAcceleratorRef pAccel)
 {
     // Exit if InitDialog() was not called or fails
     if (!m_bInitialized)
@@ -318,7 +318,7 @@ void NiSettingsDialog::RepositionControl(
     int iDeltaHeight)
 {
     // move control up or down by iDeltaHeight pixels
-    NiWindowRef pWnd = GetDlgItem(m_pDlgHandle, iControl);
+    NiWindowNativeRef pWnd = GetDlgItem(m_pDlgHandle, iControl);
     RECT kRect;
     POINT kPoint;
     GetWindowRect(pWnd, &kRect);
@@ -358,7 +358,7 @@ void NiSettingsDialog::ChangeSize()
 
     RECT kTabRect;
     RECT kWindowRect;
-    NiWindowRef pTab = GetDlgItem(m_pDlgHandle, IDC_SETTINGSTAB);
+    NiWindowNativeRef pTab = GetDlgItem(m_pDlgHandle, IDC_SETTINGSTAB);
     GetWindowRect(pTab, &kTabRect);
     GetWindowRect(m_pDlgHandle, &kWindowRect);
     unsigned int uiOldTabHeight = kTabRect.bottom - kTabRect.top;
@@ -519,7 +519,7 @@ void NiSettingsDialog::DestroyDialog()
 // Window messages processing functions
 //--------------------------------------------------------------------------------------------------
 bool NiSettingsDialog::ProcessCommand(
-    NiWindowRef,
+    NiWindowNativeRef,
     WORD wID,
     WORD)
 {
@@ -561,7 +561,7 @@ BOOL CALLBACK NiSettingsDialog::SettingsWndProc(
 
     WORD wID = LOWORD(wParam);
     WORD wNotifyCode = HIWORD(wParam);
-    NiWindowRef pDlgHandle = (NiWindowRef)lParam;
+    NiWindowNativeRef pDlgHandle = (NiWindowNativeRef)lParam;
 
     switch (uiMsg)
     {

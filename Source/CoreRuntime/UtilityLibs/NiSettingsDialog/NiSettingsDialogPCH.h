@@ -17,7 +17,9 @@
 
 #if defined(NI_USE_PCH)
 
-#include <winerrordxgi_d3d10.h>
+#include <NiSystem.h>
+#include <NiRenderer.h>
+#include <efd/SystemDesc.h>
 
 #include "NiSettingsDialogLibType.h"
 #include "NiBaseRendererDesc.h"
@@ -27,6 +29,8 @@
 #include "NiRendererSettings.h"
 #include "NiRendererTabController.h"
 #include "NiSettingsDialog.h"
+
+
 
 #endif //#if defined(NI_USE_PCH)
 

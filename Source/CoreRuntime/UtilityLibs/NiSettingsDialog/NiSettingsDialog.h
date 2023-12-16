@@ -32,16 +32,16 @@ public:
     bool AddTabController(NiBaseTabController* pkTabCtrl);
 
     // Initialize the dialog. Return code must be checked.
-    bool InitDialog(NiInstanceRef pInstance, NiWindowRef pParentWnd = NULL);
+    bool InitDialog(NiInstanceRef pInstance, NiWindowNativeRef pParentWnd = NULL);
 
     // Show dialog. Must be called after InitDialog().
-    bool ShowDialog(NiWindowRef pWnd, NiAcceleratorRef pAccel);
+    bool ShowDialog(NiWindowNativeRef pWnd, NiAcceleratorRef pAccel);
 
     // Show messagebox with info about error, returned by GetLastError()
     static void ReportWinAPIError(DWORD dwErrorCode, char* pcErrorText);
 
 protected:
-    NiWindowRef m_pDlgHandle;
+    NiWindowNativeRef m_pDlgHandle;
     NiTPrimitiveArray<NiBaseTabController*> m_kTabArray;
     NiRendererSettings* m_pkSettings;
     bool m_bViewAdvanced;
@@ -51,9 +51,9 @@ protected:
     void DestroyDialog();
 
     // Create always present (Renderer) NiXXXTabController
-    bool CreateInternalTabControllers(NiWindowRef pDlgHandle);
+    bool CreateInternalTabControllers(NiWindowNativeRef pDlgHandle);
     // Initialize / delete tab controller(s)
-    NiWindowRef InitTabController(unsigned int uiIdx);
+    NiWindowNativeRef InitTabController(unsigned int uiIdx);
     void DeleteTabControllers();
 
     // Center window on the screen
@@ -74,7 +74,7 @@ protected:
     void DeactivateTab(unsigned int uiTabIdx);
 
     // Message processing functions
-    bool ProcessCommand(NiWindowRef pDlgHandle, WORD wID, WORD wNotifyCode);
+    bool ProcessCommand(NiWindowNativeRef pDlgHandle, WORD wID, WORD wNotifyCode);
     static BOOL CALLBACK SettingsWndProc(
         HWND pDlg,
         UINT uiMsg,

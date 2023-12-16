@@ -5,7 +5,7 @@
 // be copied or disclosed except in accordance with the terms of that
 // agreement.
 //
-//      Copyright (c) 2022 Arves100/Made In Server Developers.
+//      Copyright (c) 2022-2023 Arves100/Made In Server Developers.
 //      Copyright (c) 1996-2009 Emergent Game Technologies.
 //      All Rights Reserved.
 //
@@ -18,13 +18,32 @@
 
 #include "NiSettingsDialogLibType.h"
 #include <NiMemObject.h>
-#include <NiDX9SystemDesc.h>
-#include <NiD3D10SystemDesc.h>
-#include <ecrBGFXRenderer/BGFXSystemDesc.h>
+#include <efd/SystemDesc.h>
 
+#ifdef EE_USE_DX9_RENDERER
+#include <NiDX9SystemDesc.h>
+#endif
+
+#ifdef EE_USE_D3D10_RENDERER
+#include <NiD3D10SystemDesc.h>
+#endif
+
+#ifdef EE_USE_OPENGL_RENDERER
+#include <NiOpenGLSystemDesc.h>
+#endif
+
+#ifdef EE_USE_DX9_RENDERER
 class NiDX9RendererDesc;
+#endif
+#ifdef EE_USE_D3D10_RENDERER
 class NiD3D10RendererDesc;
+#endif
+#ifdef EE_USE_D3D11_RENDERER
 class NiD3D11RendererDesc;
+#endif
+#ifdef EE_NIAPP_USE_OPENGL_RENDERER
+class NiOpenGLRendererDesc;
+#endif
 
 namespace efd
 {
@@ -70,17 +89,20 @@ public:
 
     VertexProcessing m_eVertexProcessing;
 
+#ifdef EE_USE_DX9_RENDERER
     NiDX9Renderer::FrameBufferFormat m_eDX9RTFormat;
     NiDX9Renderer::DepthStencilFormat m_eDX9DSFormat;
     NiDX9Renderer::FramebufferMode m_eDX9FBFormat;
-
+#endif
+#ifdef EE_USE_D3D10_RENDERER
     unsigned int m_uiD3D10OutputIdx;
     unsigned int m_uiD3D10MultisampleCount;
     unsigned int m_uiD3D10MultisampleQuality;
     DXGI_FORMAT m_eD3D10DSFormat;
     DXGI_FORMAT m_eD3D10RTFormat;
     DXGI_RATIONAL m_kD3D10Refresh;
-
+#endif
+#ifdef EE_USE_D3D11_RENDERER
     unsigned int m_uiD3D11OutputIdx;
     unsigned int m_uiD3D11MultisampleCount;
     unsigned int m_uiD3D11MultisampleQuality;
@@ -93,12 +115,7 @@ public:
     bool m_bD3D11FeatureLevel10_0;
     bool m_bD3D11FeatureLevel10_1;
     bool m_bD3D11FeatureLevel11_0;
-
-    // BGFX ---
-    ecr::BGFXRenderType::Enum m_eBGFXRenderType;
-    bgfx::TextureFormat::Enum m_eBGFXRTFormat;
-    bgfx::TextureFormat::Enum m_eBGFXDSFormat;
-    unsigned int m_nBGFXMSAA;
+#endif
 
     // Load / save settings.
     void LoadSettings(const char* pcFileName);
@@ -126,15 +143,20 @@ protected:
     static const char* ms_pcMinScreenWidth;
     static const char* ms_pcMinScreenHeight;
     static const char* ms_pcVertexProcessing;
+#ifdef EE_USE_DX9_RENDERER
     static const char* ms_pcDX9RenderTargetMode;
     static const char* ms_pcDX9DepthSurfaceMode;
     static const char* ms_pcDX9FrameBufferMode;
+#endif
+#ifdef EE_USE_D3D10_RENDERER
     static const char* ms_pcD3D10OutputIdx;
     static const char* ms_pcD3D10MultisampleCount;
     static const char* ms_pcD3D10MultisampleQuality;
     static const char* ms_pcD3D10DSFormat;
     static const char* ms_pcD3D10RTFormat;
     static const char* ms_pcD3D10Renderer;  // Deprecated, will be overridden by ms_pcRendererID
+#endif
+#ifdef EE_USE_D3D11_RENDERER
     static const char* ms_pcD3D11OutputIdx;
     static const char* ms_pcD3D11MultisampleCount;
     static const char* ms_pcD3D11MultisampleQuality;
@@ -146,6 +168,7 @@ protected:
     static const char* ms_pcD3D11FeatureLevel10_0;
     static const char* ms_pcD3D11FeatureLevel10_1;
     static const char* ms_pcD3D11FeatureLevel11_0;
+#endif
     static const char* ms_pcRendererID;
     static const char* ms_pcFullscreen;
     static const char* ms_pcNVPerfHUD;
@@ -156,11 +179,6 @@ protected:
     static const char* ms_pcMultiThread;
     static const char* ms_pcRendererDialog;
     static const char* ms_pcSaveSettings;
-    // BGFX---
-    static const char* ms_pcBGFXBackend;
-    static const char* ms_pcBGFXMSAA;
-    static const char* ms_pcBGFXRTFormat;
-    static const char* ms_pcBGFXDSFormat;
 };
 
 #include "NiRendererSettings.inl"

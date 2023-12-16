@@ -27,8 +27,8 @@ public:
     virtual ~NiBaseTabController();
 
     // Creates and initializes a dialog
-    virtual NiWindowRef InitDialog(NiRendererSettings* pkSettings,
-        NiWindowRef pParentWnd) = 0;
+    virtual NiWindowNativeRef InitDialog(NiRendererSettings* pkSettings,
+        NiWindowNativeRef pParentWnd) = 0;
 
     // Returns name of a tab
     virtual char* GetCaption() = 0;

@@ -19,6 +19,7 @@
 
 #include <NiMemObject.h>
 #include <NiTList.h>
+#include <NiRenderer.h>
 
 class NiBaseRendererOptionsView;
 class NiRendererSettings;

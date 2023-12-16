@@ -28,7 +28,7 @@ public:
     NiBaseRendererOptionsView();
 
     // Dialog creation and controls initialization function
-    virtual NiWindowRef InitDialog(NiWindowRef pParentWnd);
+    virtual NiWindowNativeRef InitDialog(NiWindowNativeRef pParentWnd);
 
     // Returns name of a renderer
     virtual char* GetName() const = 0;
@@ -46,7 +46,7 @@ public:
 protected:
     virtual ~NiBaseRendererOptionsView();
 
-    NiWindowRef m_pDlgHandle;
+    NiWindowNativeRef m_pDlgHandle;
     NiRendererSettings* m_pkRendererSettings;
     bool m_bViewAdvanced;
     unsigned int m_uiBasicHeight;
@@ -62,7 +62,7 @@ protected:
 
     // Helper function, that fills a combo box from array of strings
     void FillComboboxFromArray(
-        NiWindowRef pWnd,
+        NiWindowNativeRef pWnd,
         int iControlId,
         NiTObjectArray<NiFixedString>& kList,
         unsigned int uiCurSel);
@@ -86,7 +86,7 @@ protected:
 
 private:
     // Message processing functions
-    bool ProcessCommand(NiWindowRef pDlgHandle, WORD wID, WORD wNotifyCode);
+    bool ProcessCommand(NiWindowNativeRef pDlgHandle, WORD wID, WORD wNotifyCode);
     static BOOL CALLBACK RendererOptionsViewWndProc(
         HWND pDlg,
         UINT uiMsg,

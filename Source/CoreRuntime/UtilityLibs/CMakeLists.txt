@@ -6,7 +6,11 @@ add_subdirectory(NiFont)
 add_subdirectory(NiInput)
 add_subdirectory(NiVisualTracker)
 add_subdirectory(NiMetricsOutput)
-add_subdirectory(NiSettingsDialog)
+
+if (GB3_WIN32)
+    add_subdirectory(NiSettingsDialog)
+endif()
+
 add_subdirectory(NiUserInterface)
 add_subdirectory(NiSceneGraphUpdateService)
 add_subdirectory(NiVideo)
