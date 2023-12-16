@@ -5,7 +5,7 @@ set(MOD_EXTRA_SRC_PATH
     NiSkyMaterialNodeLibrary
 )
 set(MOD_INCLUDES
-${CMAKE_CURRENT_LIST_DIR}
+    ${CMAKE_CURRENT_LIST_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/NiAtmosphereMaterialNodeLibrary
     ${CMAKE_CURRENT_LIST_DIR}/NiSkyMaterialNodeLibrary
 )
