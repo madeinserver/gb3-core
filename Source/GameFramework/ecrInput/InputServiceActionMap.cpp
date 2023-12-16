@@ -38,7 +38,7 @@ efd::Bool InputServiceActionMap::ProcessInput(
     if (!m_events.size())
         return false;
 
-#if defined(EE_PLATFORM_WIN32)
+#if defined(EE_PLATFORM_WIN32) || defined(EE_PLATFORM_SDL2)
     // Ignore the input if the application window doesn't have focus.
     if (!GetFocus())
         return false;

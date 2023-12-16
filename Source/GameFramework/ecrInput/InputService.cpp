@@ -22,11 +22,14 @@
 #include <efd/TinyXML.h>
 #include <efd/IConfigManager.h>
 #include <efd/MessageService.h>
-#if defined (EE_PLATFORM_WIN32)
+#ifdef EE_PLATFORM_SDL2
+    #include <efd/SDL2/SDL2PlatformService.h>
+    #include <SDL2/NiSDL2InputSystem.h>
+#elif defined (EE_PLATFORM_WIN32)
     #include <efd/Win32/Win32PlatformService.h>
-    #include <NiDI8InputSystem.h>
+    #include <Win32/NiDI8InputSystem.h>
 #elif defined (EE_PLATFORM_PS3)
-    #include <NiPS3InputSystem.h>
+    #include <PS3/NiPS3InputSystem.h>
 #endif
 
 #include "InputServiceAction.h"
@@ -118,6 +121,33 @@ NiInputSystem::CreateParams* InputService::GetInputSystemCreateParams()
     return pParams;
 }
 
+#elif defined (EE_PLATFORM_SDL2)
+NiInputSystem::CreateParams* InputService::GetInputSystemCreateParams()
+{
+    NiSDL2InputSystem::SDL2CreateParams* pParams =
+        EE_NEW NiSDL2InputSystem::SDL2CreateParams();
+    EE_ASSERT(pParams);
+
+    efd::UInt32 keyboardFlags = NiInputSystem::FOREGROUND;
+    if (m_exclusiveKeyboard)
+        keyboardFlags |= NiInputSystem::EXCLUSIVE;
+    else
+        keyboardFlags |= NiInputSystem::NONEXCLUSIVE;
+
+    efd::UInt32 mouseFlags = NiInputSystem::FOREGROUND;
+    if (m_exclusiveMouse)
+        mouseFlags |= NiInputSystem::EXCLUSIVE;
+    else
+        mouseFlags |= NiInputSystem::NONEXCLUSIVE;
+
+    pParams->SetKeyboardUsage(keyboardFlags);
+    pParams->SetMouseUsage(mouseFlags);
+    pParams->SetGamePadCount(2);
+    pParams->SetAxisRange(-EE_NIS_AXIS_RANGE, EE_NIS_AXIS_RANGE);
+    pParams->SetOwnerWindow(m_windowRef);
+
+    return pParams;
+}
 #elif defined (EE_PLATFORM_WIN32)
 NiInputSystem::CreateParams* InputService::GetInputSystemCreateParams()
 {
@@ -166,7 +196,9 @@ SyncResult InputService::OnPreInit(efd::IDependencyRegistrar* pDependencyRegistr
     // depend on the AssetFactoryManager class if it exists.
     pDependencyRegistrar->AddDependency<AssetFactoryManager>(sdf_Optional);
 
-#if defined(EE_PLATFORM_WIN32)
+#if defined(EE_PLATFORM_SDL2)
+    pDependencyRegistrar->AddDependency<SDL2PlatformService>(sdf_Optional);
+#elif defined(EE_PLATFORM_WIN32)
     pDependencyRegistrar->AddDependency<Win32PlatformService>(sdf_Optional);
 #endif
 
@@ -197,7 +229,23 @@ AsyncResult InputService::OnInit()
     if (!m_pMessageService)
         return AsyncResult_Failure;
 
-#if defined(EE_PLATFORM_WIN32)
+#if defined(EE_PLATFORM_SDL2)
+    // If you are using the SDL2PlatformService then we can automatically detect your instance
+    // and window references, otherwise you must call SetInstanceRef and SetWindowRef before
+    // we reach OnInit.
+    SDL2PlatformService* pWin32 = m_pServiceManager->GetSystemServiceAs<SDL2PlatformService>();
+    if (pWin32)
+    {
+        m_windowRef = pWin32->GetWindowRef();
+    }
+
+    if (m_windowRef == 0)
+    {
+        EE_LOG(efd::kGamebryoGeneral0, efd::ILogger::kERR1,
+            ("Window ref not set in InputService!"));
+        return AsyncResult_Failure;
+    }
+#elif defined(EE_PLATFORM_WIN32)
     // If you are using the Win32PlatformService then we can automatically detect your instance
     // and window references, otherwise you must call SetInstanceRef and SetWindowRef before
     // we reach OnInit.
@@ -268,7 +316,7 @@ AsyncResult InputService::OnInit()
         break;
     }
 
-#if defined (EE_PLATFORM_WIN32)
+#if defined (EE_PLATFORM_WIN32) || defined(EE_PLATFORM_SDL2)
     // On Win32, assume there is a mouse and keyboard
     if (!m_spInput->OpenMouse() || !m_spInput->OpenKeyboard())
     {

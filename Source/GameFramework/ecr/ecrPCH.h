@@ -25,24 +25,26 @@
 #include <NiParticle.h>
 #include <NiCollision.h>
 
-#if 0
+#ifdef EE_USE_DX9_RENDERER
+#include <NiDX9Renderer.h>
+#endif
+#ifdef EE_USE_D3D10_RENDERER
+#include <NiD3D10Renderer.h>
+#endif
+#ifdef EE_USE_D3D11_RENDERER
+#include <ecrD3D11Renderer/D3D11Renderer.h>
+#endif
+#ifdef EE_USE_OPENGL_RENDERER
+#include <NiOpenGLRenderer.h>
+#endif
+
 // Platform specific renderer includes. Aborts if a non-supported platform is found.
 #if defined (EE_PLATFORM_XBOX360)
     #include <NiXenonRenderer.h>
-#elif defined (EE_PLATFORM_WIN32)
-    #include <NiDX9Renderer.h>
-    #include <NiD3D10Renderer.h>
-    #include <ecrD3D11Renderer/D3D11Renderer.h>
-    #include <NiOpenGLRenderer.h>
 #elif defined (EE_PLATFORM_PS3)
     #include <NiPS3Renderer.h>
-#elif defined (EE_PLATFORM_LINUX)
-    #include <NiOpenGLRenderer.h>
-#elif defined (EE_PLATFORM_MACOSX)
-    #error "MacOSX does not support ecr"
-#else
-    #error Unknown platform!
-#endif
+#elif !defined (EE_PLATFORM_SDL2) && !defined(EE_PLATFORM_WIN32)
+    #error "Unknown platform"
 #endif
 
 #include <egf/egfLogIDs.h>

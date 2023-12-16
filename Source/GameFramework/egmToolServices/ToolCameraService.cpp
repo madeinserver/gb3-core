@@ -696,7 +696,9 @@ bool ToolCameraService::OnMouseDown(efd::Bool handled, ecrInput::MouseMessage::M
     EE_UNUSED_ARG(handled);
 
     bool altDown = false;
-#if defined(EE_PLATFORM_WIN32)
+#ifdef EE_PLATFORM_SDL2
+    altDown = (SDL_GetModState() & ::KMOD_ALT) != 0;
+#elif defined(EE_PLATFORM_WIN32)
     altDown = (GetKeyState(VK_MENU) & ~1) != 0;
 #endif
 

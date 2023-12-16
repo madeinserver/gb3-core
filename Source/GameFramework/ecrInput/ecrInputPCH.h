@@ -22,13 +22,13 @@
 #include <efd/ServiceManager.h>
 
 #if defined (EE_PLATFORM_XBOX360)
-    #include <NiXenonInputSystem.h>
+    #include <Xbox360/NiXenonInputSystem.h>
+#elif defined (EE_PLATFORM_SDL2)
+    #include <SDL2/NiSDL2InputSystem.h>
 #elif defined (EE_PLATFORM_WIN32)
-    #include <NiDI8InputSystem.h>
+    #include <Win32/NiDI8InputSystem.h>
 #elif defined (EE_PLATFORM_PS3)
-    #include <NiPS3InputSystem.h>
-#elif defined (EE_PLATFORM_LINUX)
-    #error Linux not supported by ecrInput!
+    #include <PS3/NiPS3InputSystem.h>
 #else
     #error Unknown platform!
 #endif
