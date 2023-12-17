@@ -102,8 +102,12 @@ protected:
     NiPixelDataPtr GenerateMipmapLevelsRGBA128(NiPixelDataPtr spSrc,
         NiPixelDataPtr spOptDest);
 
+#ifdef EE_PLATFORM_SDL2
+    bool m_bHaveInitSDLVideo;
+#elif defined(EE_PLATFORM_WIN32)
     IDirectDraw7* m_pkDD7;
     void* m_pkDDrawDLL;
+#endif
 };
 
 #endif

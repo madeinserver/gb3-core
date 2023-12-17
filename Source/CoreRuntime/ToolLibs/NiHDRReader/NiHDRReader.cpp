@@ -364,12 +364,12 @@ void NiHDRReader::ConvertRGBEToHalf(unsigned char* pucRGBE,
         afRGB[2] = ((unsigned int)pucRGBE[2]+0.5f)*fExponent;
     }
 
-    D3DXFLOAT16* pkHalfDest = (D3DXFLOAT16*)pucDest;
+    uint16_t* pkHalfDest = (uint16_t*)pucDest;
 
-    *(pkHalfDest++) = D3DXFLOAT16(afRGB[0]);
-    *(pkHalfDest++) = D3DXFLOAT16(afRGB[1]);
-    *(pkHalfDest++) = D3DXFLOAT16(afRGB[2]);
-    *pkHalfDest = D3DXFLOAT16(1.0f);
+    *(pkHalfDest++) = uint16_t(afRGB[0]);
+    *(pkHalfDest++) = uint16_t(afRGB[1]);
+    *(pkHalfDest++) = uint16_t(afRGB[2]);
+    *pkHalfDest = uint16_t(1.0f);
 }
 
 //--------------------------------------------------------------------------------------------------

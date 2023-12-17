@@ -14,21 +14,14 @@
 #include <NiPixelData.h>
 #include "NiDevImageQuantizer.h"
 #include "QuantizeUtil.h"
+#include "XMFloat.h"
 #include <NiString.h>
 
 #include <math.h>
-
-#define DIRECTDRAW_VERSION 0x0700
-#include <ddraw.h>
-
-#pragma comment(lib, "dxguid.lib")
-#pragma comment(lib, "ddraw.lib")
+#include <squish.h>
 
 NiImplementRTTI(NiDevImageQuantizer,NiDevImageConverter);
 
-//--------------------------------------------------------------------------------------------------
-typedef HRESULT (WINAPI * NILPDIRECTDRAWCREATEEXA)
-    (GUID FAR* lpGuid, LPVOID* lplpDD, REFIID iid, IUnknown FAR* pUnkOuter);
 //--------------------------------------------------------------------------------------------------
 bool NiDevImageQuantizer::Compress(NiPixelData& kDest,
     const NiPixelData& kSrc, int iMipmapLevel)
@@ -66,56 +59,27 @@ bool NiDevImageQuantizer::Compress(NiPixelData& kDest,
         uiMinLevel = uiMaxLevel = (unsigned int)iMipmapLevel;
     }
 
-    unsigned long dwFourCC;
 
     const NiPixelFormat& kDestFmt = kDest.GetPixelFormat();
+    unsigned long flags;
 
     switch (kDestFmt.GetFormat())
     {
-        case NiPixelFormat::FORMAT_DXT1:
-            dwFourCC = FOURCC_DXT1;
-            break;
-        case NiPixelFormat::FORMAT_DXT3:
-            dwFourCC = FOURCC_DXT3;
-            break;
-        case NiPixelFormat::FORMAT_DXT5:
-            dwFourCC = FOURCC_DXT5;
-            break;
-        default:
-            return false;
+    case NiPixelFormat::FORMAT_DXT1:
+        flags = squish::kDxt1;
+        break;
+    case NiPixelFormat::FORMAT_DXT3:
+        flags = squish::kDxt3;
+        break;
+    case NiPixelFormat::FORMAT_DXT5:
+        flags = squish::kDxt5;
+        break;
+    default:
+        return false;
     }
 
-    DDSURFACEDESC2 kDDSDRGBA;
-    DDSURFACEDESC2 kDDSDComp;
-
-    memset(&kDDSDRGBA, 0, sizeof(kDDSDRGBA));
-    kDDSDRGBA.dwSize = sizeof(kDDSDRGBA);
-    kDDSDRGBA.ddsCaps.dwCaps = DDSCAPS_TEXTURE | DDSCAPS_SYSTEMMEMORY;
-    kDDSDRGBA.dwFlags
-        = DDSD_CAPS | DDSD_WIDTH | DDSD_HEIGHT | DDSD_PIXELFORMAT;
-    kDDSDRGBA.ddpfPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
-    kDDSDRGBA.ddpfPixelFormat.dwFlags = DDPF_RGB | DDPF_ALPHAPIXELS;
-    kDDSDRGBA.ddpfPixelFormat.dwRGBBitCount = 32;
-    kDDSDRGBA.ddpfPixelFormat.dwFourCC = 0;
-    kDDSDRGBA.ddpfPixelFormat.dwRBitMask = 0x00ff0000;
-    kDDSDRGBA.ddpfPixelFormat.dwGBitMask = 0x0000ff00;
-    kDDSDRGBA.ddpfPixelFormat.dwBBitMask = 0x000000ff;
-    kDDSDRGBA.ddpfPixelFormat.dwRGBAlphaBitMask = 0xff000000;
-
-    memset(&kDDSDComp, 0, sizeof(kDDSDRGBA));
-    kDDSDComp.dwSize = sizeof(kDDSDRGBA);
-    kDDSDComp.dwFlags =
-        DDSD_CAPS | DDSD_WIDTH | DDSD_HEIGHT | DDSD_PIXELFORMAT;
-    kDDSDComp.ddsCaps.dwCaps = DDSCAPS_TEXTURE | DDSCAPS_SYSTEMMEMORY;
-    memset(&kDDSDComp.ddpfPixelFormat, 0, sizeof(kDDSDComp.ddpfPixelFormat));
-    kDDSDComp.ddpfPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
-    kDDSDComp.ddpfPixelFormat.dwFlags = DDPF_FOURCC;
-    kDDSDComp.ddpfPixelFormat.dwFourCC = dwFourCC;
-
-    DDSURFACEDESC2 kDDSD2;
-    memset(&kDDSD2, 0, sizeof(DDSURFACEDESC2));
-    kDDSD2.dwSize = sizeof(DDSURFACEDESC2);
-
+    flags |= squish::kARGB;
+    
     // For each mipmap level,
     // 1) Copy the source pixel data into the RGBA surface.
     // 2) Use BLT to compress the RGBA surface into a DXT surface.
@@ -124,99 +88,8 @@ bool NiDevImageQuantizer::Compress(NiPixelData& kDest,
     {
         for (unsigned int i = uiMinLevel; i <= uiMaxLevel; i++)
         {
-            // The width and height of the resulting compressed surface must
-            // be a multiple of 4.  So, we round the surface sizes to the
-            // next highest multiple of 4.  The BLT source and destination
-            // must have the same dimensions.  As a result, we need to be
-            // careful when copying into the source surface, and only copy
-            // the subset of the surface pixels that are in the source pixel
-            // data.
-            kDDSDRGBA.dwWidth = kDDSDComp.dwWidth
-                = ((kSrc.GetWidth(i) + 3) & ~0x3);
-            kDDSDRGBA.dwHeight = kDDSDComp.dwHeight
-                = ((kSrc.GetHeight(i) + 3) & ~0x3);
-
-            // Create the RGBA surface of the correct size.
-            LPDIRECTDRAWSURFACE7 pkRGBASurf = NULL;
-            if (m_pkDD7->CreateSurface(&kDDSDRGBA, &pkRGBASurf, NULL))
-                return false;
-
-            // Create the compressed surface of the correct size.
-            LPDIRECTDRAWSURFACE7 pkCompSurf = NULL;
-            if (m_pkDD7->CreateSurface(&kDDSDComp, &pkCompSurf, NULL))
-            {
-                pkRGBASurf->Release();
-                return false;
-            }
-
-            // *1* Copy RGBA pixels into RGBA surface.
-            pkRGBASurf->Lock(NULL, &kDDSD2, DDLOCK_SURFACEMEMORYPTR, 0);
-
-            unsigned int uiSrcRowStride
-                = kSrc.GetWidth(i) * kSrc.GetPixelStride();
-
-            unsigned int uiDestRowOverBytes = 0;
-            if ((4 * kDDSD2.dwWidth) > uiSrcRowStride)
-                uiDestRowOverBytes = (4 * kDDSD2.dwWidth) - uiSrcRowStride;
-
-            const unsigned char* pucSrc = kSrc.GetPixels(i, uiFace);
-            unsigned int j;
-            for (j = 0; j < kSrc.GetHeight(i); j++)
-            {
-                unsigned char *pucDest
-                    = ((unsigned char *)(kDDSD2.lpSurface)) + j *
-                    kDDSD2.lPitch;
-
-                // Pixel formats should match exactly - just memcpy rows,
-                // but be sure to clear out the texels that are in the
-                // surface but not in the source (when the surface is
-                // bigger than the source).
-                NiMemcpy(pucDest, pucSrc, uiSrcRowStride);
-
-                // Skip extra columns in dest, clearing them.
-                if (uiDestRowOverBytes)
-                {
-                    pucDest += uiSrcRowStride;
-
-                    memset(pucDest, 0, uiDestRowOverBytes);
-                }
-
-                pucSrc += uiSrcRowStride;
-            }
-
-            // Skip extra rows in dest, clearing them.
-            for (j = kSrc.GetHeight(i); j <  kDDSD2.dwHeight; j++)
-            {
-                memset(((unsigned char *)(kDDSD2.lpSurface)) + j *
-                    kDDSD2.lPitch, 0, 4 * kDDSD2.dwWidth);
-            }
-
-            pkRGBASurf->Unlock(NULL);
-
-            // *2* Compress the RGBA surface.
-            if (pkCompSurf->Blt(NULL, pkRGBASurf, NULL, DDBLT_WAIT, NULL))
-            {
-                pkRGBASurf->Release();
-                pkCompSurf->Release();
-                return false;
-            }
-
-            // *3* Copy the compressed data into the destination pixel data.
-            pkCompSurf->Lock(NULL, &kDDSD2, DDLOCK_SURFACEMEMORYPTR, 0);
-
-            EE_ASSERT(!(kDDSD2.dwFlags & DDSD_PITCH));
-
-            // Copy the compressed, linear data from the surface to the pixel
-            // data object.
-            unsigned int uiDestSize = (NiUInt32)kDest.GetSizeInBytes(i);
-
-            NiMemcpy(kDest.GetPixels(i, uiFace),
-                (unsigned char*)(kDDSD2.lpSurface), uiDestSize);
-
-            pkCompSurf->Unlock(NULL);
-
-            pkRGBASurf->Release();
-            pkCompSurf->Release();
+            squish::CompressImage(kSrc.GetPixels(i, uiFace), kSrc.GetWidth(i, uiFace),
+                kSrc.GetHeight(i, uiFace), kDest.GetPixels(i, uiFace), flags);
         }
     }
 
@@ -234,14 +107,14 @@ bool NiDevImageQuantizer::RGBA128toRGBA64(NiPixelData& kDest,
         {
             const float* pfSrcPix =
                 (const float*) kSrc.GetPixels(uiMipMap, uiFace);
-            D3DXFLOAT16* pkDestPix =
-                (D3DXFLOAT16*) kDest.GetPixels(uiMipMap, uiFace);
+            uint16_t* pkDestPix =
+                (uint16_t*) kDest.GetPixels(uiMipMap, uiFace);
 
 
             unsigned int uiElementCount = kSrc.GetWidth(uiMipMap, uiFace) *
                 kSrc.GetHeight(uiMipMap, uiFace) * 4;
 
-            D3DXFloat32To16Array(pkDestPix, pfSrcPix, uiElementCount);
+            XMConvertFloatToHalfArray(pkDestPix, pfSrcPix, uiElementCount);
         }
     }
     return true;
@@ -256,15 +129,15 @@ bool NiDevImageQuantizer::RGBA64toRGBA128(NiPixelData& kDest,
         for (unsigned int uiMipMap = 0; uiMipMap < kSrc.GetNumMipmapLevels();
             uiMipMap++)
         {
-            FLOAT* pfDestPix =
-                (FLOAT*) kDest.GetPixels(uiMipMap, uiFace);
-            D3DXFLOAT16* pkSrcPix =
-                (D3DXFLOAT16*) kSrc.GetPixels(uiMipMap, uiFace);
+            float* pfDestPix =
+                (float*) kDest.GetPixels(uiMipMap, uiFace);
+            uint16_t* pkSrcPix =
+                (uint16_t*) kSrc.GetPixels(uiMipMap, uiFace);
 
             unsigned int uiElementCount = kSrc.GetWidth(uiMipMap, uiFace) *
                 kSrc.GetHeight(uiMipMap, uiFace) * 4;
 
-            D3DXFloat16To32Array(pfDestPix, pkSrcPix, uiElementCount);
+            XMConvertHalfToFloatArray(pfDestPix, pkSrcPix, uiElementCount);
         }
     }
     return true;
@@ -273,6 +146,23 @@ bool NiDevImageQuantizer::RGBA64toRGBA128(NiPixelData& kDest,
 //--------------------------------------------------------------------------------------------------
 NiDevImageQuantizer* NiDevImageQuantizer::Create()
 {
+#if defined(EE_PLATFORM_SDL2)
+    if (!SDL_WasInit(SDL_INIT_VIDEO))
+    {
+        if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0)
+            return NULL;
+
+        NiDevImageQuantizer* pkThis = NiNew NiDevImageQuantizer;
+        pkThis->m_bHaveInitSDLVideo = true;
+        return pkThis;
+    }
+
+    NiDevImageQuantizer* pkThis = NiNew NiDevImageQuantizer;
+    pkThis->m_bHaveInitSDLVideo = false;
+    return pkThis;
+
+
+#elif defined(EE_PLATFORM_WIN32)
     NILPDIRECTDRAWCREATEEXA pfnDirectDrawCreateEx = NULL;
 
     HINSTANCE hInst = LoadLibrary("DDRAW.DLL");
@@ -305,6 +195,7 @@ NiDevImageQuantizer* NiDevImageQuantizer::Create()
     pkThis->m_pkDD7 = pkDD7;
 
     pkThis->m_pkDDrawDLL = hInst;
+#endif
 
     return pkThis;
 }
@@ -313,18 +204,28 @@ NiDevImageQuantizer* NiDevImageQuantizer::Create()
 NiDevImageQuantizer::NiDevImageQuantizer()
 : m_kRGBAFormat(NiPixelFormat::BGRA8888)
 {
+#ifdef EE_PLATFORM_SDL2
+    m_bHaveInitSDLVideo = false;
+#else
     m_pkDD7 = NULL;
     m_pkDDrawDLL = 0;
+#endif
     m_pQuantUtil = NiExternalNew QuantizeUtil;
 }
 
 //--------------------------------------------------------------------------------------------------
 NiDevImageQuantizer::~NiDevImageQuantizer()
 {
+#ifdef EE_PLATFORM_SDL2
+    if (m_bHaveInitSDLVideo)
+        SDL_QuitSubSystem(SDL_INIT_VIDEO);
+#elif defined(EE_PLATFORM_WIN32)
     if (m_pkDD7)
         m_pkDD7->Release();
 
     FreeLibrary((HINSTANCE)m_pkDDrawDLL);
+#endif
+
     NiExternalDelete m_pQuantUtil;
 }
 
@@ -826,24 +727,25 @@ NiPixelDataPtr NiDevImageQuantizer::GenerateMipmapLevelsRGBA64(
             {
                 for (x = 0; x < uiDestWidth; x++)
                 {
-                    D3DXFLOAT16* pfSrcUpLeft = (D3DXFLOAT16*)
+                    // Half float (16-bit floats)
+                    uint16_t* pfSrcUpLeft = (uint16_t*)
                         (kDest(x*2, y*2, k-1, uiFace));
-                    D3DXFLOAT16* pfSrcUpRight = (D3DXFLOAT16*)
+                    uint16_t* pfSrcUpRight = (uint16_t*)
                         (kDest(x*2+1, y*2, k-1, uiFace));
-                    D3DXFLOAT16* pfSrcDownLeft = (D3DXFLOAT16*)
+                    uint16_t* pfSrcDownLeft = (uint16_t*)
                         (kDest(x*2, y*2+1, k-1, uiFace));
-                    D3DXFLOAT16* pfSrcDownRight = (D3DXFLOAT16*)
+                    uint16_t* pfSrcDownRight = (uint16_t*)
                         (kDest(x*2+1, y*2+1, k-1, uiFace));
 
-                    D3DXFLOAT16* pfDest = (D3DXFLOAT16*)
+                    uint16_t* pfDest = (uint16_t*)
                         (kDest(x, y, k, uiFace));
 
                     for (unsigned int ui = 0; ui < 4; ui++)
                     {
-                        pfDest[ui] = ((FLOAT)pfSrcUpLeft[ui] +
-                            (FLOAT)pfSrcUpRight[ui] +
-                            (FLOAT)pfSrcDownLeft[ui] +
-                            (FLOAT)pfSrcDownRight[ui])/4.0f;
+                        pfDest[ui] = ((float)pfSrcUpLeft[ui] +
+                            (float)pfSrcUpRight[ui] +
+                            (float)pfSrcDownLeft[ui] +
+                            (float)pfSrcDownRight[ui])/4.0f;
                     }
                 }
             }
