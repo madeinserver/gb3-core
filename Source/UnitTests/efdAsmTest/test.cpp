@@ -1,7 +1,7 @@
-#include "../efd/SystemDesc.h"
-#include "../efd/MemManager.h"
-#include "../efd/DefaultInitializeMemoryManager.h"
-#include "../efd/EEMath.h"
+#include <efd/SystemDesc.h>
+#include <efd/MemManager.h>
+#include <efd/DefaultInitializeMemoryManager.h>
+#include <efd/EEMath.h>
 #undef main
 
 EE_USE_DEFAULT_ALLOCATOR;
