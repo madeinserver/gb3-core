@@ -20,6 +20,10 @@ endif()
 set(GB3_ROOT "${CMAKE_CURRENT_LIST_DIR}")
 set(GB3_INTEGRATION_ROOT "${GB3_ROOT}/Integrations")
 
+if (NOT DEFINED GB3_FOLDER_SUFFIX)
+    set(GB3_FOLDER_SUFFIX "")
+endif()
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH};${GB3_INTEGRATION_ROOT})
 
 # architecture detection

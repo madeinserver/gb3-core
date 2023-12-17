@@ -107,7 +107,7 @@ macro(generate_project)
             add_library(${MOD_NAME} STATIC ${MOD_SOURCES})
         endif()
         
-        set_target_properties(${MOD_NAME} PROPERTIES FOLDER "${MOD_PREFIX}${MOD_DIR}")
+        set_target_properties(${MOD_NAME} PROPERTIES FOLDER "${GB3_FOLDER_SUFFIX}${MOD_PREFIX}${MOD_DIR}")
         target_compile_definitions(${MOD_NAME} PUBLIC -DEE_${MOD_NAME_UP}_NO_IMPORT=1) # dllspec define
 
         if (DEFINED MOD_PCH)
@@ -154,7 +154,7 @@ macro(generate_project)
 
     if (GB3_ENABLE_DLL AND NOT MOD_NO_DLL) # for DLL modules
         add_library(${MOD_NAME}DLL SHARED ${MOD_SOURCES})
-        set_target_properties(${MOD_NAME}DLL PROPERTIES FOLDER "${MOD_PREFIX}${MOD_DIR}")
+        set_target_properties(${MOD_NAME}DLL PROPERTIES FOLDER "${GB3_FOLDER_SUFFIX}${MOD_PREFIX}${MOD_DIR}")
         target_compile_definitions(${MOD_NAME}DLL
             PRIVATE 
                 -DEE_${MOD_NAME_UP}_EXPORT=1
